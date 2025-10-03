@@ -62,8 +62,9 @@ function Rank() {
                   <div className="d-flex gap-3 align-items-center">
                     <div className="circle_bg">{data?.first_name?.slice(0, 2).toUpperCase()}</div>
                     <div className="">
-                      <p className="mb-0">{data?.username ? data?.username : data?.first_name + " " + data?.last_name}</p>
-                      <div className="text-gray">{data?.amount} NULL</div>
+                      {/* <p className="mb-0">{data?.username ? data?.username : data?.first_name + " " + data?.last_name}</p> */}
+                      <p className="mb-0">Total Deposit</p>
+                      <div className="text-gray">{data?.amount} 0</div>
                     </div>
                   </div>
                   <div>#{data?.rank}</div>
@@ -72,7 +73,7 @@ function Rank() {
             </div>
 
             <div className="holder-container">
-              <div className="pt-3 pb-4">{formatNumber(data?.holder)} holders</div>
+              <div className="pt-3 pb-4">{formatNumber(data?.holder)} Deposit History</div>
 
               {rank_history && rank_history.map((item) => {
                 const firstNameAbbr = item?.first_name?.slice(0, 2).toUpperCase(); // Get the first two characters in uppercase
@@ -86,7 +87,7 @@ function Rank() {
                           {item?.username ? item?.username : item?.first_name + " " + item?.last_name}
                         </p>
                         <div className="text-gray">
-                          {item?.amount} INRx
+                          {item?.amount} Mejora
                         </div>
                       </div>
                     </div>

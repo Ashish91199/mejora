@@ -202,10 +202,10 @@ function Wallet() {
                               </div>
                               <div>
                                 <div className="text-lgray">
-                                  Referral Earning
+                                  Referral Income
                                 </div>
                                 <div>
-                                  <span> + 4,976</span>
+                                  <span> + 5 $</span>
                                 </div>
                               </div>
                             </div>
@@ -315,7 +315,7 @@ function Wallet() {
                       </Link>
                     </div>
 
-                    {/* <div>
+                    <div>
                       <Link to="#">
                         <div className="card mb-2 card_with_info">
                           <div className="card-body">
@@ -329,17 +329,67 @@ function Wallet() {
                               </div>
                               <div>
                                 <div className="text-lgray">
-                                  Earning from Matrix
+                                  Total Prize Earned
                                 </div>
                                 <div>
-                                  <span>+ 8,765</span>
+                                  <span>0.00</span>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </Link>
-                    </div> */}
+                    </div>
+                    <div>
+                      <Link to="#">
+                        <div className="card mb-2 card_with_info">
+                          <div className="card-body">
+                            <div className="d-flex gap-3 align-items-center">
+                              <div>
+                                <img
+                                  src="/images/earn-matrix.png"
+                                  width={"28px"}
+                                  alt=""
+                                />
+                              </div>
+                              <div>
+                                <div className="text-lgray">
+                                  Total spin used
+                                </div>
+                                <div>
+                                  <span>0.00</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
+                    <div>
+                      <Link to="#">
+                        <div className="card mb-2 card_with_info">
+                          <div className="card-body">
+                            <div className="d-flex gap-3 align-items-center">
+                              <div>
+                                <img
+                                  src="/images/earn-matrix.png"
+                                  width={"28px"}
+                                  alt=""
+                                />
+                              </div>
+                              <div>
+                                <div className="text-lgray">
+                                  Total rank
+                                </div>
+                                <div>
+                                  <span>0.00</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
                   </div>
                 )}
                 {activeTab === "tab2" && (

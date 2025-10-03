@@ -93,7 +93,7 @@ function WheelSpinner() {
             const landedCenter = (360 - normalized + 360) % 360;
             const landedIndex = Math.floor(landedCenter / sliceDeg) % slices;
             const prize = prizes[landedIndex];
-            setResult(`🎉 You won: ${prize.label}!`);
+            setResult(`🎉 You won: ${prize.label}$`);
         };
 
         wheelRef.current.addEventListener("transitionend", onEnd);

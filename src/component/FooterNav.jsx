@@ -74,7 +74,7 @@ export default function FooterNav() {
         </Link>
 
         <Link
-          to="/wallet"
+          to="#"
           className={`nav-item ${activeIndex === 2 ? "is-active" : ""}`}
           onClick={() => setActiveIndex(2)}
         >
@@ -86,12 +86,11 @@ export default function FooterNav() {
                 alt="logo"
               />
             ) : (
-              <img src="/images/triangle.png" className="navIcon" alt="logo" />
+              <img src="/images/rank-green.png" className="navIcon" alt="logo" />
             )}
           </div>
-          <span>Earning</span>
+          <span>Rank</span>
         </Link>
-
         <Link
           to="/rank"
           className={`nav-item ${activeIndex === 3 ? "is-active" : ""}`}
@@ -100,7 +99,7 @@ export default function FooterNav() {
           <div className="navIconBg">
             {activeIndex === 3 ? (
               <img
-                src="/images/rank-green.png"
+                src="/images/triangle.png"
                 className="navIcon"
                 alt="logo"
               />
@@ -108,7 +107,7 @@ export default function FooterNav() {
               <img src="/images/rank.png" className="navIcon" alt="logo" />
             )}
           </div>
-          <span>wallet</span>
+          <span>History</span>
         </Link>
 
         <Link

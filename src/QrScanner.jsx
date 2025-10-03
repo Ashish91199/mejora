@@ -79,9 +79,9 @@ function QrScanner() {
         <div className="header">
           <div className="col-5">
             <div className="fs-12 mb-1">
-              Profit per Day
+              Total spin used
               <MdKeyboardArrowRight className="fs-16 mx-1" />
-              +126.4k
+              00
             </div>
             <div className="fs-12">
               <div className="progress">

@@ -58,7 +58,7 @@ function Home() {
             <Link className="anchor_pointer text-white" to="/profile">
               <div className="d-flex gap-2 align-items-center">
                 <img src="/images/MejoraLogo.png" width={"28px"} alt="" />
-                <div>{username}Ashish (CEO)
+                <div>{username} (CEO)
                 </div>
               </div>
             </Link>
@@ -87,9 +87,9 @@ function Home() {
         <div className="header">
           <div className="col-5">
             <div className="fs-12 mb-1">
-              Profit per Day
+              Total spin used
               <MdKeyboardArrowRight className="fs-16 mx-1" />
-              +126.4k
+              00
             </div>
             <div className="fs-12">
               <div className="progress">
