@@ -1,0 +1,235 @@
+.mytreebox {
+    position: relative;
+    background: #34363f   ;
+    /* background: linear-gradient(to right bottom, #0b3142, #1c2746); */
+    /* border: 2px solid #03325b; */
+    border-radius: 20px;
+    width: 100%;
+    height: auto;
+    max-width: 250px;
+    margin: 0 auto 25px;
+}
+.mytreebox-header {
+    padding:8px 15px 6px;
+    color:#fff;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 8px;
+    grid-row-gap: 20px;    
+    border-bottom:1px solid rgba(0,0,0,0.4);
+}
+.mytreebox-lbl {
+    font-size:16px;
+    text-align:left;
+}
+.mytreebox-sloat {
+    font-size:22px;  
+    font-weight:600;
+    text-align:center;
+}
+.mytreebox-dai {
+    font-size:16px;
+    text-align:right;
+}
+.body-section{
+	cursor: pointer;
+}
+.body-disablesection{
+	cursor: not-allowed;
+}
+.mytreebox-body {
+    padding:12px 1px 0;
+}
+.mytree-item{
+    text-align: center;
+}
+.mytree-item .mytree-icon{
+    border:2px solid #fff;
+    border-radius:50%;
+    text-align:center;
+    margin:0 auto;
+    color:#fff;
+    font-size:14px;
+    background-color: transparent;
+    position: relative;
+    z-index: 1
+}
+.mytree-item.active > .mytree-icon{
+    border:2px solid #189a4f;
+    background:#128945;
+}
+.mytree-l1{
+    display:flex;
+    position:relative;
+    /* padding:10px 0; */
+    align-items: center;
+    justify-content: center;
+}
+.mytree-l1 .mytree-item .mytree-icon{
+    width:32px;
+    height:32px;    
+    line-height:32px;
+	background-size:50%;
+	background-position: 55% 50%;
+    background-color: #34363f00;
+    position: relative;
+    z-index: 1;
+    font-size: 12px;
+
+}
+.mytree-l2{
+    display:flex;
+    position:relative;
+    padding:8px 0 0;
+    align-items: center;
+    justify-content: center;
+}
+.mytree-l2 .mytree-item{
+    width:50%;
+    position:relative;
+}
+.mytree-l2 .mytree-item .mytree-icon{
+    width:28px;
+    height:28px;    
+    line-height:26px;
+    position:relative;
+	background-size:50%;
+	background-position: 55% 50%;
+}
+.mytree-l2 .mytree-item:first-child{
+    left:0;
+}
+.mytree-l2 .mytree-item:last-child{
+    right:0;
+}
+.mytree-l2 .mytree-item:first-child:before{
+    content:'';
+    position:absolute;
+    width: 40px;
+    height: 0px;
+    border-top: 2px dashed #fff;
+    right: 12px;
+    top: -12px;
+    transform: rotate(-45deg);
+}
+.mytree-l2 .mytree-item:last-child:before{
+    content:'';
+    position:absolute;
+    width: 40px;
+    height: 0px;
+    border-top: 2px dashed #fff;
+    left: 12px;
+    top: -12px;
+    transform: rotate(45deg);
+}
+.mytree-l3{
+    display:flex;
+    position:relative;
+    padding:11px 0;
+    align-items: center;
+    justify-content: center;
+    gap:1rem
+}
+.mytree-l3 .mytree-item{
+    width:50%;
+    position:relative;	
+}
+.mytree-l3 .mytree-item .mytree-icon{
+    width:22px;
+    height:22px;    
+    line-height:20px;
+    position:relative;
+	background-size:50%;
+	background-position: 55% 50%;
+}
+.mytree-l3 .mytree-item:first-child{
+    left:0;
+}
+.mytree-l3 .mytree-item:last-child{
+    right:0;
+}
+.mytree-l3 .mytree-item:first-child:before{
+    content:'';
+    position:absolute;
+    width: 22px;
+    height: 0px;
+    border-top: 1px dashed #fff;
+    right: 0;
+    top: -9px;
+    transform: rotate(-48deg);
+}
+.mytree-l3 .mytree-item:last-child:before{
+    content:'';
+    position:absolute;
+    width: 22px;
+    height: 0px;
+    border-top: 1px dashed #fff;
+    left: 0;
+    top: -9px;
+    transform: rotate(48deg);
+}
+.mytreebox-footer {
+    padding:0px 12px 5px;
+}
+.mytreebox-footer-content {
+    display:flex;    
+    font-size:16px;
+    color:#fff;
+}
+.mytree-item.deactiv .mytree-icon {
+    border: 2px solid #fff;
+	background:none;
+	opacity: 0.3;
+}
+.mytree-item.deactiv:before {
+	opacity: 0.3;
+}
+.mytree-item.deactiv .mytree-l3 .mytree-item:before {
+    opacity: 0.3;
+}
+.mytreebox.deactiv{
+    background:none;
+    border: 1px solid rgba(40,110,150,0.3);
+}
+.mytreebox-users {
+    width:50%;
+    text-align:left;
+}
+.mytreebox-trans {
+    width:50%;
+    text-align:right;
+}
+.treeusers-icon {
+    padding:0 14px;
+	position: relative;
+    background-size: 70%;
+    background-position: 5% 50%;
+}
+.treetrans-icon {
+    padding:0 14px;
+	position: relative;
+    background-size: 70%;
+    background-position: 5% 50%;
+}
+.treegrowth {
+	display:flex;
+	margin: 1px 0;
+}
+.growth-per {
+	width:50px;
+	font-size:13px;
+	color:#fff;
+}
+.mytreebox .progress {
+    box-shadow: none;
+    background: none;
+    height: 11px;
+	border:1px solid #fff;
+	border-radius:10px;	
+	width: 100%;
+	margin: 4px 0 0;
+}
+.mytreebox .progress-bar {
+    background-color: #14b37b;
+	border:1px solid #14b37b;
+}

@@ -1,0 +1,147 @@
+/* Base Connect Button */
+.cosmuno-connect-btn {
+    background: linear-gradient(to bottom, #e1af21, #ebaf05);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cosmuno-connect-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Wrong Network Button */
+.cosmuno-wrong-network-btn {
+    background: linear-gradient(to bottom, #e1af21, #ebaf05);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Connected State Container */
+.cosmuno-wallet-connected-container {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Network Button */
+.cosmuno-network-btn {
+    /* display: flex; */
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(to bottom, #e1af21, #ebaf05);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.cosmuno-network-btn:hover {
+    background: linear-gradient(to bottom, #e1af21, #ebaf05);
+}
+
+.cosmuno-chain-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* .cosmuno-chain-icon-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+} */
+
+/* Account Button */
+.cosmuno-account-btn {
+    background: linear-gradient(to bottom, #e1af21, #ebaf05);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.cosmuno-account-btn:hover {
+    background: linear-gradient(to bottom, #e1af21, #ebaf05);
+
+    .cosmuno-account-name {
+        font-weight: 600;
+    }
+
+    .cosmuno-account-balance {
+        opacity: 0.8;
+        font-size: 0.9em;
+        white-space: nowrap;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .cosmuno-wallet-connected-container {
+            /* flex-direction: column; */
+            gap: 8px;
+        }
+
+        .cosmuno-network-btn,
+        .cosmuno-account-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .cosmuno-network-btn {
+            display: none;
+        }
+    }
+
+    /* Back Button */
+    .cosmuno-back-btn {
+        background: linear-gradient(to bottom, #e1af21, #ebaf05);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+    }
+
+    .cosmuno-back-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        background: linear-gradient(to bottom, #e1af21, #ebaf05);
+    }
+
+    /* Ensure icons are properly aligned */
+    .cosmuno-back-btn i {
+        font-size: 0.9em;
+    }
