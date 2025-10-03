@@ -59,7 +59,7 @@ function Wallet() {
             <div className="mb-3 text-center">
               <div>
                 <img
-                  src="/images/inrx-logo.png"
+                  src="/images/MejoraLogo.png"
                   width={"60px"}
                   alt="img-fluid"
                   data-aos="zoom-in"

@@ -35,34 +35,34 @@ function Level() {
       <div className="page_container">
         <div className="inner_page_layout">
           <div className="mb-5">
-          <div className="position-relative pb-1">
+            <div className="position-relative pb-1">
               <div className="backButton">
                 <Link className="anchor_pointer text-white" to="/home">
                   <MdKeyboardArrowLeft className="fs-1" />
                 </Link>
               </div>
               <div className="text-center">
-              <div>
-                <img
-                  src="/images/inrx-logo.png"
-                  width={"60px"}
-                  alt="img-fluid"
-                  data-aos="zoom-in"
-                />
-              </div>
+                <div>
+                  <img
+                    src="/images/MejoraLogo.png"
+                    width={"60px"}
+                    alt="img-fluid"
+                    data-aos="zoom-in"
+                  />
+                </div>
               </div>
             </div>
             <div className="mb-3 text-center">
-            <div className="text-gray">Level</div>
-              
-            </div>  
-            <LevelSelector/>        
+              <div className="text-gray">Level</div>
+
+            </div>
+            <LevelSelector />
           </div>
         </div>
       </div>
       <FooterNav />
 
-    
+
     </>
   );
 }

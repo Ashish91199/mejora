@@ -39,13 +39,13 @@ export default function FooterNav() {
           <div className="navIconBg">
             {activeIndex === 0 ? (
               <img
-                src="/images/inrx-logo.png"
+                src="/images/MejoraLogo.png"
                 className="navIcon"
                 alt="logo"
               />
             ) : (
               <img
-                src="/images/inrx-logo.png"
+                src="/images/MejoraLogo.png"
                 className="navIcon"
                 alt="logo"
               />
@@ -127,7 +127,7 @@ export default function FooterNav() {
               <img src="/images/friends.png" className="navIcon" alt="logo" />
             )}
           </div>
-          <span>Refer & Earn</span>
+          <span>Refer</span>
         </Link>
       </nav>
     </div>

@@ -88,7 +88,7 @@ function InviteFriends() {
                     <div className="mb-1" value={value}>Refer & Earn</div>
                     <div>
                       <img
-                        src="/images/inrx-logo.png"
+                        src="/images/MejoraLogo.png"
                         alt=""
                         width={"25px"}
                       />
@@ -130,7 +130,7 @@ function InviteFriends() {
                       </div>
                       <div className="d-flex gap-2">
                         <img
-                          src="/images/inrx-logo.png"
+                          src="/images/MejoraLogo.png"
                           width={"25px"}
                           alt=""
                         />{" "}

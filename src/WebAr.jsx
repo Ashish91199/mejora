@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"; 
+import React, { useEffect, useRef, useState } from "react";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { Link } from "react-router-dom";
 import FooterNav from "./component/FooterNav";
@@ -8,9 +8,9 @@ function WebAr() {
     <>
       <div className="page_container">
         <div className="top-header">
-          <div className="col-4">   
+          <div className="col-4">
             <div className="d-flex gap-2 align-items-center">
-              <img src="/images/inrx-logo.png" width={"28px"} alt="" />
+              <img src="/images/MejoraLogo.png" width={"28px"} alt="" />
               <div>VS(CEO)</div>
             </div>
           </div>
@@ -74,11 +74,11 @@ function WebAr() {
             </div>
           </div>
         </div>
-        
+
         <div className="rounded-outer-container" data-aos="fade-up">
           <div className="rounded-container">
             <div className="pt-2 page_layout">
-                
+
             </div>
           </div>
         </div>

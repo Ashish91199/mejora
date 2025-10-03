@@ -63,7 +63,7 @@ function Earn() {
 
                       <div>
                         <img
-                          src="/images/inrx-logo.png"
+                          src="/images/MejoraLogo.png"
                           alt=""
                           width={"20px"}
                         />
@@ -90,7 +90,7 @@ function Earn() {
                       <div className="fs-12">Matrix</div>
                       <div>
                         <img
-                          src="/images/inrx-logo.png"
+                          src="/images/MejoraLogo.png"
                           alt=""
                           width={"20px"}
                         />
@@ -114,7 +114,7 @@ function Earn() {
                       <div className="fs-12">APR</div>
                       <div>
                         <img
-                          src="/images/inrx-logo.png"
+                          src="/images/MejoraLogo.png"
                           alt=""
                           width={"20px"}
                         />
@@ -138,7 +138,7 @@ function Earn() {
                       <div className="fs-12">Give & Take</div>
                       <div>
                         <img
-                          src="/images/inrx-logo.png"
+                          src="/images/MejoraLogo.png"
                           alt=""
                           width={"20px"}
                         />
@@ -163,7 +163,7 @@ function Earn() {
                         <div className="fs-12">Daily Task</div>
                         <div>
                           <img
-                            src="/images/inrx-logo.png"
+                            src="/images/MejoraLogo.png"
                             alt=""
                             width={"20px"}
                           />
@@ -192,7 +192,7 @@ function Earn() {
                       <div className="fs-12">Follow us on Instagram</div>
                       <div>
                         <img
-                          src="/images/inrx-logo.png"
+                          src="/images/MejoraLogo.png"
                           alt=""
                           width={"20px"}
                         />
@@ -215,7 +215,7 @@ function Earn() {
                       <div className="fs-12">Join our telegram channel</div>
                       <div>
                         <img
-                          src="/images/inrx-logo.png"
+                          src="/images/MejoraLogo.png"
                           alt=""
                           width={"20px"}
                         />
@@ -238,7 +238,7 @@ function Earn() {
                       <div className="fs-12">Follow our X Account</div>
                       <div>
                         <img
-                          src="/images/inrx-logo.png"
+                          src="/images/MejoraLogo.png"
                           alt=""
                           width={"20px"}
                         />
@@ -265,7 +265,7 @@ function Earn() {
                       <div className="fs-12">Invite friends</div>
                       <div>
                         <img
-                          src="/images/inrx-logo.png"
+                          src="/images/MejoraLogo.png"
                           alt=""
                           width={"20px"}
                         />
@@ -348,7 +348,7 @@ function Earn() {
                       </div>
                       <div className="d-flex gap-2">
                         <img
-                          src="/images/inrx-logo.png"
+                          src="/images/MejoraLogo.png"
                           width={"25px"}
                           alt=""
                         />
@@ -379,7 +379,7 @@ function Earn() {
 
                       <div className="d-flex gap-2">
                         <img
-                          src="/images/inrx-logo.png"
+                          src="/images/MejoraLogo.png"
                           width={"25px"}
                           alt=""
                         />{" "}

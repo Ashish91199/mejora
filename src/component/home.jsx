@@ -57,7 +57,7 @@ function Home() {
           <div className="col-4">
             <Link className="anchor_pointer text-white" to="/profile">
               <div className="d-flex gap-2 align-items-center">
-                <img src="/images/inrx-logo.png" width={"28px"} alt="" />
+                <img src="/images/MejoraLogo.png" width={"28px"} alt="" />
                 <div>{username}Ashish (CEO)
                 </div>
               </div>

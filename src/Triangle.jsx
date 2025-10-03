@@ -34,33 +34,33 @@ function Triangle() {
     <>
       <div className="page_container">
         <div className="inner_page_layout">
-         
+
           <div className="position-relative pb-1">
-              <div className="backButton">
-                <Link className="anchor_pointer text-white" to="/home">
-                  <MdKeyboardArrowLeft className="fs-1" />
-                </Link>
-              </div>
-              <div className="text-center">
+            <div className="backButton">
+              <Link className="anchor_pointer text-white" to="/home">
+                <MdKeyboardArrowLeft className="fs-1" />
+              </Link>
+            </div>
+            <div className="text-center">
               <div>
                 <img
-                  src="/images/inrx-logo.png"
+                  src="/images/MejoraLogo.png"
                   width={"60px"}
                   alt="img-fluid"
                   data-aos="zoom-in"
                 />
               </div>
-              </div>
             </div>
-            <div className="mb-3 text-center">
-            <div className="text-gray">Triangle</div>  
-            <ShapeSelector/>        
+          </div>
+          <div className="mb-3 text-center">
+            <div className="text-gray">Triangle</div>
+            <ShapeSelector />
           </div>
         </div>
       </div>
       <FooterNav />
 
-    
+
     </>
   );
 }

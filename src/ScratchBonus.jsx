@@ -8,8 +8,8 @@ import { IoIosCloseCircle } from "react-icons/io";
 
 function ScratchBonus() {
   const [value, setValue] = useState(22749890);
-  const [isModalOpen, setIsModalOpen] = useState(false); 
-  const [selectedDay, setSelectedDay] = useState(null); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDay, setSelectedDay] = useState(null);
 
   // Initialize AOS on component mount
   useEffect(() => {
@@ -49,7 +49,7 @@ function ScratchBonus() {
                     <div className="mb-1">Total Collection</div>
                     <div>
                       <img
-                        src="/images/inrx-logo.png"
+                        src="/images/MejoraLogo.png"
                         alt=""
                         width={"25px"}
                       />
@@ -91,24 +91,24 @@ function ScratchBonus() {
       {/* Custom Slide-Up Modal */}
       <div className={`slide-up-container ${isModalOpen ? 'active' : ''}`}>
         <div className="slide-up-inner-container">
-        <div className="slide-up-header">
-          <h5>
+          <div className="slide-up-header">
+            <h5>
 
-          </h5>
-          <button className="btn-close-custom" onClick={handleClose}><IoIosCloseCircle className="fs-3" /></button>
-        </div>
-        <div className="slide-up-body">
-          <img
-            src="/images/pink_card.png"
-            alt="cards to scratch"
-            width={"200px"}
-            className="img-fluid"
-          />
-          <h5 className="my-3">Day {selectedDay}</h5>
-          <div className="my-2">
-            <Link className="btn btn-primary">Claim</Link>
+            </h5>
+            <button className="btn-close-custom" onClick={handleClose}><IoIosCloseCircle className="fs-3" /></button>
           </div>
-        </div>
+          <div className="slide-up-body">
+            <img
+              src="/images/pink_card.png"
+              alt="cards to scratch"
+              width={"200px"}
+              className="img-fluid"
+            />
+            <h5 className="my-3">Day {selectedDay}</h5>
+            <div className="my-2">
+              <Link className="btn btn-primary">Claim</Link>
+            </div>
+          </div>
         </div>
       </div>
     </>
