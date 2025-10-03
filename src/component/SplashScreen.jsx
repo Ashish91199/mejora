@@ -88,7 +88,7 @@ function SplashScreen() {
         <div className="splash_layout">
           <div className="text-center">
             <img
-              src="/images/logo.png"
+              src="/images/MejoraLogo.png"
               alt="logo"
               className="img-fluid splash-logo mb-5"
             />
