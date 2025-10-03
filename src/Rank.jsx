@@ -51,6 +51,7 @@ function Rank() {
     <>
       <div className="page_container">
         <div className="inner_page_layout">
+          {/* align */}
           <div>
             <div className="mb-3 text-center">
               <h4 className="mb-1">Deposit History</h4>
