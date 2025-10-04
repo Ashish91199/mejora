@@ -54,7 +54,7 @@ function Rank() {
           {/* align */}
           <div>
             <div className="mb-3 text-center">
-              <h4 className="mb-1">Deposit History</h4>
+              <h4 className="mb-1">Rank </h4>
             </div>
             <div className="card mb-2">
               <div className="card-body">
@@ -63,7 +63,7 @@ function Rank() {
                     <div className="circle_bg">{data?.first_name?.slice(0, 2).toUpperCase()}</div>
                     <div className="">
                       {/* <p className="mb-0">{data?.username ? data?.username : data?.first_name + " " + data?.last_name}</p> */}
-                      <p className="mb-0">Total Deposit</p>
+                      <p className="mb-0">Total Rank Income </p>
                       <div className="text-gray">{data?.amount} 0</div>
                     </div>
                   </div>
@@ -73,37 +73,45 @@ function Rank() {
             </div>
 
             <div className="holder-container">
-              <div className="pt-3 pb-4">{formatNumber(data?.holder)} Deposit History</div>
+              <div className="pt-3 pb-4">Rank History</div> {/* Example total holders */}
 
-              {rank_history && rank_history.map((item) => {
-                const firstNameAbbr = item?.first_name?.slice(0, 2).toUpperCase(); // Get the first two characters in uppercase
-
-                return (
-                  <div className="d-flex gap-2 justify-content-between align-items-center mb-3" key={item?.username || item?.first_name}>
-                    <div className="d-flex gap-3 align-items-center">
-                      <div className="circle_bg">{firstNameAbbr}</div> {/* Display the two-letter abbreviation */}
-                      <div>
-                        <p className="mb-0">
-                          {item?.username ? item?.username : item?.first_name + " " + item?.last_name}
-                        </p>
-                        <div className="text-gray">
-                          {item?.amount} Mejora
-                        </div>
-                      </div>
-                    </div>
-
-                    {item?.rank === 1 ? (
-                      <div><img src="/images/gold.png" width={"17px"} alt="Gold" /></div>
-                    ) : item?.rank === 2 ? (
-                      <div><img src="/images/silver.png" width={"17px"} alt="Silver" /></div>
-                    ) : item?.rank === 3 ? (
-                      <div><img src="/images/bronze.png" width={"17px"} alt="Bronze" /></div>
-                    ) : <div>#{item?.rank}</div>}
+              {/* Manual data entries */}
+              <div className="d-flex gap-2 justify-content-between align-items-center mb-3">
+                <div className="d-flex gap-3 align-items-center">
+                  <div className="circle_bg">AS</div> {/* First two letters of first name */}
+                  <div>
+                    <p className="mb-0">ashish123</p> {/* Username */}
+                    <div className="text-gray">500 Mejora</div>
                   </div>
-                );
-              })}
+                </div>
+                <div><img src="/images/gold.png" width={"17px"} alt="Gold" /></div> {/* Rank 1 */}
+              </div>
+
+              <div className="d-flex gap-2 justify-content-between align-items-center mb-3">
+                <div className="d-flex gap-3 align-items-center">
+                  <div className="circle_bg">RA</div>
+                  <div>
+                    <p className="mb-0">ravi.k</p>
+                    <div className="text-gray">400 Mejora</div>
+                  </div>
+                </div>
+                <div><img src="/images/silver.png" width={"17px"} alt="Silver" /></div> {/* Rank 2 */}
+              </div>
+
+              <div className="d-flex gap-2 justify-content-between align-items-center mb-3">
+                <div className="d-flex gap-3 align-items-center">
+                  <div className="circle_bg">MO</div>
+                  <div>
+                    <p className="mb-0">monu</p>
+                    <div className="text-gray">350 Mejora</div>
+                  </div>
+                </div>
+                <div><img src="/images/bronze.png" width={"17px"} alt="Bronze" /></div> {/* Rank 3 */}
+              </div>
+
 
             </div>
+
           </div>
         </div>
       </div>

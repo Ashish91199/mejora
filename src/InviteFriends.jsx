@@ -60,7 +60,7 @@ function InviteFriends() {
   };
 
   const shareToTelegram = () => {
-    const message = "Check out this useful INRx Mini App for managing your transactions!";
+    const message = "Check out this useful Mejora Mini App for managing your transactions!";
     const url = encodeURIComponent(value); // Assuming `value` is your app URL
     const telegramUrl = `https://t.me/share/url?url=${url}&text=${encodeURIComponent(message)}`;
 

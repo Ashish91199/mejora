@@ -74,7 +74,7 @@ export default function FooterNav() {
         </Link>
 
         <Link
-          to="#"
+          to="/rank"
           className={`nav-item ${activeIndex === 2 ? "is-active" : ""}`}
           onClick={() => setActiveIndex(2)}
         >
@@ -92,7 +92,7 @@ export default function FooterNav() {
           <span>Rank</span>
         </Link>
         <Link
-          to="/rank"
+          to="/Deposithistory"
           className={`nav-item ${activeIndex === 3 ? "is-active" : ""}`}
           onClick={() => setActiveIndex(3)}
         >

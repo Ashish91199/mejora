@@ -17,6 +17,7 @@ import Deposit from "./Deposit";
 import Triangle from "./Triangle";
 import Level from "./LevelSelector";
 import Withdraw from "./Withdraw";
+import Deposithistory from "./Deposithistory";
 
 function App() {
 
@@ -40,6 +41,7 @@ function App() {
           <Route path="/triangle" element={<Triangle />} />
           <Route path="/level" element={<Level />} />
           <Route path="/Withdraw" element={< Withdraw />} />
+          <Route path="/Deposithistory" element={< Deposithistory />} />
 
         </Routes>
       </BrowserRouter>

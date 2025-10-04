@@ -7,7 +7,7 @@ export function signup_user(ref, user) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ sponser_id:ref, user }),
+    body: JSON.stringify({ sponser_id: ref, user }),
   }).then(response => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -16,6 +16,7 @@ export function signup_user(ref, user) {
   });
 }
 
+
 export function getProfile(id) {
   // Make sure to use the correct endpoint from your local server
   return fetch(`${url}/profile`, {
@@ -23,7 +24,7 @@ export function getProfile(id) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ id:id }),
+    body: JSON.stringify({ id: id }),
   }).then(response => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -39,7 +40,7 @@ export function getLevel(id, idd) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ id:id, level_id:idd }),
+    body: JSON.stringify({ id: id, level_id: idd }),
   }).then(response => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -55,7 +56,7 @@ export function getMatrix(id) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ id:id }),
+    body: JSON.stringify({ id: id }),
   }).then(response => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -71,7 +72,7 @@ export function getdepositAddress(id, network, amount, order_id) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ id:id, network:network, amount:amount, order_id:order_id }),
+    body: JSON.stringify({ id: id, network: network, amount: amount, order_id: order_id }),
   }).then(response => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -86,7 +87,7 @@ export function getWithdraw(id, network, amount, wallet_address) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ id:id, network:network, amount:amount, wallet_address:wallet_address }),
+    body: JSON.stringify({ id: id, network: network, amount: amount, wallet_address: wallet_address }),
   }).then(response => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -102,7 +103,7 @@ export function getUserLevel(id, level) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ id:id, level:level}),
+    body: JSON.stringify({ id: id, level: level }),
   }).then(response => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -118,7 +119,7 @@ export function activateMatrix(id, type) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ id:id, type:type}),
+    body: JSON.stringify({ id: id, type: type }),
   }).then(response => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -134,7 +135,7 @@ export function activateLevelAPI(id, level) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ id:id, level:level}),
+    body: JSON.stringify({ id: id, level: level }),
   }).then(response => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -150,7 +151,7 @@ export function getRank(id) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ id:id}),
+    body: JSON.stringify({ id: id }),
   }).then(response => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
