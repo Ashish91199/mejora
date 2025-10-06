@@ -4,8 +4,8 @@ export function useTelegram() {
   if (!tg) {
     console.error('Telegram WebApp SDK is not available');
     return {
-      onClose: () => {},
-      onToggleButton: () => {},
+      onClose: () => { },
+      onToggleButton: () => { },
       tg: null,
       user: null,
       queryId: null,
