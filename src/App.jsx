@@ -18,7 +18,6 @@ import Triangle from "./Triangle";
 import Level from "./LevelSelector";
 import Withdraw from "./Withdraw";
 import Deposithistory from "./Deposithistory";
-
 function App() {
 
   return (

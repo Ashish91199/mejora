@@ -5,7 +5,7 @@ const TelegramBot = () => {
     const [message, setMessage] = useState("");
 
     const sendMessage = async () => {
-        const BOT_TOKEN = "8356563754:AAGQqAdlklr4YQUFOlV-gu_5tHSpMMzxCcM";  // Yaha apna token daalein (abhi ke liye temporary)
+        const BOT_TOKEN = "8249766731:AAEGpLVDTYgfMbdxCiM1vEqyY0BlgotaAgU";  // Yaha apna token daalein (abhi ke liye temporary)
         const CHAT_ID = "Ashish_3580";  // @userinfobot se mila ID yaha daalein
 
         const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
