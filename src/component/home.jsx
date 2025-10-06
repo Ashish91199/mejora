@@ -58,7 +58,7 @@ function Home() {
             <Link className="anchor_pointer text-white" to="/profile">
               <div className="d-flex gap-2 align-items-center">
                 <img src="/images/MejoraLogo.png" width={"28px"} alt="" />
-                <div>{username}{user} (CEO)
+                <div>{username} (CEO)
                 </div>
               </div>
             </Link>
