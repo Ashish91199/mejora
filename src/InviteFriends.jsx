@@ -104,42 +104,41 @@ function InviteFriends() {
 
             <div>
               <div className="fs-12 py-2">List of your friends</div>
-              {level_data != null && level_data.map((item) => (
-                <div key={item?._id} className="card mb-2">
-                  <div className="card-body">
-                    <div className="d-flex justify-content-between align-items-center">
-                      <div className="d-flex gap-3">
-                        <div className="square_bg">
-                          <img src="/images/emoji.png" alt="" />
-                        </div>
-                        <div>
-                          <div className="mb-1">{item?.username ? item?.username : item?.first_name + item?.last_name}</div>
-                          <div className="d-flex gap-2 align-items-center">
-                            {/* <div className="text-gray">Level L{item?.level}</div>
-                            <div className="dot"></div> */}
-                            {/* <img
-                              src="/images/inrx-black-logo.png"
-                              width={"20px"}
-                              alt=""
-                            />{" "}
-                            <div>
-                              {item.amount} <span className="text-gray">(6.04K)</span>
-                            </div> */}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="d-flex gap-2">
-                        <img
-                          src="/images/MejoraLogo.png"
-                          width={"25px"}
-                          alt=""
-                        />{" "}
-                        <div>{item?.amount}</div>
-                      </div>
+
+              <div className="card mb-5">
+                <div className="card-body p-2">
+                  {level_data && level_data.length > 0 ? (
+                    <table className="table table-bordered table-sm text-center mb-0">
+                      <thead className="table-light">
+                        <tr>
+                          <th className="fs-12">#</th>
+                          <th className="fs-12">Username</th>
+                          <th className="fs-12">User ID</th>
+                          <th className="fs-12">Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {level_data.map((friend, index) => (
+                          <tr key={index}>
+                            <td className="fs-12">1</td>
+                            <td className="fs-12">ashish</td>
+                            <td className="fs-12">mja12334</td>
+                            <td className="fs-12">
+                              2-10-2025
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  ) : (
+                    <div className="text-center text-muted fs-12 py-2">
+                      No friends invited yet.
                     </div>
-                  </div>
+                  )}
                 </div>
-              ))}
+              </div>
+
+
 
             </div>
           </div>

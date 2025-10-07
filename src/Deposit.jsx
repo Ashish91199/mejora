@@ -8,10 +8,17 @@ import ConnectWallet from "./Connectwallet";
 
 export default function Deposit() {
   const [user, setUser] = useState(null);
-  const [selectedAmount, setSelectedAmount] = useState("");
+  const [selectedAmount, setSelectedAmount] = useState(54); // default amount
   const [order_id, setOrderId] = useState(null);
   const [inputValue, setInputValue] = useState(null);
 
+  // Dummy deposit history data
+  const [depositHistory, setDepositHistory] = useState([
+    { id: 1, amount: 54, status: "Completed", date: "2025-10-07", txId: "0x12345ABC" },
+
+  ]);
+
+  // Set Telegram WebApp user
   useEffect(() => {
     if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
       setUser(window.Telegram?.WebApp?.initDataUnsafe?.user);
@@ -32,10 +39,8 @@ export default function Deposit() {
     }
   }, [selectedAmount, user]);
 
-  const handleCopy = () => {
-    if (inputValue) {
-      navigator.clipboard.writeText(inputValue);
-    }
+  const handleCopy = (value) => {
+    if (value) navigator.clipboard.writeText(value);
   };
 
   return (
@@ -65,17 +70,20 @@ export default function Deposit() {
 
           {/* Amount input */}
           <div className="col-12 mb-3 mb-2">
-            <label className="text-gray mb-2">Enter Amount</label>
-            <input
-              type="number"
-              className="form-control"
-              placeholder="Enter Amount"
-              value={selectedAmount}
-              onChange={(e) => setSelectedAmount(e.target.value)}
-            />
+            <label className="text-gray mb-2">Amount</label>
+            <div className="input-group">
+              <span className="input-group-text">$</span>
+              <input
+                type="number"
+                className="form-control"
+                placeholder="Amount"
+                value={selectedAmount}
+                readOnly
+              />
+            </div>
           </div>
 
-          {/* Connect Wallet button (placeholder) */}
+          {/* Connect Wallet button */}
           <div className="col-6 mb-3 mb-2">
             <ConnectWallet />
           </div>
@@ -86,15 +94,54 @@ export default function Deposit() {
               <label className="text-gray mb-2">Deposit Address</label>
               <div className="d-flex align-items-center gap-2">
                 <input type="text" className="form-control" value={inputValue} readOnly />
-                <button className="btn btn-darker" onClick={handleCopy}>
+                <button className="btn btn-darker" onClick={() => handleCopy(inputValue)}>
                   <BsCopy />
                 </button>
               </div>
             </div>
           )}
+
+          {/* 3D-Style Deposit History Table */}
+          <div className="col-12 mt-4">
+            <h5 className="mb-3 text-white">Deposit History</h5>
+            <div className="d-flex flex-column gap-3">
+              {depositHistory.map((item, index) => (
+                <div
+                  key={item.id}
+                  className="deposit-card p-3 d-flex justify-content-between align-items-center shadow-lg"
+                >
+                  <div className="d-flex gap-3 align-items-center">
+                    <span className="text-white fs-5">{index + 1}.</span>
+                    <div>
+                      <div className="text-white">Amount: ${item.amount}</div>
+                      <div
+                        className={`status-badge ${item.status === "Completed" ? "completed" : "pending"
+                          }`}
+                      >
+                        {item.status}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="d-flex gap-3 align-items-center">
+                    <div className="text-white">Date: {item.date}</div>
+                    <input
+                      type="text"
+                      value={item.txId}
+                      readOnly
+                      className="form-control form-control-sm text-center tx-input"
+                    />
+                    <button className="btn btn-copy" onClick={() => handleCopy(item.txId)}>
+                      <BsCopy />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
       <FooterNav />
+
     </div>
   );
 }

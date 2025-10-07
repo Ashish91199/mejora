@@ -2,12 +2,12 @@
 import React, { useRef, useState, useEffect } from "react";
 
 const prizes = [
-    { label: "Prize 1", color: "#ff595e" },
-    { label: "Prize 2", color: "#ffca3a" },
-    { label: "Prize 3", color: "#8ac926" },
-    { label: "Prize 4", color: "#1982c4" },
-    { label: "Prize 5", color: "#6a4c93" },
-    { label: "Prize 6", color: "#ff9f1c" },
+    { label: "Prize", color: "#ff595e" },
+    { label: "Prize", color: "#ffca3a" },
+    { label: "Prize", color: "#8ac926" },
+    { label: "Prize", color: "#1982c4" },
+    { label: "Prize", color: "#6a4c93" },
+    { label: "Prize", color: "#ff9f1c" },
     // { label: "Prize 7", color: "#2ec4b6" },
     // { label: "Prize 8", color: "#d7263d" },
     // { label: "Prize 9", color: "#3a86ff" },
@@ -93,7 +93,7 @@ function WheelSpinner() {
             const landedCenter = (360 - normalized + 360) % 360;
             const landedIndex = Math.floor(landedCenter / sliceDeg) % slices;
             const prize = prizes[landedIndex];
-            setResult(`🎉 You won: ${prize.label}$`);
+            setResult(`🎉 You won: 5 $`);
         };
 
         wheelRef.current.addEventListener("transitionend", onEnd);

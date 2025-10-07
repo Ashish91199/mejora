@@ -1141,3 +1141,60 @@ tc-range-slider::part(thumb) {
   font-weight: 700;
   color: #ffb703;
 }
+
+/* card design  */
+.deposit-card {
+  background: linear-gradient(145deg, #1e1e2f, #2a2a3f);
+  border-radius: 15px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.deposit-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.status-badge {
+  margin-top: 5px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.status-badge.completed {
+  background: #00ff7f;
+  color: #000;
+}
+
+.status-badge.pending {
+  background: #ffd700;
+  color: #000;
+}
+
+.tx-input {
+  width: 150px;
+  background: #2a2a3f;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+}
+
+.btn-copy {
+  background: #e3af1d;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-copy:hover {
+  transform: scale(1.1);
+}
+
+h5 {
+  color: #fff;
+}
