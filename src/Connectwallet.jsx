@@ -1,9 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import "./ConnectWallet.css";
 import { useAccount } from "wagmi";
-import axios from "axios";
+import { ethers } from "ethers";
+import "./ConnectWallet.css";
+import { contractAddress, contractAddressABI } from "./ContractAbi";
+console.log("contractAddress", contractAddress);
+console.log("contractAddressABI", contractAddressABI);
+
 function ConnectWallet() {
+    const { address } = useAccount();
+    const [userExists, setUserExists] = useState(false);
+
+    const checkUserExists = async (walletAddress) => {
+        if (!walletAddress) return;
+
+        try {
+            // Create a provider directly from window.ethereum
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const contract = new ethers.Contract(contractAddress, contractAddressABI, provider);
+
+            const exists = await contract.isUserExists(walletAddress);
+            setUserExists(exists);
+        } catch (error) {
+            console.error("Error checking user:", error);
+        }
+    };
+
+    useEffect(() => {
+        if (address) {
+            checkUserExists(address);
+        }
+    }, [address]);
 
     return (
         <ConnectButton.Custom>
@@ -23,10 +50,8 @@ function ConnectWallet() {
                     chain &&
                     (!authenticationStatus || authenticationStatus === "authenticated");
 
-                // Return null if not ready to prevent layout shift
                 if (!isReady) return null;
 
-                // Not connected state
                 if (!isConnected) {
                     return (
                         <button onClick={openConnectModal} className="cosmuno-connect-btn">
@@ -35,42 +60,38 @@ function ConnectWallet() {
                     );
                 }
 
-                // Wrong network state
+                if (userExists) {
+                    return (
+                        <div className="cosmuno-wallet-connected-container">
+                            <span>Wallet already registered!</span>
+                        </div>
+                    );
+                }
+
                 if (chain.unsupported) {
                     return (
-                        <button
-                            onClick={openChainModal}
-                            className="cosmuno-wrong-network-btn"
-                        >
+                        <button onClick={openChainModal} className="cosmuno-wrong-network-btn">
                             Wrong Network
                         </button>
                     );
                 }
 
-                // Connected state
                 return (
                     <div className="cosmuno-wallet-connected-container">
                         <button onClick={openChainModal} className="cosmuno-network-btn">
-                            {chain.hasIcon && (
-                                <div className="cosmuno-chain-icon">
-                                    {chain.iconUrl && (
-                                        <img
-                                            alt={chain.name ?? "Chain icon"}
-                                            src={chain.iconUrl}
-                                            className="cosmuno-chain-icon-img"
-                                        />
-                                    )}
-                                </div>
+                            {chain.hasIcon && chain.iconUrl && (
+                                <img
+                                    alt={chain.name ?? "Chain icon"}
+                                    src={chain.iconUrl}
+                                    className="cosmuno-chain-icon-img"
+                                />
                             )}
                             {chain.name}
                         </button>
 
                         <button onClick={openAccountModal} className="cosmuno-account-btn">
-
                             {account.displayBalance && (
-                                <span className="cosmuno-account-balance">
-                                    {account.displayBalance}
-                                </span>
+                                <span className="cosmuno-account-balance">{account.displayBalance}</span>
                             )}
                         </button>
                     </div>
