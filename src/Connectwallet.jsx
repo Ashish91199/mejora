@@ -1,103 +1,155 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount } from "wagmi";
-import { ethers } from "ethers";
+import {
+    readContract,
+    writeContract,
+    waitForTransaction,
+    waitForTransactionReceipt,
+} from "@wagmi/core";
+import {
+    contractTokenABI,
+    contractToken,
+    contractAddressABI,
+    contractAddress,
+} from "./ContractAbi"; // adjust paths
 import "./ConnectWallet.css";
-import { contractAddress, contractAddressABI } from "./ContractAbi";
-console.log("contractAddress", contractAddress);
-console.log("contractAddressABI", contractAddressABI);
+import { config } from "./main";
 
 function ConnectWallet() {
-    const { address } = useAccount();
-    const [userExists, setUserExists] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    const checkUserExists = async (walletAddress) => {
-        if (!walletAddress) return;
+    const shortenAddress = (addr) =>
+        addr ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : "";
 
+    // Check token allowance
+
+    async function checkAllowance(userAddress) {
         try {
-            // Create a provider directly from window.ethereum
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const contract = new ethers.Contract(contractAddress, contractAddressABI, provider);
-
-            const exists = await contract.isUserExists(walletAddress);
-            setUserExists(exists);
-        } catch (error) {
-            console.error("Error checking user:", error);
+            const result = await readContract(config, {
+                abi: contractTokenABI,
+                address: contractToken,
+                functionName: "allowance",
+                args: [userAddress, contractAddress], // use correct variable
+            });
+            console.log({ allowance: result });
+            return Number(result) / 1e18; // convert wei to token amount
+        } catch (err) {
+            console.error("Error checking allowance:", err);
+            return 0;
         }
+    }
+
+    async function approveToken(amt) {
+        try {
+            const result = await writeContract(config, {
+                abi: contractTokenABI,
+                address: contractToken,
+                functionName: "approve",
+                args: [
+                    contractAddress,
+                    (amt * 1e18).toLocaleString("fullwide", { useGrouping: false }),
+                ],
+            });
+            const res = await waitForTransactionReceipt(config, { hash: result });
+            if (res?.status === "success") {
+                return true;
+            }
+            return false;
+        } catch (error) {
+            return false;
+        }
+    }
+    // Handle deposit flow
+    const handleDeposit = async (userAddress, depositAmount) => {
+        setLoading(true);
+        try {
+            const allowance = await checkAllowance(config, userAddress); // pass config
+            console.log("Current allowance:", allowance);
+
+            if (allowance < depositAmount) {
+                console.log("Approving tokens...");
+                const approve = await approveToken(depositAmount);
+                if (!approve) {
+                    alert("Failed to Approve!");
+                    return;
+                }
+                console.log("Tokens approved!");
+            }
+
+            console.log(`Depositing ${depositAmount} USDT...`);
+            const res = await writeContract(config, {
+                abi: contractAddressABI,
+                address: contractAddress,
+                functionName: 'deposit',
+                args: []
+            })
+            alert("Deposit successful!");
+        } catch (err) {
+            console.error(err);
+            alert("Deposit failed, see console for details.");
+        }
+        setLoading(false);
     };
 
-    useEffect(() => {
-        if (address) {
-            checkUserExists(address);
-        }
-    }, [address]);
-
     return (
-        <ConnectButton.Custom>
-            {({
-                account,
-                chain,
-                openAccountModal,
-                openChainModal,
-                openConnectModal,
-                authenticationStatus,
-                mounted,
-            }) => {
-                const isReady = mounted && authenticationStatus !== "loading";
-                const isConnected =
-                    isReady &&
-                    account &&
-                    chain &&
-                    (!authenticationStatus || authenticationStatus === "authenticated");
+        <div className="cosmuno-wallet-container">
+            <ConnectButton.Custom>
+                {({
+                    account,
+                    chain,
+                    openAccountModal,
+                    openConnectModal,
+                    authenticationStatus,
+                    mounted,
+                }) => {
+                    const isReady = mounted && authenticationStatus !== "loading";
+                    const isConnected =
+                        isReady &&
+                        account &&
+                        chain &&
+                        (!authenticationStatus || authenticationStatus === "authenticated");
 
-                if (!isReady) return null;
+                    if (!isReady) return null;
 
-                if (!isConnected) {
-                    return (
-                        <button onClick={openConnectModal} className="cosmuno-connect-btn">
-                            Connect Wallet
-                        </button>
-                    );
-                }
+                    if (!isConnected) {
+                        return (
+                            <button
+                                onClick={openConnectModal}
+                                className="cosmuno-connect-btn"
+                            >
+                                Connect Wallet
+                            </button>
+                        );
+                    }
 
-                if (userExists) {
+                    if (chain.unsupported) {
+                        return (
+                            <button className="cosmuno-wrong-network-btn">
+                                Wrong Network
+                            </button>
+                        );
+                    }
+
                     return (
                         <div className="cosmuno-wallet-connected-container">
-                            <span>Wallet already registered!</span>
+                            <button
+                                onClick={openAccountModal}
+                                className="cosmuno-account-btn"
+                            >
+                                {shortenAddress(account.address)}
+                            </button>
+                            <button
+                                onClick={() => handleDeposit(account.address, 10)} // Deposit 10 USDT
+                                className="cosmuno-account-btn"
+                                disabled={loading}
+                            >
+                                {loading ? "Processing..." : "Deposit"}
+                            </button>
                         </div>
                     );
-                }
-
-                if (chain.unsupported) {
-                    return (
-                        <button onClick={openChainModal} className="cosmuno-wrong-network-btn">
-                            Wrong Network
-                        </button>
-                    );
-                }
-
-                return (
-                    <div className="cosmuno-wallet-connected-container">
-                        <button onClick={openChainModal} className="cosmuno-network-btn">
-                            {chain.hasIcon && chain.iconUrl && (
-                                <img
-                                    alt={chain.name ?? "Chain icon"}
-                                    src={chain.iconUrl}
-                                    className="cosmuno-chain-icon-img"
-                                />
-                            )}
-                            {chain.name}
-                        </button>
-
-                        <button onClick={openAccountModal} className="cosmuno-account-btn">
-                            {account.displayBalance && (
-                                <span className="cosmuno-account-balance">{account.displayBalance}</span>
-                            )}
-                        </button>
-                    </div>
-                );
-            }}
-        </ConnectButton.Custom>
+                }}
+            </ConnectButton.Custom>
+        </div>
     );
 }
 

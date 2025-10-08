@@ -1,4 +1,4 @@
-const url = "https://bot.redstones.io/api";
+const url = "http://localhost:8001/api/";
 
 export function signup_user(ref, user) {
   // Make sure to use the correct endpoint from your local server

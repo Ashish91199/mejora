@@ -67,6 +67,8 @@ function InviteFriends() {
     window.open(telegramUrl, '_blank'); // Open in a new tab
   };
 
+  console.log({ value })
+
   return (
     <>
       <div className="page_container">

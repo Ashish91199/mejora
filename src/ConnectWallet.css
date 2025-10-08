@@ -145,3 +145,19 @@
     .cosmuno-back-btn i {
         font-size: 0.9em;
     }
+
+    .cosmuno-deposit-btn {
+        background: #ff6b6b;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 10px 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .cosmuno-deposit-btn:hover {
+        opacity: 0.9;
+        transform: scale(1.03);
+    }

@@ -8,12 +8,15 @@ import { Link } from "react-router-dom";
 import { getProfile } from "../helper/apifunction";
 import { formatNumber } from "../helper/Math";
 import Wheelspinner from "../component/wheelspinner";
+import { useAccount } from "wagmi";
 
 function Home() {
+  const { address } = useAccount()
   const [user, setUser] = useState(null);
   const [username, setUserName] = useState(null);
   const [user_data, setUserData] = useState(null);
   // Initialize AOS on component mount
+  console.log({ user })
   useEffect(() => {
     AOS.init({
       duration: 600,
@@ -21,27 +24,31 @@ function Home() {
       once: true,
     });
   }, []);
+
   useEffect(() => {
     if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
       setUser(window.Telegram?.WebApp?.initDataUnsafe?.user)
     }
   }, [window.Telegram?.WebApp?.initDataUnsafe?.user]);
-  useEffect(() => {
-    if (user) {
-      setUserName(user?.username ? user?.username : user?.first_name + " " + user?.last_name)
-      const getUser = async () => {
-        try {
-          const res = await getProfile(user?.id);
-          setUserData(res?.user);
-        } catch (error) {
-          console.error("Error during signup:", error);
-        }
-      };
 
-      getUser();
-    }
+  // useEffect(() => {
+  //   // if (user) {
+  //   // setUserName(user?.username ? user?.username : user?.first_name + " " + user?.last_name)
+  //   console.log({ address })
+  //   const getUser = async (address) => {
+  //     try {
+  //       const res = await getProfile(address);
+  //       console.log({ res })
+  //       setUserData(res?.user);
+  //     } catch (error) {
+  //       console.error("Error during signup:", error);
+  //     }
+  //   };
 
-  }, [user?.id])
+  //   if (address) getUser(address);
+  //   // }
+
+  // }, [address])
 
   const [value, setValue] = useState(30); // Initial slider value
 

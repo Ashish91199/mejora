@@ -3,10 +3,13 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { BsCheck, BsCopy } from "react-icons/bs";
 import FooterNav from "./component/FooterNav";
-import { getdepositAddress } from "./helper/apifunction";
+import { getdepositAddress, getProfile } from "./helper/apifunction";
+// console.log("getdepositAddress", getdepositAddress);
 import ConnectWallet from "./Connectwallet";
+import { useAccount } from "wagmi";
 
 export default function Deposit() {
+  const { address } = useAccount();
   const [user, setUser] = useState(null);
   const [selectedAmount, setSelectedAmount] = useState(54); // default amount
   const [order_id, setOrderId] = useState(null);
@@ -26,6 +29,23 @@ export default function Deposit() {
   }, [window.Telegram?.WebApp?.initDataUnsafe?.user]);
 
   // Fetch deposit address (always BEP20)
+
+  useEffect(() => {
+    console.log({ address })
+    const getUser = async (address) => {
+      try {
+        const res = await getProfile(address);
+        console.log({ res })
+        setUser(res?.data);
+      } catch (error) {
+        console.error("Error during signup:", error);
+      }
+    };
+
+    if (address) getUser(address);
+  }, [address])
+
+
   useEffect(() => {
     if (user && selectedAmount > 0) {
       const getAddress = async () => {
@@ -42,6 +62,10 @@ export default function Deposit() {
   const handleCopy = (value) => {
     if (value) navigator.clipboard.writeText(value);
   };
+
+  const deposit = async () => {
+    const res = await deposit
+  }
 
   return (
     <div>

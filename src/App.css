@@ -1198,3 +1198,24 @@ tc-range-slider::part(thumb) {
 h5 {
   color: #fff;
 }
+
+/* Wallet address style */
+.cosmuno-wallet-address {
+  display: inline-block;
+  font-family: monospace;
+  background: linear-gradient(90deg, #e3af1d, #e3af1d, #e3af1d);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  cursor: default;
+  user-select: all;
+  transition: transform 0.2s;
+}
+
+/* Hover effect */
+.cosmuno-wallet-address:hover {
+  transform: scale(1.05);
+}
