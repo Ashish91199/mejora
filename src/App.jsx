@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
 import "./App.css";
 import Home from "./component/home";
@@ -18,7 +17,32 @@ import Triangle from "./Triangle";
 import Level from "./LevelSelector";
 import Withdraw from "./Withdraw";
 import Deposithistory from "./Deposithistory";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+
+
 function App() {
+  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
+
+
+  // useEffect(() => {
+  //   AOS.init({
+  //     duration: 600,
+  //     easing: "ease-in-out",
+  //     once: true,
+  //   });
+  // }, []);
+
+  useEffect(() => {
+    // Telegram WebApp user data handle
+    const telegramUser = window?.Telegram?.WebApp?.initDataUnsafe?.user;
+    if (telegramUser) {
+      console.log({ telegramUser })
+      setUser(telegramUser);
+      dispatch(setUserDetails(telegramUser));
+    }
+  }, [dispatch]);
 
   return (
     <>

@@ -160,4 +160,21 @@ export function getRank(id) {
   });
 }
 
+export function getDepositHistory(id) {
+  return fetch(`${url}/deposithistory`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ id: id }),
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    });
+}
+
+
 

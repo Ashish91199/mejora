@@ -3,8 +3,45 @@ import {
     writeContract,
     waitForTransactionReceipt,
 } from "@wagmi/core";
-import { config } from "./main";
+
 import { contractAddress, contractAddressABI, contractToken, contractTokenABI } from "../ContractAbi";
+import { config } from "../main";
+
+
+export async function registerUser(referralAddress, telegramId) {
+    if (!referralAddress || !telegramId) {
+        console.log("in eolasfasd")
+        return;
+    }
+    console.log(referralAddress, telegramId, "in web 3")
+    const res = await writeContract(config, {
+        abi: contractAddressABI,
+        address: contractAddress,
+        functionName: "_registerUser",
+        args: [referralAddress, telegramId]
+    })
+    console.log(res, "1234");
+    const result = await waitForTransactionReceipt({ hash: res })
+    return result;
+
+}
+
+export async function isLoggedIn(userAddress) {
+    try {
+        const res = await readContract(config, {
+            abi: contractAddressABI,
+            address: contractAddress,
+            functionName: "isUserExists",
+            args: [userAddress]
+        })
+        return res;
+    } catch (error) {
+        console.log(error, "error in register");
+        return false;
+    }
+}
+
+
 
 async function checkAllowance(userAddress) {
     try {
@@ -43,8 +80,8 @@ async function approveToken(amt) {
     }
 }
 // Handle deposit flow
-const handleDeposit = async (userAddress, depositAmount) => {
-    setLoading(true);
+export const handleDeposit = async (userAddress, depositAmount) => {
+    // setLoading(true);
     try {
         const allowance = await checkAllowance(config, userAddress); // pass config
         console.log("Current allowance:", allowance);
@@ -63,13 +100,18 @@ const handleDeposit = async (userAddress, depositAmount) => {
         const res = await writeContract(config, {
             abi: contractAddressABI,
             address: contractAddress,
-            functionName: 'deposit',
-            args: ["MEJ5698963",]
+            functionName: '_deposit',
+            args: ["MEJ5698963", (depositAmount * 1e18).toLocaleString("fullwide", { useGrouping: false })]
         })
+        const result = await waitForTransactionReceipt({
+            hash: res
+        })
+        return result;
         alert("Deposit successful!");
     } catch (err) {
+
         console.error(err);
         alert("Deposit failed, see console for details.");
     }
-    setLoading(false);
+    // setLoading(false);
 };

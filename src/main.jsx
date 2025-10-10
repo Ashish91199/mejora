@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App.jsx";
 import "@rainbow-me/rainbowkit/styles.css";
 import { connectorsForWallets, getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { opBNBTestnet } from "viem/chains";
+import { bscTestnet, opBNBTestnet } from "viem/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
 import { Toaster } from "react-hot-toast";
@@ -15,6 +15,8 @@ import {
   trustWallet,
   walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets';
+import { Provider } from "react-redux";
+import { store } from "./redux/store.js";
 
 const connectors = connectorsForWallets(
   [
@@ -32,7 +34,7 @@ export const config = getDefaultConfig({
   connectors,
   appName: "My RainbowKit App",
   projectId: "my project Id",
-  chains: [opBNBTestnet],
+  chains: [bscTestnet],
   ssr: true,
 });
 
@@ -43,7 +45,9 @@ createRoot(document.getElementById("root")).render(
     <QueryClientProvider client={queryClient}>
       <RainbowKitProvider>
         <Toaster />
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </RainbowKitProvider>
     </QueryClientProvider>
   </WagmiProvider>

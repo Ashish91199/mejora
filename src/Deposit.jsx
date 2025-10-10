@@ -3,25 +3,34 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { BsCheck, BsCopy } from "react-icons/bs";
 import FooterNav from "./component/FooterNav";
-import { getdepositAddress, getProfile } from "./helper/apifunction";
-// console.log("getdepositAddress", getdepositAddress);
+import { getdepositAddress, getProfile, getDepositHistory } from "./helper/apifunction";
 import ConnectWallet from "./Connectwallet";
 import { useAccount } from "wagmi";
+import { handleDeposit, isLoggedIn, registerUser } from "./helper/web3";
+import { useAspect } from "@react-three/drei";
+
+
+
 
 export default function Deposit() {
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const [user, setUser] = useState(null);
+  const [userdata, setUserdata] = useState(null);
   const [selectedAmount, setSelectedAmount] = useState(54); // default amount
   const [order_id, setOrderId] = useState(null);
   const [inputValue, setInputValue] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [depositHistory, setDepositHistory] = useState([]); // Already present, but make sure you use it
 
-  // Dummy deposit history data
-  const [depositHistory, setDepositHistory] = useState([
-    { id: 1, amount: 54, status: "Completed", date: "2025-10-07", txId: "0x12345ABC" },
 
-  ]);
+  // // Dummy deposit history data
+  // const [depositHistory, setDepositHistory] = useState([
+  //   { id: 1, amount: 54, status: "Completed", date: "2025-10-07", txId: "0x12345ABC" },
 
-  // Set Telegram WebApp user
+  // ]);
+
+  // Set Telegram WebApp user 
   useEffect(() => {
     if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
       setUser(window.Telegram?.WebApp?.initDataUnsafe?.user);
@@ -31,18 +40,51 @@ export default function Deposit() {
   // Fetch deposit address (always BEP20)
 
   useEffect(() => {
-    console.log({ address })
     const getUser = async (address) => {
       try {
         const res = await getProfile(address);
-        console.log({ res })
-        setUser(res?.data);
+        // console.log({ res })
+        setUserdata(res?.data);
       } catch (error) {
         console.error("Error during signup:", error);
       }
     };
 
-    if (address) getUser(address);
+
+    if (address) getUser("1703020047");
+  }, [address])
+  useEffect(() => {
+    const fetchDepositHistory = async () => {
+      if (!address) return; // address check
+
+      try {
+        const res = await getDepositHistory(address);
+        if (res.status === 200) {
+          setDepositHistory(res.data); // set deposit history
+        } else {
+          console.error("Failed to fetch deposit history", res);
+        }
+      } catch (error) {
+        console.error("Error fetching deposit history:", error);
+      }
+    };
+
+    fetchDepositHistory();
+  }, [address]);
+
+  useEffect(() => {
+    const getUser = async (address) => {
+      try {
+        const res = await getDepositHistory(address);
+        // console.log({ res })
+        setUserdata(res?.data);
+      } catch (error) {
+        console.error("Error during signup:", error);
+      }
+    };
+
+
+    if (address) getUser("1703020047");
   }, [address])
 
 
@@ -63,9 +105,46 @@ export default function Deposit() {
     if (value) navigator.clipboard.writeText(value);
   };
 
-  const deposit = async () => {
-    const res = await deposit
-  }
+  useEffect(() => {
+    // Run only if required data is available
+    if (!address || !userdata?.referral_address || !userdata?.user_id) return;
+
+    const register = async () => {
+      try {
+        if (!address) {
+          setIsOpen(false)
+          return;
+        }
+        const isLogin = await isLoggedIn(address);
+        console.log(isLogin, "in register")
+        if (isLogin) {
+          setIsOpen(false)
+          return
+        }; // already registered
+        setIsOpen(true);
+        console.log(userdata.referral_address, userdata.user_id, isOpen, "123")
+        if (isOpen) {
+          return
+        }
+        const registered = await registerUser(userdata.referral_address, userdata.user_id);
+        if (registered) {
+
+          console.log("✅ User registered successfully");
+          setIsOpen(false)
+        }
+      } catch (error) {
+        console.error("Registration failed:", error);
+        setIsOpen(false)
+      }
+    };
+
+    if (address || !isOpen) register();
+  }, [address]);
+
+
+  // const handleDeposit = async () => {
+  //   const res = await deposit
+  // }
 
   return (
     <div>
@@ -108,8 +187,19 @@ export default function Deposit() {
           </div>
 
           {/* Connect Wallet button */}
-          <div className="col-6 mb-3 mb-2">
-            <ConnectWallet />
+          <div className="d-flex align-items-center gap-3">
+            <div>
+              <ConnectWallet />
+            </div>
+            {isConnected && <div>
+              <button
+                onClick={() => handleDeposit(address, 54)} // Deposit 54 USDT
+                className="cosmuno-account-btn"
+                disabled={loading}
+              >
+                {loading ? "Processing..." : "Deposit"}
+              </button>
+            </div>}
           </div>
 
           {/* Deposit Address & Copy */}

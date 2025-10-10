@@ -30,7 +30,7 @@ function Home() {
       setUser(window.Telegram?.WebApp?.initDataUnsafe?.user)
     }
   }, [window.Telegram?.WebApp?.initDataUnsafe?.user]);
-
+  // 5972467273   default telegramId
   // useEffect(() => {
   //   // if (user) {
   //   // setUserName(user?.username ? user?.username : user?.first_name + " " + user?.last_name)

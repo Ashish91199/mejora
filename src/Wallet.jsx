@@ -67,7 +67,7 @@ function Wallet() {
               </div>
               <div className="mt-3">
                 <div className="text-gray fs-12">Wallet Balance</div>
-                <div className="wallet_amt">{user_data?.amount}</div>
+                <div className="wallet_amt">{user_data?.user_id}</div>
               </div>
             </div>
 

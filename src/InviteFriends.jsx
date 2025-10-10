@@ -22,6 +22,7 @@ function InviteFriends() {
 
   // Initialize AOS on component mount
   useEffect(() => {
+
     AOS.init({
       duration: 600,
       easing: "ease-in-out",
@@ -66,8 +67,6 @@ function InviteFriends() {
 
     window.open(telegramUrl, '_blank'); // Open in a new tab
   };
-
-  console.log({ value })
 
   return (
     <>
