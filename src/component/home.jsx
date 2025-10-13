@@ -94,9 +94,9 @@ function Home() {
         <div className="header">
           <div className="col-5">
             <div className="fs-12 mb-1">
-              Total spin used
+              Available Spin
               <MdKeyboardArrowRight className="fs-16 mx-1" />
-              00
+              {user_data?.avaibleSpin}
             </div>
             <div className="fs-12">
               <div className="progress">

@@ -1,26 +1,21 @@
-// src/components/WheelSpinner.jsx
 import React, { useRef, useState, useEffect } from "react";
+import { Spinerrun } from "../helper/apifunction";
 
 const prizes = [
-    { label: "Prize", color: "#ff595e" },
-    { label: "Prize", color: "#ffca3a" },
-    { label: "Prize", color: "#8ac926" },
-    { label: "Prize", color: "#1982c4" },
-    { label: "Prize", color: "#6a4c93" },
-    { label: "Prize", color: "#ff9f1c" },
-    // { label: "Prize 7", color: "#2ec4b6" },
-    // { label: "Prize 8", color: "#d7263d" },
-    // { label: "Prize 9", color: "#3a86ff" },
-    // { label: "Prize 10", color: "#8338ec" },
-    // { label: "Prize 11", color: "#ff006e" },
-    // { label: "Prize 12", color: "#06d6a0" },
+    { label: "5$", color: "#ff595e" },
+    { label: "10$", color: "#ffca3a" },
+    { label: "20$", color: "#8ac926" },
+    { label: "50$", color: "#1982c4" },
+    { label: "100$", color: "#6a4c93" },
+    { label: "200$", color: "#ff9f1c" },
+    { label: "500$", color: "#8ac926" },
 ];
 
 function WheelSpinner() {
     const wheelRef = useRef(null);
     const [result, setResult] = useState("");
     const [spinning, setSpinning] = useState(false);
-
+    const [user, setUser] = useState(null);
     const slices = prizes.length;
     const sliceDeg = 360 / slices;
 
@@ -68,48 +63,69 @@ function WheelSpinner() {
         initWheel();
     }, []);
 
-    const spinWheel = () => {
-        if (spinning) return;
+    const spinWheel = async () => {
+        // if (spinning || !user) return;
         setSpinning(true);
 
-        const chosenIndex = Math.floor(Math.random() * slices);
-        const randomOffset = (Math.random() - 0.5) * (sliceDeg - 8);
-        const sliceCenter = chosenIndex * sliceDeg + sliceDeg / 2;
-        const targetDeg = 360 - sliceCenter + randomOffset;
-        const fullSpins = Math.floor(Math.random() * 3) + 4;
-        const totalDeg = fullSpins * 360 + targetDeg;
+        try {
+            // Call the Spinerrun API with the user's Telegram ID
+            const response = await Spinerrun("5972467273");
+            if (!response.success) {
+                setResult(`❌ ${response.message}`);
+                setSpinning(false);
+                return;
+            }
 
-        requestAnimationFrame(() => {
-            wheelRef.current.style.transition =
-                "transform 5s cubic-bezier(.15,.9,.1,1)";
-            wheelRef.current.style.transform = `rotate(${totalDeg}deg)`;
-        });
+            const { spinAmount } = response;
+            // Map spinAmount to the prize index
+            const prizeIndex = prizes.findIndex((prize) => prize.label === `${spinAmount}$`);
+            if (prizeIndex === -1) {
+                setResult(`❌ Invalid prize amount: ${spinAmount}`);
+                setSpinning(false);
+                return;
+            }
 
-        const onEnd = () => {
-            wheelRef.current.removeEventListener("transitionend", onEnd);
+            // Calculate wheel rotation
+            const randomOffset = (Math.random() - 0.5) * (sliceDeg - 8);
+            const sliceCenter = prizeIndex * sliceDeg + sliceDeg / 2;
+            const targetDeg = 360 - sliceCenter + randomOffset;
+            const fullSpins = Math.floor(Math.random() * 3) + 4;
+            const totalDeg = fullSpins * 360 + targetDeg;
+
+            requestAnimationFrame(() => {
+                wheelRef.current.style.transition =
+                    "transform 5s cubic-bezier(.15,.9,.1,1)";
+                wheelRef.current.style.transform = `rotate(${totalDeg}deg)`;
+            });
+
+            wheelRef.current.addEventListener("transitionend", () => {
+                wheelRef.current.removeEventListener("transitionend", this);
+                setSpinning(false);
+                setResult(`🎉 You won: ${spinAmount}$`);
+            });
+        } catch (error) {
+            console.error("Spin error:", error);
+            setResult("❌ Spin Not Available");
             setSpinning(false);
-
-            const normalized = ((totalDeg % 360) + 360) % 360;
-            const landedCenter = (360 - normalized + 360) % 360;
-            const landedIndex = Math.floor(landedCenter / sliceDeg) % slices;
-            const prize = prizes[landedIndex];
-            setResult(`🎉 You won: 5 $`);
-        };
-
-        wheelRef.current.addEventListener("transitionend", onEnd);
+        }
     };
+
+    useEffect(() => {
+        if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
+            setUser(window.Telegram.WebApp.initDataUnsafe.user);
+        }
+    }, []);
 
     return (
         <div className="wheel-container">
             <div className="wheel-card">
-
                 <div className="wheel-wrap">
                     <div className="wheel-pointer"></div>
                     <div ref={wheelRef} className="wheel-body">
                         <div
                             className="wheel-center-btn"
                             onClick={spinWheel}
-                            style={{ cursor: spinning ? "not-allowed" : "pointer" }}
+                            style={{ cursor: spinning || !user ? "not-allowed" : "pointer" }}
                         >
                             {spinning ? "..." : "SPIN"}
                         </div>
