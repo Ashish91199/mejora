@@ -114,7 +114,7 @@ function InviteFriends() {
               </div>
             </div>
 
-            <ReferralList userId={"MEJ3875905"} />
+            <ReferralList userId={user.id} />
           </div>
           <div className="invite_fixed_wrapper">
             <div className="d-flex gap-2">

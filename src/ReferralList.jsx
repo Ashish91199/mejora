@@ -6,6 +6,7 @@ const ReferralList = ({ userId }) => {
     const [levelData, setLevelData] = useState([]);
     const [loading, setLoading] = useState(false);
 
+
     const fetchReferrals = async () => {
         try {
             setLoading(true);
