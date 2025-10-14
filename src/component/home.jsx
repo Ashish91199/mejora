@@ -31,24 +31,24 @@ function Home() {
     }
   }, [window.Telegram?.WebApp?.initDataUnsafe?.user]);
   // 5972467273   default telegramId
-  // useEffect(() => {
-  //   // if (user) {
-  //   // setUserName(user?.username ? user?.username : user?.first_name + " " + user?.last_name)
-  //   console.log({ address })
-  //   const getUser = async (address) => {
-  //     try {
-  //       const res = await getProfile(address);
-  //       console.log({ res })
-  //       setUserData(res?.user);
-  //     } catch (error) {
-  //       console.error("Error during signup:", error);
-  //     }
-  //   };
+  useEffect(() => {
+    if (user) {
+      setUserName(user?.username ? user?.username : user?.first_name + " " + user?.last_name)
+      console.log({ address })
+      const getUser = async (address) => {
+        try {
+          const res = await getProfile(address);
+          console.log({ res })
+          setUserData(res?.user);
+        } catch (error) {
+          console.error("Error during signup:", error);
+        }
+      };
 
-  //   if (address) getUser(address);
-  //   // }
+      if (address) getUser(address);
+    }
 
-  // }, [address])
+  }, [address])
 
   const [value, setValue] = useState(30); // Initial slider value
 
