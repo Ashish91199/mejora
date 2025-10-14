@@ -1,4 +1,5 @@
-export const url = "http://localhost:8001/api/";
+// export const url = "http://localhost:8001/api";
+export const url = "https://mejora.cloud/api";
 
 export function signup_user(ref, user) {
   // Make sure to use the correct endpoint from your local server
