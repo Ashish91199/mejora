@@ -177,8 +177,8 @@ export function Spinerrun(id) {
   });
 }
 
-export function getDepositHistory() {
-  return fetch(`${url}/deposithistory`, {
+export function getDepositHistory(user_id) {
+  return fetch(`${url}/deposithistory/${user_id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

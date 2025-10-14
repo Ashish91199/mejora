@@ -44,8 +44,8 @@ function Deposithistory() {
             }
         };
 
-        Rank();
-    }, [user?.id]);
+        if (user) Rank();
+    }, [user]);
 
     return (
         <>

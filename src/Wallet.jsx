@@ -35,7 +35,8 @@ function Wallet() {
       const getUser = async () => {
         try {
           const res = await getProfile(user?.id);
-          setUserData(res?.user);
+          console.log(res, "res")
+          setUserData(res?.data);
         } catch (error) {
           console.error("Error during signup:", error);
         }
@@ -44,7 +45,7 @@ function Wallet() {
       getUser();
     }
 
-  }, [user?.id])
+  }, [user])
 
   return (
     <>

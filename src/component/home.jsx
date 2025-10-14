@@ -36,20 +36,20 @@ function Home() {
     if (user) {
       setUserName(user?.username ? user?.username : user?.first_name + " " + user?.last_name)
       console.log({ address })
-      const getUser = async (address) => {
+      const getUser = async () => {
         try {
-          const res = await getProfile(address);
-          console.log({ res })
-          setUserData(res?.user);
+          const res = await getProfile(user.id);
+          console.log({ res }, "res")
+          setUserData(res?.data);
         } catch (error) {
           console.error("Error during signup:", error);
         }
       };
 
-      if (address) getUser(address);
+      getUser();
     }
 
-  }, [address])
+  }, [user])
 
   const [value, setValue] = useState(30); // Initial slider value
 
@@ -66,7 +66,7 @@ function Home() {
             <Link className="anchor_pointer text-white" to="#">
               <div className="d-flex gap-2 align-items-center">
                 <img src="/images/MejoraLogo.png" width={"28px"} alt="" />
-                <div>{username} (CEO2)
+                <div>{user?.username ? user?.username : user?.first_name + " " + user?.last_name} (CEO)
                 </div>
               </div>
             </Link>
