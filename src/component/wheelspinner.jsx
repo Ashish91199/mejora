@@ -94,7 +94,7 @@ function WheelSpinner() {
 
             requestAnimationFrame(() => {
                 wheelRef.current.style.transition =
-                    "transform 5s cubic-bezier(.15,.9,.1,1)";
+                    "transform 20s cubic-bezier(.20,.12,.6,1)";
                 wheelRef.current.style.transform = `rotate(${totalDeg}deg)`;
             });
 

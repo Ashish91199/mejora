@@ -14,6 +14,7 @@ function Home() {
   const { address } = useAccount()
   const [user, setUser] = useState(null);
   const [username, setUserName] = useState(null);
+  console.log("username", username)
   const [user_data, setUserData] = useState(null);
   // Initialize AOS on component mount
   console.log({ user })
