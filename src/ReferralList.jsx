@@ -2,15 +2,20 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { url } from "./helper/apifunction";
 
-const ReferralList = ({ userId }) => {
+const ReferralList = () => {
+    const [user, setUser] = useState(null);
     const [levelData, setLevelData] = useState([]);
     const [loading, setLoading] = useState(false);
-
+    useEffect(() => {
+        if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
+            setUser(window.Telegram?.WebApp?.initDataUnsafe?.user);
+        }
+    }, [window.Telegram?.WebApp?.initDataUnsafe?.user]);
 
     const fetchReferrals = async () => {
         try {
             setLoading(true);
-            const res = await axios.get(`${url}/referrals/${userId}`);
+            const res = await axios.get(`${url}/referrals/${user?.id}`);
             setLevelData(res.data.data || []);
         } catch (err) {
             console.error("Error fetching referrals:", err);
@@ -20,8 +25,8 @@ const ReferralList = ({ userId }) => {
     };
 
     useEffect(() => {
-        if (userId) fetchReferrals();
-    }, [userId]);
+        if (user) fetchReferrals();
+    }, [user]);
 
     const formatDate = (dateStr) => {
         const date = new Date(dateStr);
