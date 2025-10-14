@@ -69,7 +69,7 @@ function WheelSpinner() {
 
         try {
             // Call the Spinerrun API with the user's Telegram ID
-            const response = await Spinerrun("5972467273");
+            const response = await Spinerrun(user.id);
             if (!response.success) {
                 setResult(`❌ ${response.message}`);
                 setSpinning(false);

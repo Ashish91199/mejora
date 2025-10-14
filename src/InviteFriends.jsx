@@ -6,6 +6,11 @@ import { Link } from "react-router-dom";
 import FooterNav from "./component/FooterNav";
 import { RWebShare } from "react-web-share";
 import { getUserLevel } from "./helper/apifunction";
+import ReferralList from "./ReferralList";
+
+// Import toast
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function InviteFriends() {
   const [user, setUser] = useState(null);
@@ -16,24 +21,24 @@ function InviteFriends() {
 
   useEffect(() => {
     if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
-      setUser(window.Telegram?.WebApp?.initDataUnsafe?.user)
+      setUser(window.Telegram?.WebApp?.initDataUnsafe?.user);
     }
   }, [window.Telegram?.WebApp?.initDataUnsafe?.user]);
 
   // Initialize AOS on component mount
   useEffect(() => {
-
     AOS.init({
       duration: 600,
       easing: "ease-in-out",
       once: true,
     });
   }, []);
+
   useEffect(() => {
     if (user?.id) {
-      setValue(`https://t.me/@MejoraBot_bot?start=${user?.id}`)
+      setValue(`https://t.me/@MejoraBot_bot?start=${user?.id}`);
     }
-
+    console.log(user, "user");
   }, [user]);
 
   useEffect(() => {
@@ -46,18 +51,27 @@ function InviteFriends() {
           console.error("Error during getLevel:", error);
         }
       };
-
       getLevel();
     }
-  }, [user])
+  }, [user]);
 
   // Function to copy text to clipboard
   const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text).then(() => {
-      alert("Link copied to clipboard!");
-    }).catch(err => {
-      console.error("Failed to copy: ", err);
-    });
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        toast.success("Link copied to clipboard!", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+        });
+      })
+      .catch(err => {
+        toast.error("Failed to copy!", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        console.error("Failed to copy: ", err);
+      });
   };
 
   const shareToTelegram = () => {
@@ -99,49 +113,8 @@ function InviteFriends() {
                 </div>
               </div>
             </div>
-            {/* <div className="py-3 text-center">
-              <Link className="anchor_link fs-16">Active more levels</Link>
-            </div> */}
 
-            <div>
-              <div className="fs-12 py-2">List of your friends</div>
-
-              <div className="card mb-5">
-                <div className="card-body p-2">
-                  {level_data && level_data.length > 0 ? (
-                    <table className="table table-bordered table-sm text-center mb-0">
-                      <thead className="table-light">
-                        <tr>
-                          <th className="fs-12">#</th>
-                          <th className="fs-12">Username</th>
-                          <th className="fs-12">User ID</th>
-                          <th className="fs-12">Date</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {level_data.map((friend, index) => (
-                          <tr key={index}>
-                            <td className="fs-12">1</td>
-                            <td className="fs-12">ashish</td>
-                            <td className="fs-12">mja12334</td>
-                            <td className="fs-12">
-                              2-10-2025
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  ) : (
-                    <div className="text-center text-muted fs-12 py-2">
-                      No friends invited yet.
-                    </div>
-                  )}
-                </div>
-              </div>
-
-
-
-            </div>
+            <ReferralList userId={"MEJ3875905"} />
           </div>
           <div className="invite_fixed_wrapper">
             <div className="d-flex gap-2">
@@ -165,7 +138,9 @@ function InviteFriends() {
           </div>
         </div>
       </div>
+
       <FooterNav />
+      <ToastContainer /> {/* Add toast container */}
     </>
   );
 }

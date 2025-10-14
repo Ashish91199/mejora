@@ -80,7 +80,7 @@ async function approveToken(amt) {
     }
 }
 // Handle deposit flow
-export const handleDeposit = async (userAddress, depositAmount) => {
+export const handleDeposit = async (user_id, userAddress, depositAmount) => {
     // setLoading(true);
     try {
         const allowance = await checkAllowance(config, userAddress); // pass config
@@ -101,7 +101,7 @@ export const handleDeposit = async (userAddress, depositAmount) => {
             abi: contractAddressABI,
             address: contractAddress,
             functionName: '_deposit',
-            args: ["MEJ5698963", (depositAmount * 1e18).toLocaleString("fullwide", { useGrouping: false })]
+            args: [user_id, (depositAmount * 1e18).toLocaleString("fullwide", { useGrouping: false })]
         })
         const result = await waitForTransactionReceipt({
             hash: res

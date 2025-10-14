@@ -1219,3 +1219,233 @@ h5 {
 .cosmuno-wallet-address:hover {
   transform: scale(1.05);
 }
+
+/* card deposthistory css */
+/* Reset conflicting styles and ensure base layout */
+.dep-hist-holder-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 1rem;
+  background: #1e2125;
+  /* Darker container for contrast */
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.dep-hist-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #e5e7eb;
+  text-align: left;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1rem;
+}
+
+.dep-hist-card {
+  background: rgba(39, 42, 47, 0.7);
+  /* Semi-transparent #272a2f */
+  backdrop-filter: blur(12px);
+  /* Frosted glass effect */
+  -webkit-backdrop-filter: blur(12px);
+  /* Safari support */
+  border-radius: 12px;
+  border: 2px solid #efb90b;
+  /* Vibrant yellow border */
+  box-shadow: 0 4px 20px rgba(239, 185, 11, 0.3);
+  /* Shadow with #efb90b */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.dep-hist-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 24px rgba(239, 185, 11, 0.5);
+  /* Enhanced #efb90b shadow on hover */
+}
+
+.dep-hist-serial-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 28px;
+  height: 28px;
+  background: rgba(239, 185, 11, 0.2);
+  /* Semi-transparent #efb90b background */
+  border: 2px solid #efb90b;
+  /* #efb90b border */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f9fafb;
+  /* Light gray for contrast */
+  font-size: 0.9rem;
+  font-weight: 600;
+  z-index: 10;
+  box-shadow: 0 0 8px rgba(239, 185, 11, 0.4);
+  /* Glowing #efb90b shadow */
+}
+
+.dep-hist-card-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dep-hist-card-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  align-items: start;
+  justify-content: space-between;
+}
+
+.dep-hist-card-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.dep-hist-card-item:hover {
+  background: rgba(239, 185, 11, 0.1);
+  /* Subtle #efb90b hover effect */
+}
+
+.dep-hist-icon {
+  color: #efb90b;
+  /* Yellow icon color */
+  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.1);
+  /* Transparent background */
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 8px rgba(239, 185, 11, 0.4);
+  /* #efb90b glowing shadow */
+}
+
+.dep-hist-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #d1d5db;
+  /* Light gray for labels */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dep-hist-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f9fafb;
+  /* Light gray for values */
+}
+
+.dep-hist-text-mono {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.85rem;
+}
+
+.dep-hist-tooltip {
+  position: relative;
+}
+
+.dep-hist-tooltip-text {
+  visibility: hidden;
+  width: 220px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.dep-hist-tooltip:hover .dep-hist-tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.dep-hist-empty-state {
+  padding: 2rem;
+  text-align: center;
+}
+
+.dep-hist-text-gray {
+  color: #d1d5db;
+  /* Light gray for empty state */
+  font-size: 1rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .dep-hist-card-body {
+    padding: 1rem;
+  }
+
+  .dep-hist-card-content {
+    grid-template-columns: 1fr;
+  }
+
+  .dep-hist-card-item {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .dep-hist-icon {
+    font-size: 1rem;
+    padding: 0.4rem;
+  }
+
+  .dep-hist-title {
+    font-size: 1.125rem;
+  }
+
+  .dep-hist-serial-badge {
+    width: 24px;
+    height: 24px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dep-hist-card {
+    border-width: 1px;
+    /* Thinner border for small screens */
+  }
+
+  .dep-hist-card-body {
+    padding: 0.75rem;
+  }
+
+  .dep-hist-card-item {
+    padding: 0.25rem;
+  }
+
+  .dep-hist-label,
+  .dep-hist-value {
+    font-size: 0.75rem;
+  }
+
+  .dep-hist-serial-badge {
+    width: 20px;
+    height: 20px;
+    font-size: 0.7rem;
+    top: 8px;
+    left: 8px;
+  }
+}

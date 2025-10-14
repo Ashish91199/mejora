@@ -67,7 +67,7 @@ function Wallet() {
               </div>
               <div className="mt-3">
                 <div className="text-gray fs-12">Wallet Balance</div>
-                <div className="wallet_amt">{user_data?.user_id}</div>
+                <div className="wallet_amt">{user_data?.earning_balance}</div>
               </div>
             </div>
 
@@ -205,7 +205,7 @@ function Wallet() {
                                   Referral Income
                                 </div>
                                 <div>
-                                  <span> + 5 $</span>
+                                  <span> {user_data?.direct_income}</span>
                                 </div>
                               </div>
                             </div>
@@ -281,7 +281,7 @@ function Wallet() {
                                   Wallet Balance
                                 </div>
                                 <div>
-                                  <span>10,765</span>
+                                  <span> {user_data?.earning_balance}</span>
                                 </div>
                               </div>
                             </div>
@@ -306,7 +306,7 @@ function Wallet() {
                                   Withdrawal Balance
                                 </div>
                                 <div>
-                                  <span>10,00</span>
+                                  <span>{user_data?.earning_balance}</span>
                                 </div>
                               </div>
                             </div>
@@ -332,7 +332,7 @@ function Wallet() {
                                   Total Prize Earned
                                 </div>
                                 <div>
-                                  <span>0.00</span>
+                                  <span>{user_data?.spinearnBalance}</span>
                                 </div>
                               </div>
                             </div>
@@ -357,7 +357,7 @@ function Wallet() {
                                   Total spin used
                                 </div>
                                 <div>
-                                  <span>0.00</span>
+                                  <span>{user_data?.completeSpin}</span>
                                 </div>
                               </div>
                             </div>

@@ -62,7 +62,7 @@ function Home() {
       <div className="page_container">
         <div className="top-header">
           <div className="col-4">
-            <Link className="anchor_pointer text-white" to="/profile">
+            <Link className="anchor_pointer text-white" to="#">
               <div className="d-flex gap-2 align-items-center">
                 <img src="/images/MejoraLogo.png" width={"28px"} alt="" />
                 <div>{username} (CEO)
@@ -76,7 +76,9 @@ function Home() {
 
                 <div className="wallet_btn">
                   <div className="d-flex gap-2 align-items-center">
-                    <div>+{formatNumber(user_data?.amount)}</div>{" "}
+                    {/* <div>+{formatNumber(user_data?.deposit_balance)}</div>{" "} */}
+                    <div>+{user_data?.deposit_balance ? formatNumber(user_data.deposit_balance / 1e18) : 0}</div>
+
                     <div>
                       <Link to="/wallet">
                         <span className="badge bg-lightwallet rounded-pill">
@@ -111,26 +113,7 @@ function Home() {
               </div>
             </div>
           </div>
-          {/* <div className="col-7">
-            <div className="d-flex justify-content-end gap-1">
-              <div data-aos="zoom-in">
 
-                <div className="wallet_btn">
-                  <div className="d-flex gap-2 align-items-center">
-                    <div>+{formatNumber(user_data?.amount)}</div>{" "}
-                    <div>
-                      <Link to="/wallet">
-                        <span className="badge bg-light rounded-pill">
-                          <img src="/images/wallet.png" width={"15px"} alt="" />
-                        </span>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div> */}
         </div>
         {/* Centered Logo */}
         <div className="rounded-outer-container" data-aos="fade-up">

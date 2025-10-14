@@ -22,14 +22,6 @@ export default function Deposit() {
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [depositHistory, setDepositHistory] = useState([]); // Already present, but make sure you use it
-
-
-  // // Dummy deposit history data
-  // const [depositHistory, setDepositHistory] = useState([
-  //   { id: 1, amount: 54, status: "Completed", date: "2025-10-07", txId: "0x12345ABC" },
-
-  // ]);
-
   // Set Telegram WebApp user 
   useEffect(() => {
     if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
@@ -51,7 +43,7 @@ export default function Deposit() {
     };
 
 
-    if (address) getUser("1703020047");
+    if (address) getUser(user.id);
   }, [address])
   useEffect(() => {
     const fetchDepositHistory = async () => {
@@ -72,20 +64,7 @@ export default function Deposit() {
     fetchDepositHistory();
   }, [address]);
 
-  useEffect(() => {
-    const getUser = async (address) => {
-      try {
-        const res = await getDepositHistory(address);
-        // console.log({ res })
-        setUserdata(res?.data);
-      } catch (error) {
-        console.error("Error during signup:", error);
-      }
-    };
 
-
-    if (address) getUser("1703020047");
-  }, [address])
 
 
   useEffect(() => {
@@ -193,7 +172,7 @@ export default function Deposit() {
             </div>
             {isConnected && <div>
               <button
-                onClick={() => handleDeposit(address, 54)} // Deposit 54 USDT
+                onClick={() => handleDeposit(userdata.user_id, address, 54)} // Deposit 54 USDT
                 className="cosmuno-account-btn"
                 disabled={loading}
               >
@@ -216,42 +195,7 @@ export default function Deposit() {
           )}
 
           {/* 3D-Style Deposit History Table */}
-          <div className="col-12 mt-4">
-            <h5 className="mb-3 text-white">Deposit History</h5>
-            <div className="d-flex flex-column gap-3">
-              {depositHistory.map((item, index) => (
-                <div
-                  key={item.id}
-                  className="deposit-card p-3 d-flex justify-content-between align-items-center shadow-lg"
-                >
-                  <div className="d-flex gap-3 align-items-center">
-                    <span className="text-white fs-5">{index + 1}.</span>
-                    <div>
-                      <div className="text-white">Amount: ${item.amount}</div>
-                      <div
-                        className={`status-badge ${item.status === "Completed" ? "completed" : "pending"
-                          }`}
-                      >
-                        {item.status}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="d-flex gap-3 align-items-center">
-                    <div className="text-white">Date: {item.date}</div>
-                    <input
-                      type="text"
-                      value={item.txId}
-                      readOnly
-                      className="form-control form-control-sm text-center tx-input"
-                    />
-                    <button className="btn btn-copy" onClick={() => handleCopy(item.txId)}>
-                      <BsCopy />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+
         </div>
       </div>
       <FooterNav />
