@@ -19,6 +19,7 @@ import Withdraw from "./Withdraw";
 import Deposithistory from "./Deposithistory";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
+import { setUserDetails } from "./redux/slice";
 
 
 function App() {
