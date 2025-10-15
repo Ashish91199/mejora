@@ -44,7 +44,7 @@ function ConnectWallet() {
                         return (
                             <button
                                 onClick={openConnectModal}
-                                className="cosmuno-connect-btn"
+                                className="connectcss"
                             >
                                 Connect Wallet
                             </button>
@@ -53,7 +53,7 @@ function ConnectWallet() {
 
                     if (chain.unsupported) {
                         return (
-                            <button className="cosmuno-wrong-network-btn">
+                            <button className="connectcss">
                                 Wrong Network
                             </button>
                         );
@@ -63,7 +63,7 @@ function ConnectWallet() {
                         <div className="cosmuno-wallet-connected-container">
                             <button
                                 onClick={openAccountModal}
-                                className="cosmuno-account-btn"
+                                className="connectcss"
                             >
                                 {shortenAddress(account.address)}
                             </button>

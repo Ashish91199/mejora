@@ -8,6 +8,7 @@ import ConnectWallet from "./Connectwallet";
 import { useAccount } from "wagmi";
 import { handleDeposit, isLoggedIn, registerUser } from "./helper/web3";
 import { useAspect } from "@react-three/drei";
+import "@rainbow-me/rainbowkit/styles.css";
 
 
 
@@ -43,7 +44,7 @@ export default function Deposit() {
     };
 
 
-    if (address) getUser(user.id);
+    if (address) getUser(user?.id);
   }, [address])
   useEffect(() => {
     const fetchDepositHistory = async () => {
@@ -173,7 +174,7 @@ export default function Deposit() {
             {isConnected && <div>
               <button
                 onClick={() => handleDeposit(userdata.user_id, address, 54)} // Deposit 54 USDT
-                className="cosmuno-account-btn"
+                className="connectcss"
                 disabled={loading}
               >
                 {loading ? "Processing..." : "Deposit"}

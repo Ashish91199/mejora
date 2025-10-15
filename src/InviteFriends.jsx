@@ -36,7 +36,7 @@ function InviteFriends() {
 
   useEffect(() => {
     if (user?.id) {
-      setValue(`https://t.me/@MejoraBot_bot?start=${user?.id}`);
+      setValue(`https://t.me/MejoraBot_bot?start=${user?.id}`);
     }
     console.log(user, "user");
   }, [user]);
