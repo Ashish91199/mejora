@@ -33,9 +33,9 @@ export default function Deposit() {
   // Fetch deposit address (always BEP20)
 
   useEffect(() => {
-    const getUser = async (address) => {
+    const getUser = async () => {
       try {
-        const res = await getProfile(address);
+        const res = await getProfile(user?.id);
         // console.log({ res })
         setUserdata(res?.data);
       } catch (error) {
@@ -44,8 +44,8 @@ export default function Deposit() {
     };
 
 
-    if (address) getUser(user?.id);
-  }, [address])
+    if (user) getUser();
+  }, [user])
   useEffect(() => {
     const fetchDepositHistory = async () => {
       if (!address) return; // address check
@@ -86,8 +86,8 @@ export default function Deposit() {
   };
 
   useEffect(() => {
-    // Run only if required data is available
-    if (!address || !userdata?.referral_address || !userdata?.user_id) return;
+
+    if (!address) return;
 
     const register = async () => {
       try {
@@ -96,19 +96,17 @@ export default function Deposit() {
           return;
         }
         const isLogin = await isLoggedIn(address);
+
         console.log(isLogin, "in register")
         if (isLogin) {
           setIsOpen(false)
           return
-        }; // already registered
+        };
         setIsOpen(true);
-        console.log(userdata.referral_address, userdata.user_id, isOpen, "123")
-        if (isOpen) {
-          return
-        }
-        const registered = await registerUser(userdata.referral_address, userdata.user_id);
-        if (registered) {
+        console.log(userdata.user_address, userdata.user_id, isOpen, "123")
 
+        const registered = await registerUser(userdata.user_address, userdata.user_id);
+        if (registered) {
           console.log("✅ User registered successfully");
           setIsOpen(false)
         }
