@@ -1,22 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import AOS from "aos";
-import "aos/dist/aos.css"; // Import AOS styles
+import "aos/dist/aos.css";
 
-import { FaHandHoldingDroplet } from "react-icons/fa6";
-import { AiOutlineSwap } from "react-icons/ai";
-import { SiRocket } from "react-icons/si";
-import { MdOutlineToken } from "react-icons/md";
+import { FiDollarSign } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import FooterNav from "./component/FooterNav";
 import { getRank } from "./helper/apifunction";
-import { formatNumber } from "./helper/Math";
 
 function Rank() {
   const [user, setUser] = useState(null);
   const [data, setUserData] = useState(null);
-  const [rank_history, setRankHistory] = useState(null);
+  const [rankHistory, setRankHistory] = useState([]);
 
-  // Initialize AOS on component mount
   useEffect(() => {
     AOS.init({
       duration: 600,
@@ -26,95 +21,87 @@ function Rank() {
   }, []);
 
   useEffect(() => {
-    if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
-      setUser(window.Telegram?.WebApp?.initDataUnsafe?.user)
-    }
-  }, [window.Telegram?.WebApp?.initDataUnsafe?.user]);
+    const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+    if (tgUser) setUser(tgUser);
+  }, []);
+
   useEffect(() => {
-    if (user) {
-      const Rank = async () => {
+    if (user?.id) {
+      const fetchRankData = async () => {
         try {
-          const res = await getRank(user?.id);
-          setUserData(res?.data);
-          setRankHistory(res?.result)
+          const res = await getRank(user.id);
+          setUserData(res?.data || null);
+          setRankHistory(res?.result || []);
         } catch (error) {
-          console.error("Error during signup:", error);
+          console.error("Error loading rank:", error);
         }
       };
-
-      Rank();
+      fetchRankData();
     }
-
-  }, [user?.id])
+  }, [user?.id]);
 
   return (
     <>
-      <div className="page_container">
-        <div className="inner_page_layout">
-          {/* align */}
-          <div>
-            <div className="mb-3 text-center">
-              <h4 className="mb-1">Rank </h4>
-            </div>
-            <div className="card mb-2">
-              <div className="card-body">
-                <div className="d-flex gap-2 justify-content-between align-items-center">
-                  <div className="d-flex gap-3 align-items-center">
-                    <div className="circle_bg">{data?.first_name?.slice(0, 2).toUpperCase()}</div>
-                    <div className="">
-                      {/* <p className="mb-0">{data?.username ? data?.username : data?.first_name + " " + data?.last_name}</p> */}
-                      <p className="mb-0">Total Rank Income </p>
-                      <div className="text-gray">{data?.amount} 0</div>
+      <div className="dep-hist-holder-container">
+        <div className="dep-hist-title pt-3 pb-4">Rank History</div>
+
+        {rankHistory.length > 0 ? (
+          rankHistory.map((item, index) => (
+            <div
+              className="dep-hist-card mb-4"
+              key={index}
+              data-aos="fade-up"
+            >
+              <div className="dep-hist-serial-badge">{index + 1}</div>
+              <div className="dep-hist-card-body">
+                <div className="dep-hist-card-content">
+
+                  <div className="dep-hist-card-item">
+                    <div className="dep-hist-icon">
+                      <div className="circle_bg">
+                        {item?.first_name?.slice(0, 2)?.toUpperCase() || "--"}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="dep-hist-label">Username</span>
+                      <br />
+                      <span className="dep-hist-value">{item?.username || "N/A"}</span>
                     </div>
                   </div>
-                  <div>#{data?.rank}</div>
+
+                  <div className="dep-hist-card-item">
+                    <div className="dep-hist-icon"><FiDollarSign /></div>
+                    <div>
+                      <span className="dep-hist-label">Rank Income</span>
+                      <br />
+                      <span className="dep-hist-value">{item?.amount} Mejora</span>
+                    </div>
+                  </div>
+
+                  <div className="dep-hist-card-item">
+                    <div className="dep-hist-icon">
+                      <img
+                        src={`/images/${item?.rank === 1 ? "gold" : item?.rank === 2 ? "silver" : "bronze"
+                          }.png`}
+                        width="20"
+                        alt="Rank Icon"
+                      />
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </div>
-
-            <div className="holder-container">
-              <div className="pt-3 pb-4">Rank History</div> {/* Example total holders */}
-
-              {/* Manual data entries */}
-              <div className="d-flex gap-2 justify-content-between align-items-center mb-3">
-                <div className="d-flex gap-3 align-items-center">
-                  <div className="circle_bg">AS</div> {/* First two letters of first name */}
-                  <div>
-                    <p className="mb-0">ashish123</p> {/* Username */}
-                    <div className="text-gray">500 Mejora</div>
-                  </div>
-                </div>
-                <div><img src="/images/gold.png" width={"17px"} alt="Gold" /></div> {/* Rank 1 */}
-              </div>
-
-              <div className="d-flex gap-2 justify-content-between align-items-center mb-3">
-                <div className="d-flex gap-3 align-items-center">
-                  <div className="circle_bg">RA</div>
-                  <div>
-                    <p className="mb-0">ravi.k</p>
-                    <div className="text-gray">400 Mejora</div>
-                  </div>
-                </div>
-                <div><img src="/images/silver.png" width={"17px"} alt="Silver" /></div> {/* Rank 2 */}
-              </div>
-
-              <div className="d-flex gap-2 justify-content-between align-items-center mb-3">
-                <div className="d-flex gap-3 align-items-center">
-                  <div className="circle_bg">MO</div>
-                  <div>
-                    <p className="mb-0">monu</p>
-                    <div className="text-gray">350 Mejora</div>
-                  </div>
-                </div>
-                <div><img src="/images/bronze.png" width={"17px"} alt="Bronze" /></div> {/* Rank 3 */}
-              </div>
-
-
+          ))
+        ) : (
+          <div className="dep-hist-card">
+            <div className="dep-hist-card-body dep-hist-empty-state">
+              <p className="dep-hist-text-gray mb-0">No rank history available</p>
             </div>
-
           </div>
-        </div>
+        )}
       </div>
+
       <FooterNav />
     </>
   );

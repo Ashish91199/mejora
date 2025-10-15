@@ -107,7 +107,7 @@ function InviteFriends() {
                         alt=""
                         width={"25px"}
                       />
-                      <span className="text-green ms-1">$5 Bonus Each 🎁</span>when you invite a friend
+                      <span className="text-green ms-1">5% Bonus Each 🎁</span>when you invite a friend
                     </div>
                   </div>
                 </div>
@@ -120,7 +120,7 @@ function InviteFriends() {
             <div className="d-flex gap-2">
               <div className="flex-grow-1 content_area text-center fs-16" style={{ cursor: 'pointer' }} onClick={shareToTelegram}>
                 <span>
-                  🎁 Invite & Get $5
+                  🎁 Invite & Get 5%
                   <FiUserPlus className="ms-2" />
                 </span>
               </div>
