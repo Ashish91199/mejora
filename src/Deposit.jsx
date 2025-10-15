@@ -9,6 +9,7 @@ import { useAccount } from "wagmi";
 import { handleDeposit, isLoggedIn, registerUser } from "./helper/web3";
 import { useAspect } from "@react-three/drei";
 import "@rainbow-me/rainbowkit/styles.css";
+import toast from "react-hot-toast";
 
 
 
@@ -92,27 +93,37 @@ export default function Deposit() {
     const register = async () => {
       try {
         if (!address) {
-          setIsOpen(false)
+          toast.error("Please connect your wallet first!");
+          setIsOpen(false);
           return;
         }
+
         const isLogin = await isLoggedIn(address);
-
-        console.log(isLogin, "in register")
         if (isLogin) {
-          setIsOpen(false)
-          return
-        };
-        setIsOpen(true);
-        console.log(userdata.user_address, userdata.user_id, isOpen, "123")
-
-        const registered = await registerUser(userdata.user_address, userdata.user_id);
-        if (registered) {
-          console.log("✅ User registered successfully");
-          setIsOpen(false)
+          toast("You are already registered!", { icon: "ℹ️" });
+          setIsOpen(false);
+          return;
         }
+
+        setIsOpen(true);
+
+        const loadingToast = toast.loading("Registering user...");
+
+        const res = await getProfile(user?.id);
+        const registered = await registerUser(userdata.referral_address, userdata.user_id);
+
+        if (registered) {
+          toast.success("✅ Registration Successful!", { id: loadingToast });
+          setIsOpen(false);
+        } else {
+          toast.error("❌ Registration Failed!", { id: loadingToast });
+          setIsOpen(false);
+        }
+
       } catch (error) {
         console.error("Registration failed:", error);
-        setIsOpen(false)
+        toast.error("Something went wrong during registration!");
+        setIsOpen(false);
       }
     };
 

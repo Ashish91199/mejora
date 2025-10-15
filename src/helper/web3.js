@@ -6,25 +6,31 @@ import {
 
 import { contractAddress, contractAddressABI, contractToken, contractTokenABI } from "../ContractAbi";
 import { config } from "../main";
+import toast from "react-hot-toast";
 
 
 export async function registerUser(referralAddress, telegramId) {
-    if (!referralAddress || !telegramId) {
-        console.log("in eolasfasd")
-        return;
-    }
-    console.log(referralAddress, telegramId, "in web 3")
-    const res = await writeContract(config, {
-        abi: contractAddressABI,
-        address: contractAddress,
-        functionName: "_registerUser",
-        args: [referralAddress, telegramId]
-    })
-    console.log(res, "1234");
-    const result = await waitForTransactionReceipt({ hash: res })
-    return result;
+    try {
+        if (!referralAddress || !telegramId) {
+            console.log("Missing referral or telegram ID");
+            return false;
+        }
 
+        const res = await writeContract(config, {
+            abi: contractAddressABI,
+            address: contractAddress,
+            functionName: "_registerUser",
+            args: [referralAddress, telegramId]
+        });
+
+        const result = await waitForTransactionReceipt({ hash: res });
+        return result
+    } catch (err) {
+        console.error("Web3 Registration Error:", err);
+        return false;
+    }
 }
+
 
 export async function isLoggedIn(userAddress) {
     try {
@@ -79,39 +85,42 @@ async function approveToken(amt) {
         return false;
     }
 }
-// Handle deposit flow
+
+
 export const handleDeposit = async (user_id, userAddress, depositAmount) => {
-    // setLoading(true);
     try {
-        const allowance = await checkAllowance(config, userAddress); // pass config
+        const allowance = await checkAllowance(config, userAddress);
         console.log("Current allowance:", allowance);
 
         if (allowance < depositAmount) {
-            console.log("Approving tokens...");
+            const approvalToast = toast.loading("Approving tokens...");
+
             const approve = await approveToken(depositAmount);
             if (!approve) {
-                alert("Failed to Approve!");
+                toast.error("Failed to approve tokens!", { id: approvalToast });
                 return;
             }
-            console.log("Tokens approved!");
+
+            toast.success("✅ Tokens approved!", { id: approvalToast });
         }
 
-        console.log(`Depositing ${depositAmount} USDT...`);
+        // const depositToast = toast.loading(`Depositing ${depositAmount} USDT...`);
+
         const res = await writeContract(config, {
             abi: contractAddressABI,
             address: contractAddress,
             functionName: '_deposit',
             args: [user_id, (depositAmount * 1e18).toLocaleString("fullwide", { useGrouping: false })]
-        })
-        const result = await waitForTransactionReceipt({
-            hash: res
-        })
-        return result;
-        alert("Deposit successful!");
-    } catch (err) {
+        });
 
+        const result = await waitForTransactionReceipt({ hash: res });
+
+        toast.success("✅ Deposit successful!";
+
+        return result;
+
+    } catch (err) {
         console.error(err);
-        alert("Deposit failed, see console for details.");
+        toast.error("❌ Deposit failed! Check console for details.");
     }
-    // setLoading(false);
 };
