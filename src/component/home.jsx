@@ -66,7 +66,7 @@ function Home() {
             <Link className="anchor_pointer text-white" to="#">
               <div className="d-flex gap-2 align-items-center">
                 <img src="/images/MejoraLogo.png" width={"28px"} alt="" />
-                <div>{user?.username ? user?.username : user?.first_name + " " + user?.last_name} (CEO)
+                <div>{user?.username ? user?.username : user?.first_name + " " + user?.last_name}
                 </div>
               </div>
             </Link>

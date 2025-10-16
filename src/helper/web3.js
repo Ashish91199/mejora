@@ -104,7 +104,7 @@ export const handleDeposit = async (user_id, userAddress, depositAmount) => {
             toast.success("✅ Tokens approved!", { id: approvalToast });
         }
 
-        // const depositToast = toast.loading(`Depositing ${depositAmount} USDT...`);
+        const depositToast = toast.loading(`Depositing ${depositAmount} USDT...`);
 
         const res = await writeContract(config, {
             abi: contractAddressABI,
@@ -112,15 +112,17 @@ export const handleDeposit = async (user_id, userAddress, depositAmount) => {
             functionName: '_deposit',
             args: [user_id, (depositAmount * 1e18).toLocaleString("fullwide", { useGrouping: false })]
         });
-
+        console.log("resdddd", res);
         const result = await waitForTransactionReceipt({ hash: res });
 
-        toast.success("✅ Deposit successful!";
+        toast.success("✅ Deposit successful!", { id: depositToast });
 
         return result;
 
     } catch (err) {
         console.error(err);
         toast.error("❌ Deposit failed! Check console for details.");
+        setTimeout(() => toast.dismiss(), 2000);  // ✅ यह line error के बाद
+
     }
 };

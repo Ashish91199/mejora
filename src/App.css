@@ -1085,10 +1085,12 @@ tc-range-slider::part(thumb) {
   height: 0;
   border-left: 26px solid transparent;
   border-right: 26px solid transparent;
-  border-bottom: 36px solid #ffb703;
+  border-top: 36px solid #ffb703;
+  /* border-bottom हटाकर border-top लगा दिया */
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
   z-index: 10;
 }
+
 
 .wheel-center-btn {
   position: absolute;

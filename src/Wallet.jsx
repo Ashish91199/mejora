@@ -355,7 +355,7 @@ function Wallet() {
                               </div>
                               <div>
                                 <div className="text-lgray">
-                                  Total spin used
+                                  Total Spin Used
                                 </div>
                                 <div>
                                   <span>{user_data?.completeSpin}</span>
@@ -380,7 +380,7 @@ function Wallet() {
                               </div>
                               <div>
                                 <div className="text-lgray">
-                                  Total rank
+                                  Total Rank
                                 </div>
                                 <div>
                                   <span>0.00</span>

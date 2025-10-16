@@ -1,5 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Spinerrun } from "../helper/apifunction";
+import spinningSound from "../component/spinning.mp3";
+import resultSound from "../component/result.mp3";
 
 const prizes = [
     { label: "5$", color: "#ff595e" },
@@ -16,6 +18,10 @@ function WheelSpinner() {
     const [result, setResult] = useState("");
     const [spinning, setSpinning] = useState(false);
     const [user, setUser] = useState(null);
+
+    const spinningAudioRef = useRef(new Audio(spinningSound));
+    const resultAudioRef = useRef(new Audio(resultSound));
+
     const slices = prizes.length;
     const sliceDeg = 360 / slices;
 
@@ -41,7 +47,7 @@ function WheelSpinner() {
             const x = size / 2 + Math.cos(rad) * (radius * 0.75);
             const y = size / 2 + Math.sin(rad) * (radius * 0.75);
             svgParts.push(
-                `<text x='${x}' y='${y}' text-anchor='middle' alignment-baseline='middle' font-size='14' font-family='Arial' font-weight='700' fill='#fff' transform='rotate(${angle}, ${x}, ${y})'>${prizes[i].label}</text>`
+                `<text x='${x}' y='${y}' text-anchor='middle' alignment-baseline='middle' font-size='18' font-family='Arial' font-weight='700' fill='#fff' transform='rotate(${angle}, ${x}, ${y})'>${prizes[i].label}</text>`
             );
         }
         svgParts.push("</svg>");
@@ -64,28 +70,33 @@ function WheelSpinner() {
     }, []);
 
     const spinWheel = async () => {
-        // if (spinning || !user) return;
+        if (spinning || !user) return;
         setSpinning(true);
 
+        // Play spinning sound
+        const spinningAudio = spinningAudioRef.current;
+        spinningAudio.currentTime = 0;
+        spinningAudio.loop = true;
+        spinningAudio.play().catch(() => console.log("Autoplay blocked"));
+
         try {
-            // Call the Spinerrun API with the user's Telegram ID
             const response = await Spinerrun(user.id);
             if (!response.success) {
                 setResult(`❌ ${response.message}`);
                 setSpinning(false);
+                spinningAudio.pause();
                 return;
             }
 
             const { spinAmount } = response;
-            // Map spinAmount to the prize index
             const prizeIndex = prizes.findIndex((prize) => prize.label === `${spinAmount}$`);
             if (prizeIndex === -1) {
                 setResult(`❌ Invalid prize amount: ${spinAmount}`);
                 setSpinning(false);
+                spinningAudio.pause();
                 return;
             }
 
-            // Calculate wheel rotation
             const randomOffset = (Math.random() - 0.5) * (sliceDeg - 8);
             const sliceCenter = prizeIndex * sliceDeg + sliceDeg / 2;
             const targetDeg = 360 - sliceCenter + randomOffset;
@@ -93,20 +104,28 @@ function WheelSpinner() {
             const totalDeg = fullSpins * 360 + targetDeg;
 
             requestAnimationFrame(() => {
-                wheelRef.current.style.transition =
-                    "transform 20s cubic-bezier(.20,.12,.6,1)";
+                wheelRef.current.style.transition = "transform 20s cubic-bezier(.20,.12,.10,5)";
                 wheelRef.current.style.transform = `rotate(${totalDeg}deg)`;
             });
 
-            wheelRef.current.addEventListener("transitionend", () => {
-                wheelRef.current.removeEventListener("transitionend", this);
+            setTimeout(() => {
                 setSpinning(false);
                 setResult(`🎉 You won: ${spinAmount}$`);
-            });
+
+                // Stop spinning sound
+                spinningAudio.pause();
+                spinningAudio.currentTime = 0;
+
+                // Play result sound once
+                const resultAudio = resultAudioRef.current;
+                resultAudio.currentTime = 0;
+                resultAudio.play().catch(() => console.log("Autoplay blocked"));
+            }, 20000);
         } catch (error) {
             console.error("Spin error:", error);
             setResult("❌ Spin Not Available");
             setSpinning(false);
+            spinningAudioRef.current.pause();
         }
     };
 

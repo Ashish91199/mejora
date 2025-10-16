@@ -18,22 +18,23 @@ import {
 import { Provider } from "react-redux";
 import { store } from "./redux/store.js";
 
-const connectors = connectorsForWallets(
-  [
-    {
-      groupName: 'Recommended',
-      wallets: [trustWallet, metaMaskWallet, tokenPocketWallet, binanceWallet, walletConnectWallet],
-    },
-  ],
-  {
-    appName: 'My RainbowKit App',
-    projectId: 'YOUR_PROJECT_ID',
-  }
-);
+// const connectors = connectorsForWallets(
+//   [
+//     {
+//       groupName: 'Recommended',
+//       wallets: [trustWallet, metaMaskWallet, tokenPocketWallet, binanceWallet, walletConnectWallet],
+//     },
+//   ],
+//   {
+//     appName: 'My RainbowKit App',
+//     projectId: '37fee02b4b61416e511c21b2ef5e5bd1',
+
+//   }
+// );
 export const config = getDefaultConfig({
-  connectors,
+  // connectors,
   appName: "My RainbowKit App",
-  projectId: "my project Id",
+  projectId: "37fee02b4b61416e511c21b2ef5e5bd1",
   chains: [bscTestnet],
   ssr: true,
 });
