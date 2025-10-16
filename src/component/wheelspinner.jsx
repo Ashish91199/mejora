@@ -69,6 +69,21 @@ function WheelSpinner() {
         initWheel();
     }, []);
 
+    // Pure JS confetti
+    const showConfetti = (count = 100) => {
+        for (let i = 0; i < count; i++) {
+            const confetti = document.createElement("div");
+            confetti.className = "confetti-piece";
+            confetti.style.left = Math.random() * window.innerWidth + "px";
+            confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            confetti.style.animationDuration = 1 + Math.random() * 2 + "s";
+            confetti.style.width = 5 + Math.random() * 10 + "px";
+            confetti.style.height = 5 + Math.random() * 10 + "px";
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 3000);
+        }
+    };
+
     const spinWheel = async () => {
         if (spinning || !user) return;
         setSpinning(true);
@@ -89,7 +104,9 @@ function WheelSpinner() {
             }
 
             const { spinAmount } = response;
-            const prizeIndex = prizes.findIndex((prize) => prize.label === `${spinAmount}$`);
+            const prizeIndex = prizes.findIndex(
+                (prize) => prize.label === `${spinAmount}$`
+            );
             if (prizeIndex === -1) {
                 setResult(`❌ Invalid prize amount: ${spinAmount}`);
                 setSpinning(false);
@@ -104,19 +121,30 @@ function WheelSpinner() {
             const totalDeg = fullSpins * 360 + targetDeg;
 
             requestAnimationFrame(() => {
-                wheelRef.current.style.transition = "transform 20s cubic-bezier(.20,.12,.10,5)";
+                wheelRef.current.style.transition =
+                    "transform 20s cubic-bezier(.20,.12,.10,5)";
                 wheelRef.current.style.transform = `rotate(${totalDeg}deg)`;
             });
 
             setTimeout(() => {
                 setSpinning(false);
+
+                // Show animated result
                 setResult(`🎉 You won: ${spinAmount}$`);
+                const resultEl = document.querySelector(".wheel-result");
+                if (resultEl) {
+                    resultEl.classList.add("win");
+                    setTimeout(() => resultEl.classList.remove("win"), 1500);
+                }
+
+                // Confetti burst
+                showConfetti(150);
 
                 // Stop spinning sound
                 spinningAudio.pause();
                 spinningAudio.currentTime = 0;
 
-                // Play result sound once
+                // Play result sound
                 const resultAudio = resultAudioRef.current;
                 resultAudio.currentTime = 0;
                 resultAudio.play().catch(() => console.log("Autoplay blocked"));

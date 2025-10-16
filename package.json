@@ -18,6 +18,7 @@
     "aos": "^2.3.4",
     "ar.js": "^2.2.2",
     "axios": "^1.12.2",
+    "canvas-confetti": "^1.9.3",
     "ethers": "^6.15.0",
     "framer-motion": "^12.23.22",
     "html5-qrcode": "^2.3.8",

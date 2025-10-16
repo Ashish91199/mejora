@@ -27,6 +27,7 @@ function ConnectWallet() {
                     account,
                     chain,
                     openAccountModal,
+                    openChainModal,
                     openConnectModal,
                     authenticationStatus,
                     mounted,
@@ -53,7 +54,7 @@ function ConnectWallet() {
 
                     if (chain.unsupported) {
                         return (
-                            <button className="connectcss">
+                            <button className="connectcss" onClick={openChainModal}>
                                 Wrong Network
                             </button>
                         );

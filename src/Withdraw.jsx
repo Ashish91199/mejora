@@ -11,6 +11,7 @@ export default function Deposit() {
     const [selectedAmount, setSelectedAmount] = useState("");
     const [order_id, setOrderId] = useState(null);
     const [inputValue, setInputValue] = useState(null);
+    const [error, setError] = useState(""); // new state for error
 
     useEffect(() => {
         if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
@@ -20,7 +21,7 @@ export default function Deposit() {
 
     // Fetch deposit address (always BEP20)
     useEffect(() => {
-        if (user && selectedAmount > 0) {
+        if (user && selectedAmount >= 10) { // only fetch if amount >= 10
             const getAddress = async () => {
                 const res = await getdepositAddress(user?.id, "binance", selectedAmount, order_id);
                 if (res.status === 200 && !order_id) {
@@ -35,6 +36,18 @@ export default function Deposit() {
     const handleCopy = () => {
         if (inputValue) {
             navigator.clipboard.writeText(inputValue);
+        }
+    };
+
+    const handleAmountChange = (e) => {
+        const value = e.target.value;
+        setSelectedAmount(value);
+
+        if (value < 10) {
+            setError("Minimum withdrawal amount is $10");
+            setInputValue(null); // clear previous deposit address if any
+        } else {
+            setError("");
         }
     };
 
@@ -71,11 +84,13 @@ export default function Deposit() {
                             className="form-control"
                             placeholder="Enter Amount"
                             value={selectedAmount}
-                            onChange={(e) => setSelectedAmount(e.target.value)}
+                            onChange={handleAmountChange}
+                            min={10} // prevents going below 10 using arrow buttons
                         />
+                        {error && <small className="text-danger">{error}</small>}
                     </div>
 
-                    {/* Connect Wallet button (placeholder) */}
+                    {/* Connect Wallet button */}
                     <div className="col-6 mb-3 mb-2">
                         <ConnectWallet />
                     </div>

@@ -68,7 +68,11 @@ function Wallet() {
               </div>
               <div className="mt-3">
                 <div className="text-gray fs-12">Wallet Balance</div>
-                <div className="wallet_amt">{user_data?.earning_balance}</div>
+                <div className="wallet_amt">
+                  {user_data?.deposit_balance
+                    ? (Number(user_data.deposit_balance) / 1e18).toFixed(4)
+                    : "0"}
+                </div>
               </div>
             </div>
 
