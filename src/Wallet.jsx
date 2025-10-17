@@ -70,9 +70,11 @@ function Wallet() {
                 <div className="text-gray fs-12">Wallet Balance</div>
                 <div className="wallet_amt">
                   {user_data?.deposit_balance
-                    ? (Number(user_data.deposit_balance) / 1e18).toFixed(4)
-                    : "0"}
+                    ? (Number(user_data.deposit_balance) / 1e18).toFixed(2)
+                    : "0.00"}
                 </div>
+
+
               </div>
             </div>
 
@@ -210,7 +212,7 @@ function Wallet() {
                                   Referral Income
                                 </div>
                                 <div>
-                                  <span> {user_data?.direct_income}</span>
+                                  <span> {user_data?.level_income}</span>
                                 </div>
                               </div>
                             </div>

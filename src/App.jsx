@@ -20,6 +20,7 @@ import Deposithistory from "./Deposithistory";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserDetails } from "./redux/slice";
+import Income from "./Income";
 
 
 function App() {
@@ -66,6 +67,7 @@ function App() {
           <Route path="/level" element={<Level />} />
           <Route path="/Withdraw" element={< Withdraw />} />
           <Route path="/Deposithistory" element={< Deposithistory />} />
+          <Route path="/Income" element={< Income />} />
 
         </Routes>
       </BrowserRouter>

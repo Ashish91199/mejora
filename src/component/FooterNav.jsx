@@ -17,7 +17,7 @@ export default function FooterNav() {
       case "/Triangle":
         setActiveIndex(2);
         break;
-      case "/rank":
+      case "/Income":
         setActiveIndex(3);
         break;
       case "/invitefriends":
@@ -75,7 +75,7 @@ export default function FooterNav() {
         </Link>
 
         <Link
-          to="/rank"
+          to="/Income"
           className={`nav-item ${activeIndex === 2 ? "is-active" : ""}`}
           onClick={() => setActiveIndex(2)}
         >
@@ -90,7 +90,7 @@ export default function FooterNav() {
               <img src="/images/rank-green.png" className="navIcon" alt="logo" />
             )}
           </div>
-          <span>Rank</span>
+          <span>Income</span>
         </Link>
         <Link
           to="/Deposithistory"

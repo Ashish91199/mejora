@@ -193,5 +193,21 @@ export function getDepositHistory(user_id) {
     });
 }
 
+export function getlevelincome(user_id) {
+  return fetch(`${url}/LevelIncomeHistory/${user_id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    });
+}
+
 
 
