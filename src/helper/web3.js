@@ -114,14 +114,14 @@ export const handleDeposit = async (user_id, userAddress, depositAmount) => {
         });
         console.log("resdddd", res);
         const result = await waitForTransactionReceipt({ hash: res });
-
+        toast.dismiss(depositToast);
         toast.success("✅ Deposit successful!", { id: depositToast });
 
         return result;
 
     } catch (err) {
         console.error(err);
-        toast.error("❌ Deposit failed! Check console for details.");
+        toast.error(" Deposit ");
         setTimeout(() => toast.dismiss(), 2000);  // ✅ यह line error के बाद
 
     }

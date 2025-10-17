@@ -1703,7 +1703,7 @@ h5 {
   }
 
   .fancy-table td {
-    display: flex;
+    /* display: flex; */
     align-items: center;
   }
 

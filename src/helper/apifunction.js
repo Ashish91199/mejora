@@ -1,3 +1,5 @@
+import axios from "axios";
+
 // export const url = "http://localhost:8001/api";
 export const url = "https://mejora.cloud/api";
 
@@ -193,20 +195,29 @@ export function getDepositHistory(user_id) {
     });
 }
 
-export function getlevelincome(user_id) {
-  return fetch(`${url}/LevelIncomeHistory/${user_id}`, {
-    method: 'GET',
+export async function getlevelincome(user_id) {
+  const res = await axios.get(`${url}/levelIncome?userId=${user_id}`, {
     headers: {
       'Content-Type': 'application/json',
     },
-
   })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    });
+  console.log({ res })
+  if (res?.data?.success) {
+    return res?.data;
+  }
+  return [];
+}
+
+export async function getSpinner(user_id) {
+  const res = await axios.get(`${url}/get-spin-data?userId=${user_id}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  if (res?.data?.success) {
+    return res?.data;
+  }
+  return [];
 }
 
 

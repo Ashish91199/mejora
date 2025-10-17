@@ -4,13 +4,16 @@ import "aos/dist/aos.css";
 import FooterNav from "./component/FooterNav";
 import { Link } from "react-router-dom";
 import { MdKeyboardArrowLeft } from "react-icons/md";
-import { getProfile } from "./helper/apifunction";
+import { getlevelincome, getProfile, getSpinner } from "./helper/apifunction";
 import { FiUser, FiDollarSign, FiHash, FiCalendar } from "react-icons/fi";
+import { FaUser } from "react-icons/fa6";
+import { PercentIcon } from "lucide-react";
 
 function Wallet() {
   const [activeTab, setActiveTab] = useState("tab1");
   const [user, setUser] = useState(null);
   const [user_data, setUserData] = useState(null);
+  const [spinnData, setSpinnData] = useState(null);
 
   const handleTabClick = (tab) => setActiveTab(tab);
 
@@ -33,16 +36,32 @@ function Wallet() {
       try {
         const res = await getlevelincome(user?.id);
         console.log(res, "res1111");
-        setUserData(res?.data); // res.data should be an array of income objects
+        if (res?.success)
+          setUserData(res?.data); // res.data should be an array of income objects
       } catch (error) {
         console.error("Error fetching level income:", error);
       }
     };
 
-    if (user) fetchLevelIncome();
-  }, [user]);
+    if (user?.id)
+      fetchLevelIncome();
+  }, [user?.id, activeTab === "tab2"]);
 
-
+  useEffect(() => {
+    const fetchSpinnerData = async () => {
+      try {
+        const res = await getSpinner(user?.id);
+        console.log(res, "res1111");
+        if (res?.success)
+          setSpinnData(res?.data); // res.data should be an array of income objects
+      } catch (error) {
+        console.error("Error fetching level income:", error);
+      }
+    };
+    if (user?.id)
+      fetchSpinnerData();
+  }, [activeTab === "tab3", user?.id]);
+  console.log({ user })
   return (
     <>
       <div className="page_container">
@@ -97,92 +116,72 @@ function Wallet() {
 
             {/* Tabs Content */}
             <div className="tabs-content">
+
               {/* Tab 1 - Rank Income */}
-
-
-
               {activeTab === "tab1" && (
-                <div className="fancy-table-wrapper">
-                  <table className="fancy-table">
+                <div className="overflow-x-auto fancy-table-wrapper">
+                  <table className="fancy-table w-full border-collapse text-white rounded-xl shadow-lg backdrop-blur-md bg-white/20 border border-white/30">
                     <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>From User</th>
-                        <th>Rank</th>
-                        <th>Amount</th>
-                        <th>Date</th>
+                      <tr className="bg-white/10">
+                        <th className="p-2 text-left">#</th>
+                        <th className="p-2 text-left">From User</th>
+                        <th className="p-2 text-left">Rank</th>
+                        <th className="p-2 text-left">Amount</th>
+                        <th className="p-2 text-left">Date</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {user_data?.length > 0 ? (
-                        user_data.map((item, index) => (
-                          <tr key={item._id}>
-                            <td>{index + 1}</td>
-                            <td>
-                              <FiDollarSign className="f-icon yellow" /> {item.from_user}
-                            </td>
-                            <td>
-                              <FiHash className="f-icon blue" /> {item.level}
-                            </td>
-                            <td>
-                              <FiHash className="f-icon green" /> {item.amount}
-                            </td>
-                            <td>
-                              <FiCalendar className="f-icon pink" />{" "}
-                              {new Date(item.createdAt).toLocaleString()}
-                            </td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td colSpan={5}>No data available</td>
-                        </tr>
-                      )}
+                      <tr>
+                        <td colSpan={5} className="text-center p-4">
+                          No data available
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
               )}
 
-
-
-
-
               {/* Tab 2 - Referral/Level Income */}
               {activeTab === "tab2" && (
-                <div className="fancy-table-wrapper">
-                  <table className="fancy-table">
+                <div className="overflow-x-auto fancy-table-wrapper">
+                  <table className="fancy-table w-full border-collapse text-white rounded-xl shadow-lg backdrop-blur-md bg-white/20 border border-white/30">
                     <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>From User</th>
-                        <th>Level</th>
-                        <th>Amount</th>
-                        <th>Date</th>
+                      <tr className="bg-white/10">
+                        <th className="p-2 text-left">#</th>
+                        <th className="p-2 text-left">Date</th>
+                        <th className="p-2 text-left">From User</th>
+                        <th className="p-2 text-left">Level</th>
+                        <th className="p-2 text-left">%</th>
+                        <th className="p-2 text-left">Amount</th>
                       </tr>
                     </thead>
                     <tbody>
                       {user_data?.length > 0 ? (
                         user_data.map((item, index) => (
-                          <tr key={item._id}>
-                            <td>{index + 1}</td>
-                            <td>
-                              <FiDollarSign className="f-icon yellow" /> {item.from_user}
-                            </td>
-                            <td>
-                              <FiHash className="f-icon blue" /> {item.level}
-                            </td>
-                            <td>
-                              <FiHash className="f-icon green" /> {item.amount}
-                            </td>
-                            <td>
-                              <FiCalendar className="f-icon pink" />{" "}
+                          <tr key={item._id} className="border-b border-white/30">
+                            <td className="p-2">{index + 1}</td>
+                            <td className="p-2">
+                              <FiCalendar className="f-icon pink inline mr-1" />
                               {new Date(item.createdAt).toLocaleString()}
+                            </td>
+                            <td className="p-2">
+                              <FiDollarSign className="f-icon yellow inline mr-1" />
+                              {item.from_user}
+                            </td>
+                            <td className="p-2">
+                              <FiHash className="f-icon blue inline mr-1" />
+                              {item.level}
+                            </td>
+                            <td className="p-2">{item.percentage}%</td>
+                            <td className="p-2">
+                              <FiHash className="f-icon green inline mr-1" />
+                              {item.amount}
                             </td>
                           </tr>
                         ))
                       ) : (
                         <tr>
-                          <td colSpan={5}>No data available</td>
+                          <td colSpan={6} className="text-center p-4">No data available</td>
                         </tr>
                       )}
                     </tbody>
@@ -192,37 +191,38 @@ function Wallet() {
 
               {/* Tab 3 - Spin Income */}
               {activeTab === "tab3" && (
-                <div className="fancy-table-wrapper">
-                  <table className="fancy-table">
+                <div className="overflow-x-auto fancy-table-wrapper">
+                  <table className="fancy-table w-full border-collapse text-white rounded-xl shadow-lg backdrop-blur-md bg-white/20 border border-white/30">
                     <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>User ID</th>
-                        <th>prize</th>
-                        <th>Date</th>
+                      <tr className="bg-white/10">
+                        <th className="p-2 text-left">#</th>
+                        <th className="p-2 text-left">Date</th>
+                        <th className="p-2 text-left">User ID</th>
+                        <th className="p-2 text-left">Prize</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {user_data?.length > 0 ? (
-                        user_data.map((item, index) => (
-                          <tr key={item._id}>
-                            <td>{index + 1}</td>
-                            <td>
-                              <FiDollarSign className="f-icon yellow" /> {item.from_user}
-                            </td>
-
-                            <td>
-                              <FiHash className="f-icon green" /> {item.amount}
-                            </td>
-                            <td>
-                              <FiCalendar className="f-icon pink" />{" "}
+                      {spinnData?.length > 0 ? (
+                        spinnData.map((item, index) => (
+                          <tr key={item._id} className="border-b border-white/30">
+                            <td className="p-2">{index + 1}</td>
+                            <td className="p-2">
+                              <FiCalendar className="f-icon pink inline mr-1" />
                               {new Date(item.createdAt).toLocaleString()}
+                            </td>
+                            <td className="p-2">
+                              <FaUser className="f-icon yellow inline mr-1" />
+                              {item.tuserId}
+                            </td>
+                            <td className="p-2">
+                              <FiDollarSign className="f-icon blue inline mr-1" />
+                              {item.prize}
                             </td>
                           </tr>
                         ))
                       ) : (
                         <tr>
-                          <td colSpan={5}>No data available</td>
+                          <td colSpan={4} className="text-center p-4">No data available</td>
                         </tr>
                       )}
                     </tbody>
@@ -230,14 +230,14 @@ function Wallet() {
                 </div>
               )}
 
-              {/* Tab 4 - Spin List */}
-              {/* {activeTab === "tab4" && (
+              {/* Tab 4 - Spin List (Optional) */}
+              {activeTab === "tab4" && (
                 <div className="content card p-3 text-center">
-                  <h6 className="text-gray">Spin List</h6>
+                  <h6 className="text-gray-300 mb-2">Spin List</h6>
                   {user_data?.spinList?.length > 0 ? (
-                    <ul className="list-group mt-2">
+                    <ul className="list-disc list-inside">
                       {user_data.spinList.map((spin, index) => (
-                        <li key={index} className="list-group-item">
+                        <li key={index} className="p-1">
                           Spin #{index + 1}: {spin.amount}$
                         </li>
                       ))}
@@ -246,8 +246,10 @@ function Wallet() {
                     <p>No spins yet.</p>
                   )}
                 </div>
-              )} */}
+              )}
+
             </div>
+
 
 
           </div>
