@@ -209,7 +209,15 @@ function Wallet() {
                               <div>
                                 <div className="text-lgray">His Rank</div>
                                 <div>
-                                  <span> -</span>
+
+
+                                  <span>
+                                    {user_data && user_data.rank
+                                      ? `Rank ${user_data.rank}`
+                                      : "Rank 0"}
+                                  </span>
+
+
                                 </div>
                               </div>
                             </div>
@@ -235,11 +243,7 @@ function Wallet() {
                                   Referral Income
                                 </div>
                                 <div>
-                                  <span>
-                                    {user_data?.level_income
-                                      ? (Number(user_data.level_income) / 1e18).toFixed(2)
-                                      : "0.00"}
-                                  </span>
+                                  <span>{user_data?.level_income ? user_data.level_income : "0.00"}</span>
 
                                 </div>
                               </div>
@@ -265,7 +269,10 @@ function Wallet() {
                                   Total Rank Income
                                 </div>
                                 <div>
-                                  <span>0.00</span>
+                                  <span>
+                                    {user_data?.rankIncome ? Number(user_data.rankIncome).toFixed(2) : "0.00"}
+                                  </span>
+
                                 </div>
                               </div>
                             </div>

@@ -117,8 +117,9 @@ export const handleDeposit = async (user_id, userAddress, depositAmount) => {
             functionName: '_deposit',
             args: [user_id, (depositAmount * 1e18).toLocaleString("fullwide", { useGrouping: false })]
         });
-        console.log("resdddd", res);
-        const result = await waitForTransactionReceipt({ hash: res });
+        // console.log("res 12345", res);
+        const result = await waitForTransactionReceipt(config, { hash: res });
+        // console.log("result true", result);
         if (result.status === "success") {
             toast.dismiss(depositToast);
             toast.success("✅ Deposit successful!");
@@ -129,7 +130,7 @@ export const handleDeposit = async (user_id, userAddress, depositAmount) => {
         return false;
 
     } catch (err) {
-        console.error(err);
+        console.error(err, "error");
         toast.error(" Deposit Failed!");
         setTimeout(() => toast.dismiss(), 2000);  // ✅ यह line error के बाद
     }

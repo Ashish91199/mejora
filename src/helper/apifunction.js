@@ -220,5 +220,16 @@ export async function getSpinner(user_id) {
   return [];
 }
 
+export async function getRankIncome(user_id) {
+  const res = await axios.get(`${url}/RankIncome?user_id=${user_id}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  if (res?.data?.success) {
+    return res?.data;
+  }
+  return [];
+}
 
 

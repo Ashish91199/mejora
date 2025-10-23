@@ -4,9 +4,9 @@ import "aos/dist/aos.css";
 import FooterNav from "./component/FooterNav";
 import { Link } from "react-router-dom";
 import { MdKeyboardArrowLeft } from "react-icons/md";
-import { getlevelincome, getProfile, getSpinner } from "./helper/apifunction";
+import { getlevelincome, getProfile, getRankIncome, getSpinner } from "./helper/apifunction";
 import { FiUser, FiDollarSign, FiHash, FiCalendar } from "react-icons/fi";
-import { FaUser } from "react-icons/fa6";
+import { FaDollarSign, FaRegCalendarCheck, FaUser } from "react-icons/fa6";
 import { PercentIcon } from "lucide-react";
 
 function Wallet() {
@@ -14,6 +14,7 @@ function Wallet() {
   const [user, setUser] = useState(null);
   const [user_data, setUserData] = useState(null);
   const [spinnData, setSpinnData] = useState(null);
+  const [rankData, setRankData] = useState(null);
 
   const handleTabClick = (tab) => setActiveTab(tab);
 
@@ -30,6 +31,22 @@ function Wallet() {
   }, []);
 
   // Fetch user profile
+
+  useEffect(() => {
+    const fetchRankIncome = async () => {
+      try {
+        const res = await getRankIncome(user?.id);
+        console.log(res, "res1111");
+        if (res?.success)
+          setRankData(res?.data); // res.data should be an array of income objects
+      } catch (error) {
+        console.error("Error fetching level income:", error);
+      }
+    };
+
+    if (user?.id)
+      fetchRankIncome();
+  }, [user?.id, activeTab === "tab1"]);
 
   useEffect(() => {
     const fetchLevelIncome = async () => {
@@ -124,18 +141,35 @@ function Wallet() {
                     <thead>
                       <tr className="bg-white/10">
                         <th className="p-2 text-left">#</th>
-                        <th className="p-2 text-left">From User</th>
-                        <th className="p-2 text-left">Rank</th>
-                        <th className="p-2 text-left">Amount</th>
                         <th className="p-2 text-left">Date</th>
+                        <th className="p-2 text-left">Rank</th>
+                        <th className="p-2 text-left">Rank Income</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td colSpan={5} className="text-center p-4">
-                          No data available
-                        </td>
-                      </tr>
+                      {rankData?.length > 0 ? (
+                        rankData.map((item, index) => (
+                          <tr key={item._id} className="border-b border-white/30">
+                            <td className="p-2">{index + 1}</td>
+                            <td className="p-2">
+                              <FiCalendar className="f-icon pink inline mr-1" />
+                              {new Date(item.createdAt).toLocaleString()}
+                            </td>
+                            <td className="p-2">
+                              <FaRegCalendarCheck className="f-icon yellow inline mr-1" />
+                              {item.rank}
+                            </td>
+                            <td className="p-2">
+                              <FaDollarSign className="f-icon blue inline mr-1" />
+                              {Number(item.receivedAmount || 0).toFixed(2)}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={6} className="text-center p-4">No data available</td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
