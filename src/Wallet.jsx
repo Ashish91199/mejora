@@ -78,7 +78,7 @@ function Wallet() {
               </div>
             </div>
 
-            <div className="add_irx_wrapper mb-3">
+            {/* <div className="add_irx_wrapper mb-3">
               <div className="card-body">
                 <Link className="anchor_pointer" to="/deposit">
                   <div className="info_right">
@@ -90,7 +90,7 @@ function Wallet() {
                   </div>
                 </Link>
               </div>
-            </div>
+            </div> */}
 
             <div className="d-flex gap-2 justify-content-center mb-4">
               <Link to="/deposit" className="btn-gradient-2 ">
@@ -194,6 +194,29 @@ function Wallet() {
                         </div>
                       </Link>
                     </div> */}
+                    <div>
+                      <Link to="#">
+                        <div className="card mb-2 card_with_info">
+                          <div className="card-body">
+                            <div className="d-flex gap-3 align-items-center">
+                              <div>
+                                <img
+                                  src="/images/HisRank.png"
+                                  width={"28px"}
+                                  alt=""
+                                />
+                              </div>
+                              <div>
+                                <div className="text-lgray">His Rank</div>
+                                <div>
+                                  <span> -</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
 
                     <div>
                       <Link to="#">
@@ -212,7 +235,37 @@ function Wallet() {
                                   Referral Income
                                 </div>
                                 <div>
-                                  <span> {user_data?.level_income}</span>
+                                  <span>
+                                    {user_data?.level_income
+                                      ? (Number(user_data.level_income) / 1e18).toFixed(2)
+                                      : "0.00"}
+                                  </span>
+
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
+                    <div>
+                      <Link to="#">
+                        <div className="card mb-2 card_with_info">
+                          <div className="card-body">
+                            <div className="d-flex gap-3 align-items-center">
+                              <div>
+                                <img
+                                  src="/images/earn-matrix.png"
+                                  width={"28px"}
+                                  alt=""
+                                />
+                              </div>
+                              <div>
+                                <div className="text-lgray">
+                                  Total Rank Income
+                                </div>
+                                <div>
+                                  <span>0.00</span>
                                 </div>
                               </div>
                             </div>
@@ -221,29 +274,7 @@ function Wallet() {
                       </Link>
                     </div>
 
-                    {/* <div>
-                      <Link to="#">
-                        <div className="card mb-2 card_with_info">
-                          <div className="card-body">
-                            <div className="d-flex gap-3 align-items-center">
-                              <div>
-                                <img
-                                  src="/images/team-earning.png"
-                                  width={"28px"}
-                                  alt=""
-                                />
-                              </div>
-                              <div>
-                                <div className="text-lgray">Team Earning</div>
-                                <div>
-                                  <span> + 23,000,567</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
-                    </div> */}
+
 
                     {/* <div>
                       <Link to="#">
@@ -271,56 +302,7 @@ function Wallet() {
                       </Link>
                     </div> */}
 
-                    <div>
-                      <Link to="#">
-                        <div className="card mb-2 card_with_info">
-                          <div className="card-body">
-                            <div className="d-flex gap-3 align-items-center">
-                              <div>
-                                <img
-                                  src="/images/earning-apr.png"
-                                  width={"28px"}
-                                  alt=""
-                                />
-                              </div>
-                              <div>
-                                <div className="text-lgray">
-                                  Wallet Balance
-                                </div>
-                                <div>
-                                  <span> {user_data?.earning_balance}</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
-                    </div>
-                    <div>
-                      <Link to="#">
-                        <div className="card mb-2 card_with_info">
-                          <div className="card-body">
-                            <div className="d-flex gap-3 align-items-center">
-                              <div>
-                                <img
-                                  src="/images/earning-apr.png"
-                                  width={"28px"}
-                                  alt=""
-                                />
-                              </div>
-                              <div>
-                                <div className="text-lgray">
-                                  Withdrawal Balance
-                                </div>
-                                <div>
-                                  <span>{user_data?.earning_balance}</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
-                    </div>
+
 
                     <div>
                       <Link to="#">
@@ -329,7 +311,7 @@ function Wallet() {
                             <div className="d-flex gap-3 align-items-center">
                               <div>
                                 <img
-                                  src="/images/earn-matrix.png"
+                                  src="/images/TotalEarned.png"
                                   width={"28px"}
                                   alt=""
                                 />
@@ -339,7 +321,8 @@ function Wallet() {
                                   Total Prize Earned
                                 </div>
                                 <div>
-                                  <span>{user_data?.spinearnBalance}</span>
+
+                                  <span>{user_data?.spinearnBalance ? user_data.spinearnBalance : "0.00"}</span>
                                 </div>
                               </div>
                             </div>
@@ -354,7 +337,7 @@ function Wallet() {
                             <div className="d-flex gap-3 align-items-center">
                               <div>
                                 <img
-                                  src="/images/earn-matrix.png"
+                                  src="/images/SpinUsed.png"
                                   width={"28px"}
                                   alt=""
                                 />
@@ -364,7 +347,8 @@ function Wallet() {
                                   Total Spin Used
                                 </div>
                                 <div>
-                                  <span>{user_data?.completeSpin}</span>
+
+                                  <span>{user_data?.completeSpin ? user_data.completeSpin : "0"}</span>
                                 </div>
                               </div>
                             </div>
@@ -372,6 +356,8 @@ function Wallet() {
                         </div>
                       </Link>
                     </div>
+
+
                     <div>
                       <Link to="#">
                         <div className="card mb-2 card_with_info">
@@ -379,17 +365,18 @@ function Wallet() {
                             <div className="d-flex gap-3 align-items-center">
                               <div>
                                 <img
-                                  src="/images/earn-matrix.png"
+                                  src="/images/Withdraw.png"
                                   width={"28px"}
                                   alt=""
                                 />
                               </div>
                               <div>
                                 <div className="text-lgray">
-                                  Total Rank
+                                  Withdrawal Balance
                                 </div>
                                 <div>
-                                  <span>0.00</span>
+                                  <span>{user_data?.earning_balance ? user_data.earning_balance : "0.00"}</span>
+
                                 </div>
                               </div>
                             </div>

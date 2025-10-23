@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 
 export async function registerUser(referralAddress, telegramId) {
     try {
+        console.log({ referralAddress, telegramId })
         if (!referralAddress || !telegramId) {
             console.log("Missing referral or telegram ID");
             return false;
@@ -24,7 +25,10 @@ export async function registerUser(referralAddress, telegramId) {
         });
 
         const result = await waitForTransactionReceipt({ hash: res });
-        return result
+        if (result.status === "success") {
+            return true
+        }
+        return false
     } catch (err) {
         console.error("Web3 Registration Error:", err);
         return false;
@@ -97,11 +101,12 @@ export const handleDeposit = async (user_id, userAddress, depositAmount) => {
 
             const approve = await approveToken(depositAmount);
             if (!approve) {
-                toast.error("Failed to approve tokens!", { id: approvalToast });
-                return;
+                toast.dismiss(approvalToast);
+                toast.error("Failed to approve tokens!");
+                return false;
             }
-
-            toast.success("✅ Tokens approved!", { id: approvalToast });
+            toast.dismiss(approvalToast);
+            toast.success("✅ Tokens approved!");
         }
 
         const depositToast = toast.loading(`Depositing ${depositAmount} USDT...`);
@@ -114,15 +119,18 @@ export const handleDeposit = async (user_id, userAddress, depositAmount) => {
         });
         console.log("resdddd", res);
         const result = await waitForTransactionReceipt({ hash: res });
+        if (result.status === "success") {
+            toast.dismiss(depositToast);
+            toast.success("✅ Deposit successful!");
+            return true;
+        }
         toast.dismiss(depositToast);
-        toast.success("✅ Deposit successful!", { id: depositToast });
-
-        return result;
+        toast.error("Deposit Failed!");
+        return false;
 
     } catch (err) {
         console.error(err);
-        toast.error(" Deposit ");
+        toast.error(" Deposit Failed!");
         setTimeout(() => toast.dismiss(), 2000);  // ✅ यह line error के बाद
-
     }
 };

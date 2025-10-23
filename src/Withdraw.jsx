@@ -69,11 +69,11 @@ export default function Deposit() {
 
                     {/* Chain label (always BEP20) */}
                     <div className="col-12 mb-3 mb-2">
-                        <div className="d-flex gap-2">
+                        {/* <div className="d-flex gap-2">
                             <span className="btn btn-sm btn-darker d-flex align-items-center orange_bg">
                                 BEP 20 <BsCheck className="ms-1" />
                             </span>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Amount input */}
@@ -91,9 +91,9 @@ export default function Deposit() {
                     </div>
 
                     {/* Connect Wallet button */}
-                    <div className="col-6 mb-3 mb-2">
+                    {/* <div className="col-6 mb-3 mb-2">
                         <ConnectWallet />
-                    </div>
+                    </div> */}
 
                     {/* Deposit Address & Copy */}
                     {inputValue && (

@@ -10,6 +10,7 @@ import { handleDeposit, isLoggedIn, registerUser } from "./helper/web3";
 import { useAspect } from "@react-three/drei";
 import "@rainbow-me/rainbowkit/styles.css";
 import toast from "react-hot-toast";
+import { userData } from "three/src/nodes/TSL.js";
 
 
 
@@ -109,14 +110,21 @@ export default function Deposit() {
 
         const loadingToast = toast.loading("Registering user...");
 
-        const res = await getProfile(user?.id);
+        // const res = await getProfile(user?.id);
+        if (!userdata.referral_address || !userData?.user_id) {
+          toast.dismiss(loadingToast);
+          toast.error("Referral Address or UserId is required!");
+          return;
+        }
         const registered = await registerUser(userdata.referral_address, userdata.user_id);
 
         if (registered) {
-          toast.success("✅ Registration Successful!", { id: loadingToast });
+          toast.dismiss(loadingToast);
+          toast.success("✅ Registration Successful!");
           setIsOpen(false);
         } else {
-          toast.error("❌ Registration Failed!", { id: loadingToast });
+          toast.dismiss(loadingToast);
+          toast.error("❌ Registration Failed!");
           setIsOpen(false);
         }
 
@@ -182,7 +190,11 @@ export default function Deposit() {
             </div>
             {isConnected && <div>
               <button
-                onClick={() => handleDeposit(userdata.user_id, address, 54)} // Deposit 54 USDT
+                onClick={() => {
+                  setLoading(true);
+                  handleDeposit(userdata.user_id, address, 54);
+                  setLoading(false);
+                }} // Deposit 54 USDT
                 className="connectcss"
                 disabled={loading}
               >

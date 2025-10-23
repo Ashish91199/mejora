@@ -7,6 +7,7 @@ import FooterNav from "./component/FooterNav";
 import { RWebShare } from "react-web-share";
 import { getUserLevel } from "./helper/apifunction";
 import ReferralList from "./ReferralList";
+import { MdKeyboardArrowLeft } from "react-icons/md";
 
 // Import toast
 import { ToastContainer, toast } from "react-toastify";
@@ -86,53 +87,60 @@ function InviteFriends() {
     <>
       <div className="page_container">
         <div className="inner_page_layout">
-          <div className="mb-5">
-            <div className="mb-3 text-center">
-              <h4 className="mb-1">Invite friends!</h4>
-              <p className="text-lgray fs-12 mb-0">
-                Refer & Earn
-              </p>
+          <div className="position-relative mb-5 py-1">
+            <div className="backButton">
+              <Link className="anchor_pointer text-white" to="/home">
+                <MdKeyboardArrowLeft className="fs-1" />
+              </Link>
             </div>
-            <div className="card mb-2">
-              <div className="card-body">
-                <div className="d-flex gap-2">
-                  <div>
-                    <img src="/images/invite.png" alt="" />
-                  </div>
-                  <div>
-                    <div className="mb-1" value={value}>Refer & Earn</div>
+            <div className="mb-5">
+              <div className="mb-3 text-center">
+                <h4 className="mb-1">Invite friends!</h4>
+                <p className="text-lgray fs-12 mb-0">
+                  Refer & Earn
+                </p>
+              </div>
+              <div className="card mb-2">
+                <div className="card-body">
+                  <div className="d-flex gap-2">
                     <div>
-                      <img
-                        src="/images/MejoraLogo.png"
-                        alt=""
-                        width={"25px"}
-                      />
-                      <span className="text-green ms-1">5% Bonus Each 🎁</span>when you invite a friend
+                      <img src="/images/invite.png" alt="" />
+                    </div>
+                    <div>
+                      <div className="mb-1" value={value}>Refer & Earn</div>
+                      <div>
+                        <img
+                          src="/images/MejoraLogo.png"
+                          alt=""
+                          width={"25px"}
+                        />
+                        <span className="text-green ms-1">5% Bonus Each 🎁</span>when you invite a friend
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+
+              <ReferralList />
             </div>
+            <div className="invite_fixed_wrapper">
+              <div className="d-flex gap-2">
+                <div className="flex-grow-1 content_area text-center fs-16" style={{ cursor: 'pointer' }} onClick={shareToTelegram}>
+                  <span>
+                    🎁 Invite & Get 5%
+                    <FiUserPlus className="ms-2" />
+                  </span>
+                </div>
 
-            <ReferralList />
-          </div>
-          <div className="invite_fixed_wrapper">
-            <div className="d-flex gap-2">
-              <div className="flex-grow-1 content_area text-center fs-16" style={{ cursor: 'pointer' }} onClick={shareToTelegram}>
-                <span>
-                  🎁 Invite & Get 5%
-                  <FiUserPlus className="ms-2" />
-                </span>
-              </div>
-
-              <div className="action_wrapper">
-                <img
-                  src="/images/copy.png"
-                  width={"20px"}
-                  alt=""
-                  onClick={() => copyToClipboard(value)}
-                  style={{ cursor: 'pointer' }}
-                />
+                <div className="action_wrapper">
+                  <img
+                    src="/images/copy.png"
+                    width={"20px"}
+                    alt=""
+                    onClick={() => copyToClipboard(value)}
+                    style={{ cursor: 'pointer' }}
+                  />
+                </div>
               </div>
             </div>
           </div>

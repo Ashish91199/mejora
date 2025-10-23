@@ -2,6 +2,12 @@ import React, { useRef, useState, useEffect } from "react";
 import { Spinerrun } from "../helper/apifunction";
 import spinningSound from "../component/spinning.mp3";
 import resultSound from "../component/result.mp3";
+import five from "../image/5.png";
+import ten from "../image/10.png";
+import twenty from "../image/20.png";
+import Fifty from "../image/50.png";
+import hundred from "../image/100.png";
+import twohundred from "../image/200.png";
 
 const prizes = [
     { label: "5$", color: "#ff595e" },
@@ -18,6 +24,7 @@ function WheelSpinner() {
     const [result, setResult] = useState("");
     const [spinning, setSpinning] = useState(false);
     const [user, setUser] = useState(null);
+    const [prizeImg, setPrizeImg] = useState(null);
 
     const spinningAudioRef = useRef(new Audio(spinningSound));
     const resultAudioRef = useRef(new Audio(resultSound));
@@ -25,6 +32,7 @@ function WheelSpinner() {
     const slices = prizes.length;
     const sliceDeg = 360 / slices;
 
+    // Build wheel gradient
     const buildWheelGradient = () => {
         let gradientParts = [];
         for (let i = 0; i < slices; i++) {
@@ -35,6 +43,7 @@ function WheelSpinner() {
         return `conic-gradient(${gradientParts.join(", ")})`;
     };
 
+    // Build labels
     const buildLabelsSVG = () => {
         const size = 360;
         const radius = size / 2 - 30;
@@ -54,6 +63,7 @@ function WheelSpinner() {
         return svgParts.join("");
     };
 
+    // Initialize wheel
     const initWheel = () => {
         if (!wheelRef.current) return;
         wheelRef.current.style.background = buildWheelGradient();
@@ -63,13 +73,14 @@ function WheelSpinner() {
         wheelRef.current.style.transition = "none";
         wheelRef.current.style.transform = "rotate(0deg)";
         setResult("");
+        setPrizeImg(null);
     };
 
     useEffect(() => {
         initWheel();
     }, []);
 
-    // Pure JS confetti
+    // Confetti effect
     const showConfetti = (count = 100) => {
         for (let i = 0; i < count; i++) {
             const confetti = document.createElement("div");
@@ -84,11 +95,11 @@ function WheelSpinner() {
         }
     };
 
+    // Spin wheel
     const spinWheel = async () => {
         if (spinning || !user) return;
         setSpinning(true);
 
-        // Play spinning sound
         const spinningAudio = spinningAudioRef.current;
         spinningAudio.currentTime = 0;
         spinningAudio.loop = true;
@@ -120,40 +131,63 @@ function WheelSpinner() {
             const fullSpins = Math.floor(Math.random() * 3) + 4;
             const totalDeg = fullSpins * 360 + targetDeg;
 
+            // Spin animation
             requestAnimationFrame(() => {
                 wheelRef.current.style.transition =
                     "transform 20s cubic-bezier(.20,.12,.10,5)";
                 wheelRef.current.style.transform = `rotate(${totalDeg}deg)`;
             });
 
+            // Handle result after 20s
             setTimeout(() => {
                 setSpinning(false);
-
-                // Show animated result
                 setResult(`🎉 You won: ${spinAmount}$`);
-                const resultEl = document.querySelector(".wheel-result");
-                if (resultEl) {
-                    resultEl.classList.add("win");
-                    setTimeout(() => resultEl.classList.remove("win"), 1500);
+
+                let prizeImage = null;
+                switch (spinAmount) {
+                    case 5:
+                        prizeImage = five;
+                        break;
+                    case 10:
+                        prizeImage = ten;
+                        break;
+                    case 20:
+                        prizeImage = twenty;
+                        break;
+                    case 50:
+                        prizeImage = Fifty;
+                        break;
+                    case 100:
+                        prizeImage = hundred;
+                        break;
+                    case 200:
+                        prizeImage = twohundred;
+                        break;
+                    default:
+                        prizeImage = null;
                 }
 
-                // Confetti burst
-                showConfetti(150);
+                setPrizeImg(prizeImage);
 
-                // Stop spinning sound
+                // Prize popup stays for exactly 20s
+                const hideTimeout = setTimeout(() => setPrizeImg(null), 20000);
+
+                showConfetti(150);
                 spinningAudio.pause();
                 spinningAudio.currentTime = 0;
 
-                // Play result sound
                 const resultAudio = resultAudioRef.current;
                 resultAudio.currentTime = 0;
                 resultAudio.play().catch(() => console.log("Autoplay blocked"));
+
+                // Cleanup in case user spins again
+                return () => clearTimeout(hideTimeout);
             }, 20000);
         } catch (error) {
             console.error("Spin error:", error);
             setResult("❌ Spin Not Available");
             setSpinning(false);
-            spinningAudioRef.current.pause();
+            spinningAudio.pause();
         }
     };
 
@@ -178,12 +212,21 @@ function WheelSpinner() {
                         </div>
                     </div>
                 </div>
+
                 <div className="wheel-controls">
                     <button className="wheel-btn" onClick={initWheel} disabled={spinning}>
                         Reset
                     </button>
                 </div>
-                <div className="wheel-result">{result}</div>
+
+                {/* Popup prize image */}
+                {prizeImg && (
+                    <div className="prize-float">
+                        <img src={prizeImg} alt="Prize" className="prize-pop" />
+                    </div>
+                )}
+
+
             </div>
         </div>
     );
