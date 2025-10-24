@@ -93,6 +93,11 @@ export default function Deposit() {
 
     const register = async () => {
       try {
+        if (!address) {
+          toast.error("Please connect your wallet first!");
+          setIsOpen(false);
+          return;
+        }
         const isLogin = await isLoggedIn(address);
         if (isLogin) {
           toast("You are already registered!", { icon: "ℹ️" });
