@@ -167,7 +167,7 @@ function Wallet() {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan={6} className="text-center p-4">No data available</td>
+                          <td colSpan={4} className="text-center p-4">No data available</td>
                         </tr>
                       )}
                     </tbody>

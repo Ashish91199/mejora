@@ -88,17 +88,11 @@ export default function Deposit() {
   };
 
   useEffect(() => {
-
-    if (!address) return;
+    // Exit early if either address or userdata is not ready
+    if (!address || !userdata) return;
 
     const register = async () => {
       try {
-        if (!address) {
-          toast.error("Please connect your wallet first!");
-          setIsOpen(false);
-          return;
-        }
-
         const isLogin = await isLoggedIn(address);
         if (isLogin) {
           toast("You are already registered!", { icon: "ℹ️" });
@@ -106,27 +100,25 @@ export default function Deposit() {
           return;
         }
 
-        setIsOpen(true);
-
-        const loadingToast = toast.loading("Registering user...");
-
-        // const res = await getProfile(user?.id);
-        if (!userdata.referral_address || !userData?.user_id) {
-          toast.dismiss(loadingToast);
+        if (!userdata.referral_address || !userdata.user_id) {
           toast.error("Referral Address or UserId is required!");
+          setIsOpen(false);
           return;
         }
+
+        setIsOpen(true);
+        const loadingToast = toast.loading("Registering user...");
+
         const registered = await registerUser(userdata.referral_address, userdata.user_id);
 
+        toast.dismiss(loadingToast);
+
         if (registered) {
-          toast.dismiss(loadingToast);
           toast.success("✅ Registration Successful!");
-          setIsOpen(false);
         } else {
-          toast.dismiss(loadingToast);
           toast.error("❌ Registration Failed!");
-          setIsOpen(false);
         }
+        setIsOpen(false);
 
       } catch (error) {
         console.error("Registration failed:", error);
@@ -135,8 +127,10 @@ export default function Deposit() {
       }
     };
 
-    if (address || !isOpen) register();
-  }, [address]);
+    register();
+  }, [address, userdata]); // ✅ runs only when both are available
+
+
 
 
   // const handleDeposit = async () => {
