@@ -1,82 +1,58 @@
-import React, { StrictMode } from "react";
+import React from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
-import App from "./App.jsx";
-import "@rainbow-me/rainbowkit/styles.css";
-import { connectorsForWallets, getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { bscTestnet, opBNBTestnet } from "viem/chains";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createAppKit, AppKitButton } from "@reown/appkit/react";
 import { WagmiProvider } from "wagmi";
-import { Toaster } from "react-hot-toast";
-import {
-  binanceWallet,
-  metaMaskWallet,
-  tokenPocketWallet,
-  trustWallet,
-  walletConnectWallet,
-} from '@rainbow-me/rainbowkit/wallets';
+import { arbitrum, mainnet } from "@reown/appkit/networks";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
 import { Provider } from "react-redux";
-import { store } from "./redux/store.js";
-
-// const connectors = connectorsForWallets(
-//   [
-//     {
-//       groupName: 'Recommended',
-//       wallets: [trustWallet, metaMaskWallet, tokenPocketWallet, binanceWallet, walletConnectWallet],
-//     },
-//   ],
-//   {
-//     appName: 'My RainbowKit App',
-//     projectId: '37fee02b4b61416e511c21b2ef5e5bd1',
-
-//   }
-// );
-
-const bscTestNet = {
-  id: 97,
-  name: 'BNB Smart Chain Testnet',
-  nativeCurrency: {
-    decimals: 18,
-    name: 'BNB',
-    symbol: 'tBNB',
-  },
-  rpcUrls: {
-    default: { http: ['https://bsc-testnet-rpc.publicnode.com'] },
-  },
-  blockExplorers: {
-    default: {
-      name: 'BscScan',
-      url: 'https://testnet.bscscan.com',
-      apiUrl: 'https://api-testnet.bscscan.com/api',
-    },
-  },
-  contracts: {
-    multicall3: {
-      address: '0xca11bde05977b3631167028862be2a173976ca11',
-      blockCreated: 17422483,
-    },
-  },
-  testnet: true,
-}
-export const config = getDefaultConfig({
-  // connectors,
-  appName: "My RainbowKit App",
-  projectId: "37fee02b4b61416e511c21b2ef5e5bd1",
-  chains: [bscTestNet],
-  ssr: true,
-});
+import { Toaster } from "react-hot-toast";
+import App from "./App";
+import { store } from "./redux/store";
+import "./App.css";
+import "./index.css";
 
 const queryClient = new QueryClient();
 
+// ✅ Use your real Project ID here:
+const projectId = "YOUR_REAL_PROJECT_ID"; // Example: "1234abcd5678efgh"
+
+// ✅ Metadata must match your actual accessible domain
+const metadata = {
+  name: "AppKit DApp",
+  description: "Deposit Page Example",
+  url: window.location.origin, // auto-detects correct host
+  icons: ["https://avatars.githubusercontent.com/u/179229932"],
+};
+
+const networks = [mainnet, arbitrum];
+
+const wagmiAdapter = new WagmiAdapter({
+  networks,
+  projectId,
+  ssr: true,
+});
+
+// Initialize Reown AppKit modal
+createAppKit({
+  adapters: [wagmiAdapter],
+  networks,
+  projectId,
+  metadata,
+  features: {
+    analytics: true,
+  },
+});
+
 createRoot(document.getElementById("root")).render(
-  <WagmiProvider config={config}>
-    <QueryClientProvider client={queryClient}>
-      <RainbowKitProvider>
-        <Toaster />
+  <React.StrictMode>
+    <WagmiProvider config={wagmiAdapter.wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
         <Provider store={store}>
+          <Toaster />
           <App />
         </Provider>
-      </RainbowKitProvider>
-    </QueryClientProvider>
-  </WagmiProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
+  </React.StrictMode>
 );

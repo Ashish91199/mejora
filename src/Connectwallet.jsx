@@ -13,7 +13,6 @@ import {
     contractAddress,
 } from "./ContractAbi"; // adjust paths
 import "./ConnectWallet.css";
-import { config } from "./main";
 
 function ConnectWallet() {
     const [loading, setLoading] = useState(false)

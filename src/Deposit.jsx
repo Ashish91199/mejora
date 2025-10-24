@@ -11,6 +11,8 @@ import { useAspect } from "@react-three/drei";
 import "@rainbow-me/rainbowkit/styles.css";
 import toast from "react-hot-toast";
 import { userData } from "three/src/nodes/TSL.js";
+import { AppKitButton } from "@reown/appkit/react";
+
 
 
 
@@ -185,7 +187,8 @@ export default function Deposit() {
           {/* Connect Wallet button */}
           <div className="d-flex align-items-center gap-3">
             <div>
-              <ConnectWallet />
+              <AppKitButton />
+              {/* <ConnectWallet /> */}
             </div>
             {isConnected && <div>
               <button

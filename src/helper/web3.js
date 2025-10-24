@@ -5,7 +5,6 @@ import {
 } from "@wagmi/core";
 
 import { contractAddress, contractAddressABI, contractToken, contractTokenABI } from "../ContractAbi";
-import { config } from "../main";
 import toast from "react-hot-toast";
 
 
@@ -17,7 +16,7 @@ export async function registerUser(referralAddress, telegramId) {
             return false;
         }
 
-        const res = await writeContract(config, {
+        const res = await writeContract({
             abi: contractAddressABI,
             address: contractAddress,
             functionName: "_registerUser",
@@ -38,7 +37,7 @@ export async function registerUser(referralAddress, telegramId) {
 
 export async function isLoggedIn(userAddress) {
     try {
-        const res = await readContract(config, {
+        const res = await readContract({
             abi: contractAddressABI,
             address: contractAddress,
             functionName: "isUserExists",
@@ -55,7 +54,7 @@ export async function isLoggedIn(userAddress) {
 
 async function checkAllowance(userAddress) {
     try {
-        const result = await readContract(config, {
+        const result = await readContract({
             abi: contractTokenABI,
             address: contractToken,
             functionName: "allowance",
@@ -71,7 +70,7 @@ async function checkAllowance(userAddress) {
 
 async function approveToken(amt) {
     try {
-        const result = await writeContract(config, {
+        const result = await writeContract({
             abi: contractTokenABI,
             address: contractToken,
             functionName: "approve",
@@ -80,7 +79,7 @@ async function approveToken(amt) {
                 (amt * 1e18).toLocaleString("fullwide", { useGrouping: false }),
             ],
         });
-        const res = await waitForTransactionReceipt(config, { hash: result });
+        const res = await waitForTransactionReceipt({ hash: result });
         if (res?.status === "success") {
             return true;
         }
@@ -93,7 +92,7 @@ async function approveToken(amt) {
 
 export const handleDeposit = async (user_id, userAddress, depositAmount) => {
     try {
-        const allowance = await checkAllowance(config, userAddress);
+        const allowance = await checkAllowance(userAddress);
         console.log("Current allowance:", allowance);
 
         if (allowance < depositAmount) {
@@ -111,14 +110,14 @@ export const handleDeposit = async (user_id, userAddress, depositAmount) => {
 
         const depositToast = toast.loading(`Depositing ${depositAmount} USDT...`);
 
-        const res = await writeContract(config, {
+        const res = await writeContract({
             abi: contractAddressABI,
             address: contractAddress,
             functionName: '_deposit',
             args: [user_id, (depositAmount * 1e18).toLocaleString("fullwide", { useGrouping: false })]
         });
         // console.log("res 12345", res);
-        const result = await waitForTransactionReceipt(config, { hash: res });
+        const result = await waitForTransactionReceipt({ hash: res });
         // console.log("result true", result);
         if (result.status === "success") {
             toast.dismiss(depositToast);
