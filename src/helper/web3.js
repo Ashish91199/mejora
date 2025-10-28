@@ -46,13 +46,7 @@ export async function isLoggedIn(userAddress) {
             functionName: "isUserExists",
             args: [userAddress]
         })
-        const hash = await waitForTransactionReceipt(config, {
-            hash: res
-        });
-        if (hash.status === "success") {
-            return true
-        }
-        return false;
+        return res
     } catch (error) {
         console.log(error, "error in login");
         return false;

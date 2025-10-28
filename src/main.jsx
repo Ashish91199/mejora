@@ -16,6 +16,7 @@ import {
   arbitrum,
   opBNB,
   bscTestnet,
+  opBNBTestnet,
 } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiConfig } from "wagmi";
@@ -34,8 +35,8 @@ const chains = [
   // avalanche,
   // optimism,
   // arbitrum,
-  // opBNB,
-  bscTestnet
+  opBNBTestnet,
+  // bscTestnet
 ];
 const transports = {
   [mainnet.id]: http(
@@ -68,6 +69,8 @@ const transports = {
   [arbitrum.id]: http("https://arb1.arbitrum.io/rpc", { batch: true }),
   [opBNB.id]: http("https://opbnb-mainnet-rpc.bnbchain.org", { batch: true }),
   [bscTestnet.id]: http("https://bsc-testnet-rpc.publicnode.com", { batch: true }),
+  [opBNBTestnet.id]: http("https://opbnb-testnet-rpc.publicnode.com", { batch: true }),
+
 
 
 };

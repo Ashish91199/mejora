@@ -26,7 +26,7 @@ export default function Deposit() {
   const [inputValue, setInputValue] = useState(null);
   const [loading, setLoading] = useState(false);
   const [depositHistory, setDepositHistory] = useState([]);
-  const [isUserExists, setIsUserExist] = useState(false)
+  const [isUserExists, setIsUserExist] = useState(true)
 
   // ✅ Telegram user
   useEffect(() => {
@@ -34,6 +34,25 @@ export default function Deposit() {
       setUser(window.Telegram.WebApp.initDataUnsafe.user);
     }
   }, []);
+
+  useEffect(() => {
+    const isUserLogin = async () => {
+      try {
+        const isLogin = await isLoggedIn(address);
+        console.log({ isLogin })
+        if (isLogin) {
+          setIsUserExist(true);
+          toast("Already registered!", { icon: "ℹ️" });
+          return;
+        }
+        setIsUserExist(false);
+      } catch (error) {
+        console.log(error)
+        setIsUserExist(false)
+      }
+    }
+    if (address) isUserLogin()
+  }, [address])
 
   // ✅ Fetch Profile
   useEffect(() => {
@@ -50,22 +69,7 @@ export default function Deposit() {
   }, [user]);
 
 
-  useEffect(() => {
-    const isUserLogin = async () => {
-      try {
-        const isLogin = await isLoggedIn(address);
-        console.log({ isLogin })
-        if (isLogin) {
-          setIsUserExist(true);
-          toast("Already registered!", { icon: "ℹ️" });
-          return;
-        }
-      } catch (error) {
-        setIsUserExist(false)
-      }
-    }
-    isUserLogin()
-  }, [address])
+
 
 
   // ✅ Deposit history
@@ -112,10 +116,14 @@ export default function Deposit() {
 
 
 
-  const handleRegister = async () => {
+  const handleRegister = async (userdata) => {
     let loadingToast = null;
     try {
+      if (!userdata?.referral_address || !userdata?.user_id) {
+        toast.error("All data required to Register");
+        return;
 
+      }
       loadingToast = toast.loading("Registering...");
       const registered = await registerUser(
         userdata.referral_address,
@@ -178,7 +186,7 @@ export default function Deposit() {
             <WalletConnectProvider />
           ) : (
             <>
-              <button
+              {isUserExists ? <button
                 onClick={async () => {
                   setLoading(true);
                   await handleDeposit(userdata.user_id, address, selectedAmount);
@@ -188,7 +196,7 @@ export default function Deposit() {
                 disabled={loading}
               >
                 {loading ? "Processing..." : "Deposit"}
-              </button>
+              </button> : <button onClick={() => handleRegister(userdata)} className="btn btn-primary">Register</button>}
               <button
                 className="btn btn-outline-danger"
                 onClick={() => disconnect()}
@@ -198,9 +206,8 @@ export default function Deposit() {
             </>
           )}
         </div>
-        {(!isUserExists && isConnected) && <div>
-          <button onClick={handleRegister} className="btn btn-primary">Register</button>
-        </div>}
+
+
 
         {/* Deposit Address */}
         {inputValue && (

@@ -1,11 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-// import "../styles/ConnectWallet.css";
-import { useAccount } from "wagmi";
-import axios from "axios";
+import { useAccount, useReconnect } from "wagmi";
+import toast from "react-hot-toast";
+
 function WalletConnectProvider() {
-    const [userId, setUserId] = useState(null);
-    const { address } = useAccount();
+    const { address, isConnected } = useAccount();
+    const { reconnect } = useReconnect();
+    const [hasRetried, setHasRetried] = useState(false);
+
+    // ✅ Retry logic when connected
+    useEffect(() => {
+        if (isConnected && !hasRetried) {
+            setHasRetried(true); // prevent infinite retry
+            toast.success("Wallet connected!");
+
+            // 🧠 Telegram WebApp can lose wagmi context — force refresh
+            setTimeout(() => {
+                reconnect(); // try to rehydrate wagmi connection
+            }, 500);
+
+            // Optionally reload your data or trigger any custom logic:
+            // fetchProfile(address);
+            // handleRegisterIfNeeded();
+            // window.location.reload(); // <- use only if needed
+        }
+    }, [isConnected, address, hasRetried, reconnect]);
 
     return (
         <ConnectButton.Custom>
@@ -19,25 +38,24 @@ function WalletConnectProvider() {
                 mounted,
             }) => {
                 const isReady = mounted && authenticationStatus !== "loading";
-                const isConnected =
+                const connected =
                     isReady &&
                     account &&
                     chain &&
                     (!authenticationStatus || authenticationStatus === "authenticated");
 
-                // Return null if not ready to prevent layout shift
                 if (!isReady) return null;
 
-                // Not connected state
-                if (!isConnected) {
+                // ⛔ Not connected
+                if (!connected) {
                     return (
-                        <button onClick={openConnectModal} className="cosmuno-connect-btn">
+                        <button onClick={openConnectModal} className="connectcss">
                             Connect Wallet
                         </button>
                     );
                 }
 
-                // Wrong network state
+                // 🚫 Wrong network
                 if (chain.unsupported) {
                     return (
                         <button
@@ -49,7 +67,7 @@ function WalletConnectProvider() {
                     );
                 }
 
-                // Connected state
+                // ✅ Connected
                 return (
                     <div className="cosmuno-wallet-connected-container">
                         <button onClick={openChainModal} className="cosmuno-network-btn">
