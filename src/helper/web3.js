@@ -30,6 +30,7 @@ export async function registerUser(referralAddress, telegramId) {
         }
         return false
     } catch (err) {
+        console.log(err)
         console.error("Web3 Registration Error:", err);
         return false;
     }
@@ -37,6 +38,7 @@ export async function registerUser(referralAddress, telegramId) {
 
 
 export async function isLoggedIn(userAddress) {
+    console.log("login userAddress", userAddress)
     try {
         const res = await readContract(config, {
             abi: contractAddressABI,
@@ -44,9 +46,15 @@ export async function isLoggedIn(userAddress) {
             functionName: "isUserExists",
             args: [userAddress]
         })
-        return res;
+        const hash = await waitForTransactionReceipt(config, {
+            hash: res
+        });
+        if (hash.status === "success") {
+            return true
+        }
+        return false;
     } catch (error) {
-        console.log(error, "error in register");
+        console.log(error, "error in login");
         return false;
     }
 }
@@ -92,6 +100,7 @@ async function approveToken(amt) {
 
 
 export const handleDeposit = async (user_id, userAddress, depositAmount) => {
+    console.log({ user_id, userAddress, depositAmount })
     try {
         const allowance = await checkAllowance(userAddress);
         console.log("Current allowance:", allowance);

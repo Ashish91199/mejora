@@ -3,14 +3,22 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { BsCheck, BsCopy } from "react-icons/bs";
 import FooterNav from "./component/FooterNav";
-import { getdepositAddress, getProfile, getDepositHistory } from "./helper/apifunction";
-import { useAccount } from "wagmi";
-import { handleDeposit, isLoggedIn, registerUser } from "./helper/web3";
 import toast from "react-hot-toast";
-import { AppKitButton } from "@reown/appkit/react";
+import {
+  getdepositAddress,
+  getProfile,
+  getDepositHistory,
+} from "./helper/apifunction";
+import { handleDeposit, isLoggedIn, registerUser } from "./helper/web3";
+
+// 🧩 wagmi imports
+import { useAccount, useDisconnect } from "wagmi";
+import WalletConnectProvider from "./WalletConnectProvider.jsx/WalletConnectProvider";
 
 export default function Deposit() {
   const { address, isConnected } = useAccount();
+  const { disconnect } = useDisconnect();
+
   const [user, setUser] = useState(null);
   const [userdata, setUserdata] = useState(null);
   const [selectedAmount, setSelectedAmount] = useState(54);
@@ -18,96 +26,114 @@ export default function Deposit() {
   const [inputValue, setInputValue] = useState(null);
   const [loading, setLoading] = useState(false);
   const [depositHistory, setDepositHistory] = useState([]);
+  const [isUserExists, setIsUserExist] = useState(false)
 
-  // ✅ Telegram WebApp user data
+  // ✅ Telegram user
   useEffect(() => {
     if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
       setUser(window.Telegram.WebApp.initDataUnsafe.user);
     }
   }, []);
 
-  // ✅ Get User Profile from backend
+  // ✅ Fetch Profile
   useEffect(() => {
     const getUser = async () => {
+      if (!user) return;
       try {
         const res = await getProfile(user?.id);
         setUserdata(res?.data);
-      } catch (error) {
-        console.error("Error fetching profile:", error);
+      } catch (err) {
+        console.error(err);
       }
     };
-    if (user) getUser();
+    getUser();
   }, [user]);
 
-  // ✅ Get deposit history when wallet is connected
+
+  useEffect(() => {
+    const isUserLogin = async () => {
+      try {
+        const isLogin = await isLoggedIn(address);
+        console.log({ isLogin })
+        if (isLogin) {
+          setIsUserExist(true);
+          toast("Already registered!", { icon: "ℹ️" });
+          return;
+        }
+      } catch (error) {
+        setIsUserExist(false)
+      }
+    }
+    isUserLogin()
+  }, [address])
+
+
+  // ✅ Deposit history
   useEffect(() => {
     const fetchDepositHistory = async () => {
       if (!address) return;
       try {
         const res = await getDepositHistory(address);
-        if (res.status === 200) {
-          setDepositHistory(res.data);
-        }
-      } catch (error) {
-        console.error("Error fetching deposit history:", error);
+        if (res.status === 200) setDepositHistory(res.data);
+      } catch (err) {
+        console.error(err);
       }
     };
     fetchDepositHistory();
   }, [address]);
 
-  // ✅ Fetch deposit address when user & amount ready
+  // ✅ Deposit address
   useEffect(() => {
-    if (user && selectedAmount > 0) {
-      const getAddress = async () => {
-        const res = await getdepositAddress(user?.id, "binance", selectedAmount, order_id);
-        if (res.status === 200 && !order_id) {
-          setInputValue(res?.data?.address);
-          setOrderId(res?.data?.order_id);
-        }
-      };
-      getAddress();
-    }
-  }, [selectedAmount, user]);
-
-  // ✅ Copy Address
-  const handleCopy = (value) => {
-    if (value) navigator.clipboard.writeText(value);
-    toast.success("Address copied!");
-  };
-
-  // ✅ Auto register user when both wallet & telegram user available
-  useEffect(() => {
-    if (!address || !userdata) return;
-
-    const register = async () => {
-      try {
-        const isLogin = await isLoggedIn(address);
-        if (isLogin) {
-          toast("Already registered!", { icon: "ℹ️" });
-          return;
-        }
-
-        if (!userdata.referral_address || !userdata.user_id) {
-          toast.error("Referral Address or UserId missing!");
-          return;
-        }
-
-        const loadingToast = toast.loading("Registering...");
-        const registered = await registerUser(userdata.referral_address, userdata.user_id);
-        toast.dismiss(loadingToast);
-
-        if (registered) toast.success("✅ Registration Successful!");
-        else toast.error("❌ Registration Failed!");
-      } catch (error) {
-        toast.error("Registration error!");
-        console.error(error);
+    if (!user || selectedAmount <= 0) return;
+    const getAddress = async () => {
+      const res = await getdepositAddress(
+        user?.id,
+        "binance",
+        selectedAmount,
+        order_id
+      );
+      if (res.status === 200 && !order_id) {
+        setInputValue(res?.data?.address);
+        setOrderId(res?.data?.order_id);
       }
     };
+    getAddress();
+  }, [selectedAmount, user]);
 
-    register();
-  }, [address, userdata]);
+  // ✅ Copy
+  const handleCopy = (value) => {
+    if (value) navigator.clipboard.writeText(value);
+    toast.success("Copied!");
+  };
 
-  // ✅ Render UI
+  // ✅ Auto-register
+  // if (!address || !userdata) return;
+
+
+
+
+  const handleRegister = async () => {
+    let loadingToast = null;
+    try {
+
+      loadingToast = toast.loading("Registering...");
+      const registered = await registerUser(
+        userdata.referral_address,
+        userdata.user_id
+      );
+      console.log({ registered })
+      toast.dismiss(loadingToast);
+      registered ? toast.success("Registered successfully!") : toast.error("Failed to Register!");
+    } catch (err) {
+      console.log(err)
+      toast.dismiss(loadingToast);
+      toast.error("Registration failed!");
+    }
+  };
+  //   useEffect(() => {
+  //   register();
+  // }, [address, userdata]);
+
   return (
     <div className="page_container">
       <div className="inner_page_layout">
@@ -122,7 +148,7 @@ export default function Deposit() {
           </div>
         </div>
 
-        {/* Chain Label */}
+        {/* Network */}
         <div className="col-12 mb-3 mb-2">
           <div className="d-flex gap-2">
             <span className="btn btn-sm btn-darker d-flex align-items-center orange_bg">
@@ -136,35 +162,61 @@ export default function Deposit() {
           <label className="text-gray mb-2">Amount</label>
           <div className="input-group">
             <span className="input-group-text">$</span>
-            <input type="number" className="form-control" value={selectedAmount} readOnly />
+            <input
+              type="number"
+              className="form-control"
+              value={selectedAmount}
+              readOnly
+            />
           </div>
         </div>
 
-        {/* Wallet Connect + Deposit Button */}
+        {/* Wallet + Deposit */}
         <div className="d-flex align-items-center gap-3">
-          <AppKitButton />
-          {isConnected && (
-            <button
-              onClick={async () => {
-                setLoading(true);
-                await handleDeposit(userdata.user_id, address, selectedAmount);
-                setLoading(false);
-              }}
-              className="connectcss"
-              disabled={loading}
-            >
-              {loading ? "Processing..." : "Deposit"}
-            </button>
+          {!isConnected ? (
+            // Use RainbowKit Connect Button directly
+            <WalletConnectProvider />
+          ) : (
+            <>
+              <button
+                onClick={async () => {
+                  setLoading(true);
+                  await handleDeposit(userdata.user_id, address, selectedAmount);
+                  setLoading(false);
+                }}
+                className="connectcss"
+                disabled={loading}
+              >
+                {loading ? "Processing..." : "Deposit"}
+              </button>
+              <button
+                className="btn btn-outline-danger"
+                onClick={() => disconnect()}
+              >
+                Disconnect
+              </button>
+            </>
           )}
         </div>
+        {(!isUserExists && isConnected) && <div>
+          <button onClick={handleRegister} className="btn btn-primary">Register</button>
+        </div>}
 
         {/* Deposit Address */}
         {inputValue && (
           <div className="col-12 mb-3 mb-2">
             <label className="text-gray mb-2">Deposit Address</label>
             <div className="d-flex align-items-center gap-2">
-              <input type="text" className="form-control" value={inputValue} readOnly />
-              <button className="btn btn-darker" onClick={() => handleCopy(inputValue)}>
+              <input
+                type="text"
+                className="form-control"
+                value={inputValue}
+                readOnly
+              />
+              <button
+                className="btn btn-darker"
+                onClick={() => handleCopy(inputValue)}
+              >
                 <BsCopy />
               </button>
             </div>
