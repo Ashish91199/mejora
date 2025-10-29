@@ -308,9 +308,6 @@ function Wallet() {
                         </div>
                       </Link>
                     </div> */}
-
-
-
                     <div>
                       <Link to="#">
                         <div className="card mb-2 card_with_info">

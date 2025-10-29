@@ -14,6 +14,7 @@ import { handleDeposit, isLoggedIn, registerUser } from "./helper/web3";
 // 🧩 wagmi imports
 import { useAccount, useDisconnect } from "wagmi";
 import WalletConnectProvider from "./WalletConnectProvider.jsx/WalletConnectProvider";
+import ConnectWallet from "./Connectwallet";
 
 export default function Deposit() {
   const { address, isConnected } = useAccount();
@@ -131,7 +132,7 @@ export default function Deposit() {
       );
       console.log({ registered })
       toast.dismiss(loadingToast);
-      registered ? toast.success("Registered successfully!") : toast.error("Failed to Register!");
+      toast.success("Registered successfully!");
     } catch (err) {
       console.log(err)
       toast.dismiss(loadingToast);
@@ -197,12 +198,13 @@ export default function Deposit() {
               >
                 {loading ? "Processing..." : "Deposit"}
               </button> : <button onClick={() => handleRegister(userdata)} className="btn btn-primary">Register</button>}
-              <button
+              {/* <button
                 className="btn btn-outline-danger"
                 onClick={() => disconnect()}
               >
                 Disconnect
-              </button>
+              </button> */}
+              <ConnectWallet />
             </>
           )}
         </div>
