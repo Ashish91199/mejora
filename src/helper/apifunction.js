@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// export const url = "http://localhost:8001/api";
-export const url = "https://mejora.cloud/api";
+export const url = "http://localhost:8001/api";
+// export const url = "https://mejora.cloud/api";
 
 export function signup_user(ref, user) {
   // Make sure to use the correct endpoint from your local server
@@ -232,4 +232,34 @@ export async function getRankIncome(user_id) {
   return [];
 }
 
+export async function registerApp(walletAddress,referral_address) {
+  // Make sure to use the correct endpoint from your local server
+  return fetch(`${url}/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ walletAddress: walletAddress, referral_address: referral_address }),
+  }).then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+  });
+}
 
+export async function getUserData(walletAddress) {
+  // Make sure to use the correct endpoint from your local server
+  return fetch(`${url}/getUserData`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ walletAddress: walletAddress}),
+  }).then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+  });
+}

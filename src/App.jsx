@@ -62,7 +62,7 @@ function App() {
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/webar" element={<WebAr />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/deposit" element={<Deposit />} />
+          <Route path="/register" element={<Deposit />} />
           <Route path="/triangle" element={<Triangle />} />
           <Route path="/level" element={<Level />} />
           <Route path="/Withdraw" element={< Withdraw />} />

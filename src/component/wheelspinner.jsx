@@ -8,6 +8,7 @@ import twenty from "../image/20.png";
 import Fifty from "../image/50.png";
 import hundred from "../image/100.png";
 import twohundred from "../image/200.png";
+import { useAccount } from "wagmi";
 
 const prizes = [
     { label: "5$", color: "#ff595e" },
@@ -20,6 +21,8 @@ const prizes = [
 ];
 
 function WheelSpinner() {
+        const { address } = useAccount()
+    
     const wheelRef = useRef(null);
     const [result, setResult] = useState("");
     const [spinning, setSpinning] = useState(false);
@@ -97,7 +100,7 @@ function WheelSpinner() {
 
     // Spin wheel
     const spinWheel = async () => {
-        if (spinning || !user) return;
+        if (spinning || !address) return;
         setSpinning(true);
 
         const spinningAudio = spinningAudioRef.current;
@@ -106,7 +109,7 @@ function WheelSpinner() {
         spinningAudio.play().catch(() => console.log("Autoplay blocked"));
 
         try {
-            const response = await Spinerrun(user.id);
+            const response = await Spinerrun(address);
             if (!response.success) {
                 setResult(`❌ ${response.message}`);
                 setSpinning(false);
@@ -206,7 +209,7 @@ function WheelSpinner() {
                         <div
                             className="wheel-center-btn"
                             onClick={spinWheel}
-                            style={{ cursor: spinning || !user ? "not-allowed" : "pointer" }}
+                            style={{ cursor: spinning || !address ? "not-allowed" : "pointer" }}
                         >
                             {spinning ? "..." : "SPIN"}
                         </div>

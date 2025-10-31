@@ -31,15 +31,21 @@ function Home() {
       setUser(window.Telegram?.WebApp?.initDataUnsafe?.user)
     }
   }, [window.Telegram?.WebApp?.initDataUnsafe?.user]);
-  // 5972467273   default telegramId
   useEffect(() => {
-    if (user) {
-      setUserName(user?.username ? user?.username : user?.first_name + " " + user?.last_name)
+    if (user || address) {
+      const name =
+        user?.username ||
+        [user?.first_name, user?.last_name].filter(Boolean).join(" ") ||
+        "Mejora";
+
+      setUserName(name);
+
+
       console.log({ address })
       const getUser = async () => {
         try {
-          const res = await getProfile(user.id);
-          console.log({ res }, "res")
+          const res = await getProfile(user?.id || address);
+
           setUserData(res?.data);
         } catch (error) {
           console.error("Error during signup:", error);
@@ -51,13 +57,6 @@ function Home() {
 
   }, [user])
 
-  const [value, setValue] = useState(30); // Initial slider value
-
-  // Handler for slider value change
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
   return (
     <>
       <div className="page_container">
@@ -66,7 +65,10 @@ function Home() {
             <Link className="anchor_pointer text-white" to="#">
               <div className="d-flex gap-2 align-items-center">
                 <img src="/images/MejoraLogo.png" width={"28px"} alt="" />
-                <div>{user?.username ? user?.username : user?.first_name + " " + user?.last_name}
+                <div>{user?.username
+                  ? user.username
+                  : [user?.first_name, user?.last_name].filter(Boolean).join(" ") || "Mejora"}
+
                 </div>
               </div>
             </Link>

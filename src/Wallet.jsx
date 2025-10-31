@@ -93,7 +93,7 @@ function Wallet() {
             </div> */}
 
             <div className="d-flex gap-2 justify-content-center mb-4">
-              <Link to="/deposit" className="btn-gradient-2 ">
+              <Link to="/register" className="btn-gradient-2 ">
                 Deposit
               </Link>
               <Link to="/withdraw" className="btn-gradient-3">

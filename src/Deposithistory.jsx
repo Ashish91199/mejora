@@ -7,8 +7,11 @@ import { getDepositHistory } from "./helper/apifunction"; // Make sure you have 
 import { formatNumber } from "./helper/Math";
 import { Link } from "react-router-dom";
 import { MdKeyboardArrowLeft } from "react-icons/md";
+import { useAccount } from "wagmi";
 
 function Deposithistory() {
+    const { address } = useAccount()
+    
     const [user, setUser] = useState(null);
     const [depositData, setDepositData] = useState([]);
     const [withdrawData, setWithdrawData] = useState([]);
@@ -27,11 +30,9 @@ function Deposithistory() {
 
     // Fetch deposit and withdraw history
     useEffect(() => {
-        if (!user?.id) return;
-
         const fetchDeposit = async () => {
             try {
-                const res = await getDepositHistory(user.id);
+                const res = await getDepositHistory(address);
                 setDepositData(res?.data || []);
             } catch (err) {
                 console.error("Error fetching deposit history:", err);
@@ -119,9 +120,9 @@ function Deposithistory() {
                                                         <FiUser />
                                                     </div>
                                                     <div>
-                                                        <span className="dep-hist-label">User ID</span>
+                                                        <span className="dep-hist-label">User</span>
                                                         <br />
-                                                        <span className="dep-hist-value">{item?.tuserId || "N/A"}</span>
+                                                        <span className="dep-hist-value">{item?.user || "N/A"}</span>
                                                     </div>
                                                 </div>
 
