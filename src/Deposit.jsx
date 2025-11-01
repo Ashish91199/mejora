@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MdKeyboardArrowLeft } from "react-icons/md";
-import { Link, useSearchParams } from "react-router-dom"; // Added useSearchParams
+import { Link, useSearchParams } from "react-router-dom";
 import { BsCheck, BsCopy } from "react-icons/bs";
 import FooterNav from "./component/FooterNav";
 import toast from "react-hot-toast";
@@ -12,18 +12,15 @@ import {
   getUserData,
 } from "./helper/apifunction";
 import { handleDeposit, isLoggedIn, registerUser } from "./helper/web3";
-
-// wagmi imports
-import { useAccount, useDisconnect } from "wagmi";
+import { useAccount } from "wagmi";
 import WalletConnectProvider from "./WalletConnectProvider.jsx/WalletConnectProvider";
 import ConnectWallet from "./Connectwallet";
 
 export default function Deposit() {
   const { address, isConnected } = useAccount();
-  const [searchParams] = useSearchParams(); // Read URL query params
-
-  const [userData, setUserData] = useState('');
-  const [refresh,setRefresh]= useState(false)
+  const [searchParams] = useSearchParams();
+  const [userData, setUserData] = useState("");
+  const [refresh, setRefresh] = useState(false);
   const [user, setUser] = useState(null);
   const [userdata, setUserdata] = useState(null);
   const [selectedAmount, setSelectedAmount] = useState(54);
@@ -47,7 +44,7 @@ export default function Deposit() {
 
   // Auto-fill referral address from URL ?user=0x...
   useEffect(() => {
-    const refFromUrl =	searchParams.get("user");
+    const refFromUrl = searchParams.get("user");
     if (refFromUrl && !referralAddress) {
       setReferralAddress(refFromUrl);
     }
@@ -74,18 +71,20 @@ export default function Deposit() {
 
     getUser();
 
-    getUserData(address).then((res) => {
-      if (res) {
-        setUserData(res?.data?.user_address);
-      }
-    });
-  }, [user, address, isTelegramEnv,refresh]);
+    if (address) {
+      getUserData(address).then((res) => {
+        if (res) {
+          setUserData(res?.data?.user_address);
+        }
+      });
+    }
+  }, [user, address, isTelegramEnv, refresh]);
 
   // Deposit history
   useEffect(() => {
-    const fetchDepositHistory = async () => {
-      if (!address) return;
+    if (!address) return;
 
+    const fetchDepositHistory = async () => {
       try {
         const res = await getDepositHistory(address);
         if (res.status === 200) setDepositHistory(res.data);
@@ -157,14 +156,12 @@ export default function Deposit() {
         return;
       }
       loadingToast = toast.loading("Registering...");
-      // Use connected wallet address as user_id for Dapp
       const registered = await registerApp(address, referralAddress);
 
       console.log({ registered });
       toast.dismiss(loadingToast);
       toast.success("Registered successfully!");
-setRefresh(!refresh)
-      // Refresh user status
+      setRefresh(!refresh);
       setIsUserExist(true);
     } catch (err) {
       console.error(err);
@@ -187,11 +184,9 @@ setRefresh(!refresh)
       console.log(userExist, "userExist");
 
       if (!userExist) {
-        // Await the API call to fetch user data
         const uData = await getUserData(address);
         console.log(uData, "uData");
 
-        // Register only if user data exists
         if (uData?.data?.user_address) {
           const registered = await registerUser(
             uData.data.referral_address,
@@ -215,6 +210,24 @@ setRefresh(!refresh)
     }
   };
 
+  // Render only wallet connect option if not connected
+  if (!isConnected) {
+    return (
+      <div className="page_container">
+        <div className="inner_page_layout">
+          <div className="text-center">
+            <h4 className="mb-4">Connect Your Wallet</h4>
+            <p className="text-gray mb-4">
+              Please connect your wallet to proceed with registration or deposit.
+            </p>
+            <WalletConnectProvider />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Full UI after wallet connection
   return (
     <div className="page_container">
       <div className="inner_page_layout">
@@ -233,7 +246,6 @@ setRefresh(!refresh)
         {/* Registration Section */}
         {!userData && !isTelegramEnv ? (
           <div className="registration-container">
-            {/* Registration Image */}
             <div className="text-center mb-4">
               <div className="register-image-wrapper">
                 <img
@@ -250,17 +262,21 @@ setRefresh(!refresh)
               </p>
             </div>
 
-            {/* Registration Form */}
             <div className="registration-form">
               {isTelegramEnv && userdata ? (
-                // Telegram Bot Registration
                 <div className="col-12">
                   <div className="info-card mb-3">
-                    <p className="mb-2"><strong>User ID:</strong> {userdata.user_id}</p>
-                    <p className="mb-0"><strong>Referral:</strong> {userdata.referral_address?.slice(0, 6)}...{userdata.referral_address?.slice(-4)}</p>
+                    <p className="mb-2">
+                      <strong>User ID:</strong> {userdata.user_id}
+                    </p>
+                    <p className="mb-0">
+                      <strong>Referral:</strong>{" "}
+                      {userdata.referral_address?.slice(0, 6)}...
+                      {userdata.referral_address?.slice(-4)}
+                    </p>
                   </div>
                   <button
-                    onClick={handleRegisterBot}
+                    onClick={handleRegisterDapp} // Note: handleRegisterBot is not defined, using handleRegisterDapp
                     className="btn btn-primary w-100 register-btn"
                     disabled={loading}
                   >
@@ -275,9 +291,10 @@ setRefresh(!refresh)
                   </button>
                 </div>
               ) : (
-                // Dapp Registration
                 <div className="col-12">
-                  <label className="text-gray mb-2 fw-bold">Referral Address</label>
+                  <label className="text-gray mb-2 fw-bold">
+                    Referral Address
+                  </label>
                   <input
                     type="text"
                     className="form-control mb-3 referral-input"
@@ -306,7 +323,6 @@ setRefresh(!refresh)
         ) : (
           <>
             {/* Deposit Section */}
-            {/* Network */}
             <div className="col-12 mb-3">
               <label className="text-gray mb-2 fw-bold">Network</label>
               <div className="d-flex gap-2">
@@ -321,9 +337,8 @@ setRefresh(!refresh)
               </div>
             </div>
 
-            {/* Amount */}
             <div className="col-12 mb-3">
-              <label className="text-gray mb-2 fw-bold">Amount</label>
+              <label className="text-gray mb-2 Euphoric">Amount</label>
               <div className="input-group amount-input-group">
                 <span className="input-group-text">$</span>
                 <input
@@ -336,32 +351,24 @@ setRefresh(!refresh)
               </div>
             </div>
 
-            {/* Wallet Connection + Deposit */}
             <div className="d-flex align-items-center gap-3 mb-3">
-              {!isConnected ? (
-                <WalletConnectProvider />
-              ) : (
-                <>
-                  <button
-                    onClick={handleDepositClick}
-                    className="connectcss deposit-btn"
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <>
-                        <span className="spinner-border spinner-border-sm me-2"></span>
-                        Processing...
-                      </>
-                    ) : (
-                      "Deposit"
-                    )}
-                  </button>
-                  <ConnectWallet />
-                </>
-              )}
+              <button
+                onClick={handleDepositClick}
+                className="connectcss deposit-btn"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm me-2"></span>
+                    Processing...
+                  </>
+                ) : (
+                  "Deposit"
+                )}
+              </button>
+              <ConnectWallet />
             </div>
 
-            {/* Deposit Address */}
             {inputValue && (
               <div className="col-12 mb-3">
                 <label className="text-gray mb-2 fw-bold">Deposit Address</label>
@@ -382,7 +389,6 @@ setRefresh(!refresh)
               </div>
             )}
 
-            {/* Deposit History */}
             {depositHistory.length > 0 && (
               <div className="col-12 mt-4">
                 <h6 className="mb-3">Recent Deposits</h6>
@@ -391,9 +397,17 @@ setRefresh(!refresh)
                     <div key={index} className="history-item">
                       <div>
                         <p className="mb-1">${deposit.amount}</p>
-                        <small className="text-gray">{new Date(deposit.date).toLocaleDateString()}</small>
+                        <small className="text-gray">
+                          {new Date(deposit.date).toLocaleDateString()}
+                        </small>
                       </div>
-                      <span className={`badge ${deposit.status === 'completed' ? 'bg-success' : 'bg-warning'}`}>
+                      <span
+                        className={`badge ${
+                          deposit.status === "completed"
+                            ? "bg-success"
+                            : "bg-warning"
+                        }`}
+                      >
                         {deposit.status}
                       </span>
                     </div>
@@ -407,10 +421,13 @@ setRefresh(!refresh)
 
       <FooterNav />
 
-      {/* Add custom styles */}
       <style jsx>{`
         .registration-container {
-          background: linear-gradient(135deg, rgba(255, 107, 0, 0.1) 0%, rgba(255, 107, 0, 0.05) 100%);
+          background: linear-gradient(
+            135deg,
+            rgba(255, 107, 0, 0.1) 0%,
+            rgba(255, 107, 0, 0.05) 100%
+          );
           border-radius: 20px;
           padding: 2rem;
           margin-bottom: 2rem;
@@ -547,7 +564,7 @@ setRefresh(!refresh)
         }
 
         .deposit-history {
-          display: flex;
+          display:Deposit history
           flex-direction: column;
           gap: 10px;
         }
