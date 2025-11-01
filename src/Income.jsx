@@ -7,9 +7,11 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { getlevelincome, getProfile, getRankIncome, getSpinner } from "./helper/apifunction";
 import { FiUser, FiDollarSign, FiHash, FiCalendar } from "react-icons/fi";
 import { FaDollarSign, FaRegCalendarCheck, FaUser } from "react-icons/fa6";
-import { PercentIcon } from "lucide-react";
+import { useAccount } from "wagmi";
 
 function Wallet() {
+  const { address } = useAccount()
+  
   const [activeTab, setActiveTab] = useState("tab1");
   const [user, setUser] = useState(null);
   const [user_data, setUserData] = useState(null);
@@ -35,7 +37,7 @@ function Wallet() {
   useEffect(() => {
     const fetchRankIncome = async () => {
       try {
-        const res = await getRankIncome(user?.id);
+        const res = await getRankIncome(address);
         console.log(res, "res1111");
         if (res?.success)
           setRankData(res?.data); // res.data should be an array of income objects
@@ -44,14 +46,14 @@ function Wallet() {
       }
     };
 
-    if (user?.id)
+    if (address)
       fetchRankIncome();
-  }, [user?.id, activeTab === "tab1"]);
+  }, [address, activeTab === "tab1"]);
 
   useEffect(() => {
     const fetchLevelIncome = async () => {
       try {
-        const res = await getlevelincome(user?.id);
+        const res = await getlevelincome(address);
         console.log(res, "res1111");
         if (res?.success)
           setUserData(res?.data); // res.data should be an array of income objects
@@ -60,14 +62,14 @@ function Wallet() {
       }
     };
 
-    if (user?.id)
+    if (address)
       fetchLevelIncome();
-  }, [user?.id, activeTab === "tab2"]);
+  }, [address, activeTab === "tab2"]);
 
   useEffect(() => {
     const fetchSpinnerData = async () => {
       try {
-        const res = await getSpinner(user?.id);
+        const res = await getSpinner(address);
         console.log(res, "res1111");
         if (res?.success)
           setSpinnData(res?.data); // res.data should be an array of income objects
@@ -75,9 +77,9 @@ function Wallet() {
         console.error("Error fetching level income:", error);
       }
     };
-    if (user?.id)
+    if (address)
       fetchSpinnerData();
-  }, [activeTab === "tab3", user?.id]);
+  }, [activeTab === "tab3", address]);
   console.log({ user })
   return (
     <>

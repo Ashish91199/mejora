@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { FiUserPlus, FiShare2, FiCopy, FiArrowRight } from "react-icons/fi";
+import { FiUserPlus, FiShare2, FiCopy } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import FooterNav from "./component/FooterNav";
 import { getUserLevel } from "./helper/apifunction";
@@ -64,7 +64,6 @@ const ShareBox = ({ title, link, platform, icon, onCopy, bgColor }) => {
         </div>
       </div>
       
-      {/* Link preview */}
       <div 
         className="rounded-3 p-2 mt-2"
         style={{
@@ -109,12 +108,12 @@ function InviteFriends() {
     if (!address) return;
 
     const TG_BOT_USERNAME = "MejoraBot_bot";
-    const telegramDeepLink = `https://t.me/${TG_BOT_USERNAME}?start=ref_${address}`;
+    const telegramDeepLink = `https://t.me/${TG_BOT_USERNAME}?start=${user?.id || ""}`;
     const webDappLink = `https://mejora.cloud/register?user=${address}`;
 
     setTgLink(telegramDeepLink);
     setDappLink(webDappLink);
-  }, [address]);
+  }, [address, user]);
 
   /* ---- Optional: fetch user level ---- */
   useEffect(() => {
@@ -175,8 +174,6 @@ function InviteFriends() {
       <div className="page_container">
         <div className="inner_page_layout">
           <div className="position-relative mb-5 py-1">
-
-            {/* Enhanced Back button */}
             <div className="backButton mb-3">
               <Link 
                 className="anchor_pointer text-white d-flex align-items-center" 
@@ -189,14 +186,11 @@ function InviteFriends() {
             </div>
 
             <div className="mb-5">
-
-              {/* Enhanced Header */}
               <div className="mb-4 text-center" data-aos="fade-down">
                 <h4 className="mb-2 fw-bold" style={{ color: "#f3ba2f" }}>Invite Friends & Earn</h4>
                 <p className="text-lgray fs-14 mb-0">Share your referral link and get 5% bonus from each friend</p>
               </div>
 
-              {/* Enhanced Bonus card */}
               <div 
                 className="card mb-4 border-0" 
                 style={{
@@ -230,7 +224,6 @@ function InviteFriends() {
                 </div>
               </div>
 
-              {/* Share Boxes Section - Replaced Invite Boxes */}
               <div className="mb-4" data-aos="fade-up" data-aos-delay="100">
                 <div className="text-center mb-3">
                   <h6 className="fw-bold" style={{ color: "#f3ba2f" }}>Share Your Referral Links</h6>
@@ -238,14 +231,17 @@ function InviteFriends() {
                 </div>
                 
                 <div className="px-2">
-                  <ShareBox
-                    title="Telegram Referral"
-                    link={tgLink}
-                    platform="Telegram"
-                    icon="T"
-                    onCopy={copyToClipboard}
-                    bgColor="linear-gradient(135deg, #229ED9 0%, #1e88c7 100%)"
-                  />
+                  {/* Conditionally render Telegram ShareBox only if user exists (Telegram Mini-App) */}
+                  {user && (
+                    <ShareBox
+                      title="Telegram Referral"
+                      link={tgLink}
+                      platform="Telegram"
+                      icon="T"
+                      onCopy={copyToClipboard}
+                      bgColor="linear-gradient(135deg, #229ED9 0%, #1e88c7 100%)"
+                    />
+                  )}
                   
                   <ShareBox
                     title="Web App Referral"
@@ -258,7 +254,6 @@ function InviteFriends() {
                 </div>
               </div>
 
-              {/* Referral Stats (if available) */}
               {levelData && (
                 <div 
                   className="row text-center mb-4" 
@@ -280,10 +275,8 @@ function InviteFriends() {
                 </div>
               )}
 
-              {/* Existing Referral List */}
               <ReferralList />
 
-              {/* Enhanced Fixed bottom bar */}
               <div 
                 className="invite_fixed_wrapper rounded-4 p-3"
                 style={{
@@ -302,7 +295,7 @@ function InviteFriends() {
                       fontWeight: "600",
                       transition: "all 0.3s ease"
                     }}
-                    onClick={shareViaTelegram}
+                    // onClick={shareViaTelegram}
                     onMouseEnter={(e) => {
                       e.target.style.transform = "translateY(-2px)";
                       e.target.style.boxShadow = "0 4px 12px rgba(243, 186, 47, 0.4)";
@@ -319,37 +312,37 @@ function InviteFriends() {
                   </div>
 
                   <div className="action_wrapper d-flex gap-2">
-                    {/* Quick Copy Telegram link */}
-                    <div
-                      className="rounded-circle d-flex align-items-center justify-content-center"
-                      style={{
-                        width: "40px",
-                        height: "40px",
-                        backgroundColor: "rgba(34, 158, 217, 0.1)",
-                        border: "1px solid rgba(34, 158, 217, 0.3)",
-                        cursor: "pointer",
-                        transition: "all 0.3s ease"
-                      }}
-                      onClick={() => copyToClipboard(tgLink, "Telegram")}
-                      onMouseEnter={(e) => {
-                        e.target.style.backgroundColor = "rgba(34, 158, 217, 0.2)";
-                        e.target.style.transform = "scale(1.1)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.target.style.backgroundColor = "rgba(34, 158, 217, 0.1)";
-                        e.target.style.transform = "scale(1)";
-                      }}
-                    >
-                      <FiCopy style={{ color: "#229ED9" }} />
-                    </div>
+                    {/* Conditionally render Telegram copy button */}
+                    {user && (
+                      <div
+                        className="rounded-circle d-flex align-items-center justify-content-center"
+                        style={{
+                          width: "40px",
+                          height: "40px",
+                          backgroundColor: "rgba(34, 158, 217, 0.1)",
+                          border: "1px solid rgba(34, 158, 217, 0.3)",
+                          cursor: "pointer",
+                          transition: "all 0.3s ease"
+                        }}
+                        onClick={() => copyToClipboard(tgLink, "Telegram")}
+                        onMouseEnter={(e) => {
+                          e.target.style.backgroundColor = "rgba(34, 158, 217, 0.2)";
+                          e.target.style.transform = "scale(1.1)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.backgroundColor = "rgba(34, 158, 217, 0.1)";
+                          e.target.style.transform = "scale(1)";
+                        }}
+                      >
+                        <FiCopy style={{ color: "#229ED9" }} />
+                      </div>
+                    )}
                     
-                    {/* Quick Copy DApp link */}
                     <div
                       className="rounded-circle d-flex align-items-center justify-content-center"
                       style={{
                         width: "40px",
                         height: "40px",
-                        backgroundColor: "rgba(0, 174, 255, 0.1)",
                         border: "1px solid rgba(34, 158, 217, 0.3)",
                         cursor: "pointer",
                         transition: "all 0.3s ease"
@@ -364,12 +357,11 @@ function InviteFriends() {
                         e.target.style.transform = "scale(1)";
                       }}
                     >
-                      <FiShare2 style={{ color: "#2f00ffff" }} />
+                      <FiShare2 style={{ color: "#f3ba2f" }} />
                     </div>
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -384,7 +376,6 @@ function InviteFriends() {
         }}
       />
       
-      {/* Add some custom styles for hover effects */}
       <style jsx>{`
         .share-box-hover:hover {
           transform: translateY(-2px);

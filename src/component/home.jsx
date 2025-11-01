@@ -17,7 +17,7 @@ function Home() {
   console.log("username", username)
   const [user_data, setUserData] = useState(null);
   // Initialize AOS on component mount
-  console.log({ user })
+
   useEffect(() => {
     AOS.init({
       duration: 600,

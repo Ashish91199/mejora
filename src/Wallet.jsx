@@ -7,8 +7,11 @@ import { MdArrowRightAlt, MdInfo, MdKeyboardArrowLeft, MdRampRight } from "react
 import { div } from "three/webgpu";
 // import Withdraw from "./component/Withdraw";
 import { getProfile } from "./helper/apifunction";
+import { useAccount } from "wagmi";
 
 function Wallet() {
+    const { address } = useAccount();
+  
   const [activeTab, setActiveTab] = useState("tab1");
   const [user, setUser] = useState(null);
   const [user_data, setUserData] = useState(null);
@@ -31,10 +34,10 @@ function Wallet() {
   }, []);
 
   useEffect(() => {
-    if (user) {
+    if (address) {
       const getUser = async () => {
         try {
-          const res = await getProfile(user?.id);
+          const res = await getProfile(address);
           console.log(res, "res")
           setUserData(res?.data);
         } catch (error) {
@@ -379,7 +382,7 @@ function Wallet() {
                                   Withdrawal Balance
                                 </div>
                                 <div>
-                                  <span>{user_data?.earning_balance ? user_data.earning_balance : "0.00"}</span>
+                                  <span>{user_data?.earning_balance ? user_data.earning_balance+ user_data.spinearnBalance : "0.00"}</span>
 
                                 </div>
                               </div>

@@ -23,6 +23,7 @@ export default function Deposit() {
   const [searchParams] = useSearchParams(); // Read URL query params
 
   const [userData, setUserData] = useState('');
+  const [refresh,setRefresh]= useState(false)
   const [user, setUser] = useState(null);
   const [userdata, setUserdata] = useState(null);
   const [selectedAmount, setSelectedAmount] = useState(54);
@@ -78,7 +79,7 @@ export default function Deposit() {
         setUserData(res?.data?.user_address);
       }
     });
-  }, [user, address, isTelegramEnv]);
+  }, [user, address, isTelegramEnv,refresh]);
 
   // Deposit history
   useEffect(() => {
@@ -162,7 +163,7 @@ export default function Deposit() {
       console.log({ registered });
       toast.dismiss(loadingToast);
       toast.success("Registered successfully!");
-
+setRefresh(!refresh)
       // Refresh user status
       setIsUserExist(true);
     } catch (err) {
