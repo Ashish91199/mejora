@@ -80,7 +80,7 @@ function Home() {
                 <div className="wallet_btn">
                   <div className="d-flex gap-2 align-items-center">
                     {/* <div>+{formatNumber(user_data?.deposit_balance)}</div>{" "} */}
-                    <div>+{user_data?.deposit_balance ? formatNumber(user_data.deposit_balance / 1e18) : 0}</div>
+                    <div>+<span>{user_data?.earning_balance ? user_data.earning_balance + user_data.spinearnBalance : "0.00"}</span></div>
 
                     <div>
                       <Link to="/wallet">
@@ -96,28 +96,78 @@ function Home() {
             </div>
           </div>
         </div>
-        <div className="header">
+        <div
+          className="header d-flex justify-content-between align-items-center p-3 rounded-4"
+          style={{
+            backdropFilter: "blur(16px)",
+            background: "rgba(255, 255, 255, 0.08)",
+          }}
+        >
+          {/* LEFT SIDE */}
           <div className="col-5">
-            <div className="fs-12 mb-1">
-              Available Spin
-              <MdKeyboardArrowRight className="fs-16 mx-1" />
-              {user_data?.avaibleSpin}
+            <div
+              className="fs-12 mb-2 d-flex align-items-center"
+              style={{ color: "#ffffff" }}
+            >
+              <span>Available Spin</span>
+              <MdKeyboardArrowRight className="fs-16 mx-1 text-light" />
+              <strong style={{ color: "#ffffff" }}>
+                {user_data?.avaibleSpin ?? 0}
+              </strong>
             </div>
-            <div className="fs-12">
-              <div className="progress">
-                <div
-                  className="progress-bar progress-purple"
-                  role="progressbar"
-                  aria-valuenow="0"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  style={{ width: "80px" }}
-                ></div>
-              </div>
+
+            {/* Dynamic Progress based on completeSpin */}
+            <div
+              className="progress"
+              style={{
+                height: "6px",
+                borderRadius: "10px",
+                background: "rgba(255, 255, 255, 0.1)",
+                overflow: "hidden",
+                width: "120px"
+              }}
+            >
+              <div
+                className="progress-bar"
+                role="progressbar"
+                style={{
+                  width: `${Math.min(
+                    ((user_data?.completeSpin || 0) /
+                      (user_data?.avaibleSpin + user_data?.completeSpin || 1)) * 100,
+                    100
+                  )
+                    }%`,
+                  background: "linear-gradient(90deg, #a855f7, #ec4899)",
+                  borderRadius: "10px",
+                  transition: "width 0.6s ease-in-out",
+                }}
+              ></div>
             </div>
           </div>
 
+          {/* RIGHT SIDE */}
+          <div className="col-5 text-end">
+            <div
+              className="d-inline-flex align-items-center justify-content-end gap-2 px-3 py-1"
+              style={{
+                backdropFilter: "blur(8px)",
+                background: "rgba(255,255,255,0.05)",
+                borderRadius: "30px",
+                color: "#ffffff",
+              }}
+            >
+              <span
+                style={{
+                  fontWeight: 600,
+                  color: "#ffffff",
+                }}
+              >
+                {user_data?.user_id}
+              </span>
+            </div>
+          </div>
         </div>
+
         {/* Centered Logo */}
         <div className="rounded-outer-container" data-aos="fade-up">
           <div className="rounded-container">

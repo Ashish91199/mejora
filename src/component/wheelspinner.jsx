@@ -21,8 +21,8 @@ const prizes = [
 ];
 
 function WheelSpinner() {
-        const { address } = useAccount()
-    
+    const { address } = useAccount()
+
     const wheelRef = useRef(null);
     const [result, setResult] = useState("");
     const [spinning, setSpinning] = useState(false);
@@ -144,48 +144,49 @@ function WheelSpinner() {
             // Handle result after 20s
             setTimeout(() => {
                 setSpinning(false);
-                setResult(`🎉 You won: ${spinAmount}$`);
-
-                let prizeImage = null;
-                switch (spinAmount) {
-                    case 5:
-                        prizeImage = five;
-                        break;
-                    case 10:
-                        prizeImage = ten;
-                        break;
-                    case 20:
-                        prizeImage = twenty;
-                        break;
-                    case 50:
-                        prizeImage = Fifty;
-                        break;
-                    case 100:
-                        prizeImage = hundred;
-                        break;
-                    case 200:
-                        prizeImage = twohundred;
-                        break;
-                    default:
-                        prizeImage = null;
-                }
-
-                setPrizeImg(prizeImage);
-
-                // Prize popup stays for exactly 20s
-                const hideTimeout = setTimeout(() => setPrizeImg(null), 20000);
-
-                showConfetti(150);
                 spinningAudio.pause();
                 spinningAudio.currentTime = 0;
 
-                const resultAudio = resultAudioRef.current;
-                resultAudio.currentTime = 0;
-                resultAudio.play().catch(() => console.log("Autoplay blocked"));
+                // ⏳ Wait 10 seconds before showing the result and prize
+                setTimeout(() => {
+                    setResult(`🎉 You won: ${spinAmount}$`);
 
-                // Cleanup in case user spins again
-                return () => clearTimeout(hideTimeout);
+                    let prizeImage = null;
+                    switch (spinAmount) {
+                        case 5:
+                            prizeImage = five;
+                            break;
+                        case 10:
+                            prizeImage = ten;
+                            break;
+                        case 20:
+                            prizeImage = twenty;
+                            break;
+                        case 50:
+                            prizeImage = Fifty;
+                            break;
+                        case 100:
+                            prizeImage = hundred;
+                            break;
+                        case 200:
+                            prizeImage = twohundred;
+                            break;
+                        default:
+                            prizeImage = null;
+                    }
+
+                    setPrizeImg(prizeImage);
+                    showConfetti(150);
+
+                    const resultAudio = resultAudioRef.current;
+                    resultAudio.currentTime = 0;
+                    resultAudio.play().catch(() => console.log("Autoplay blocked"));
+
+                    const hideTimeout = setTimeout(() => setPrizeImg(null), 20000);
+                    return () => clearTimeout(hideTimeout);
+                }, 4000); // ← 4-second delay before showing the prize
             }, 20000);
+
         } catch (error) {
             console.error("Spin error:", error);
             setResult("❌ Spin Not Available");

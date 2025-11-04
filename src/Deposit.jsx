@@ -323,19 +323,7 @@ export default function Deposit() {
         ) : (
           <>
             {/* Deposit Section */}
-            <div className="col-12 mb-3">
-              <label className="text-gray mb-2 fw-bold">Network</label>
-              <div className="d-flex gap-2">
-                <span className="btn btn-sm btn-darker d-flex align-items-center network-badge">
-                  <img
-                    src="https://cryptologos.cc/logos/bnb-bnb-logo.png"
-                    alt="BNB"
-                    className="network-icon me-2"
-                  />
-                  BEP 20 <BsCheck className="ms-1" />
-                </span>
-              </div>
-            </div>
+
 
             <div className="col-12 mb-3">
               <label className="text-gray mb-2 Euphoric">Amount</label>
@@ -402,11 +390,10 @@ export default function Deposit() {
                         </small>
                       </div>
                       <span
-                        className={`badge ${
-                          deposit.status === "completed"
-                            ? "bg-success"
-                            : "bg-warning"
-                        }`}
+                        className={`badge ${deposit.status === "completed"
+                          ? "bg-success"
+                          : "bg-warning"
+                          }`}
                       >
                         {deposit.status}
                       </span>

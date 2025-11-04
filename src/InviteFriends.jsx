@@ -16,7 +16,7 @@ import { useAccount } from "wagmi";
    -------------------------------------------------------------- */
 const ShareBox = ({ title, link, platform, icon, onCopy, bgColor }) => {
   return (
-    <div 
+    <div
       className="rounded-4 p-3 mb-3 share-box-hover"
       style={{
         background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
@@ -49,7 +49,7 @@ const ShareBox = ({ title, link, platform, icon, onCopy, bgColor }) => {
             <div className="fs-12 text-white-50">Tap to copy link</div>
           </div>
         </div>
-        
+
         <div className="d-flex align-items-center">
           <div
             className="rounded-3 d-flex align-items-center justify-content-center px-3 py-2"
@@ -63,8 +63,8 @@ const ShareBox = ({ title, link, platform, icon, onCopy, bgColor }) => {
           </div>
         </div>
       </div>
-      
-      <div 
+
+      <div
         className="rounded-3 p-2 mt-2"
         style={{
           background: "rgba(0, 0, 0, 0.3)",
@@ -133,8 +133,8 @@ function InviteFriends() {
   /* ---- Enhanced Copy to clipboard ---- */
   const copyToClipboard = (text, platform) => {
     if (!text) {
-      toast.error("Link not ready yet!", { 
-        position: "top-center", 
+      toast.error("Link not ready yet!", {
+        position: "top-center",
         autoClose: 2000,
         closeButton: true,
       });
@@ -152,8 +152,8 @@ function InviteFriends() {
         });
       })
       .catch(() => {
-        toast.error("Failed to copy!", { 
-          position: "top-center", 
+        toast.error("Failed to copy!", {
+          position: "top-center",
           autoClose: 2000,
           closeButton: true,
         });
@@ -174,14 +174,20 @@ function InviteFriends() {
       <div className="page_container">
         <div className="inner_page_layout">
           <div className="position-relative mb-5 py-1">
-            <div className="backButton mb-3">
-              <Link 
-                className="anchor_pointer text-white d-flex align-items-center" 
+            <div
+              className="backButton mb-3"
+              style={{
+                position: "relative",
+                zIndex: 10000,  // ✅ fix click issue
+              }}
+            >
+              <Link
+                className="anchor_pointer text-white d-flex align-items-center"
                 to="/home"
                 style={{ textDecoration: 'none' }}
               >
                 <MdKeyboardArrowLeft className="fs-2" />
-                <span className="ms-1 fs-14">Back</span>
+
               </Link>
             </div>
 
@@ -191,8 +197,8 @@ function InviteFriends() {
                 <p className="text-lgray fs-14 mb-0">Share your referral link and get 5% bonus from each friend</p>
               </div>
 
-              <div 
-                className="card mb-4 border-0" 
+              <div
+                className="card mb-4 border-0"
                 style={{
                   background: "linear-gradient(135deg, rgba(243, 186, 47, 0.1) 0%, rgba(243, 186, 47, 0.05) 100%)",
                   backdropFilter: "blur(10px)",
@@ -202,7 +208,7 @@ function InviteFriends() {
               >
                 <div className="card-body py-3">
                   <div className="d-flex gap-3 align-items-center">
-                    <div 
+                    <div
                       className="rounded-3 d-flex align-items-center justify-content-center"
                       style={{
                         width: "60px",
@@ -229,7 +235,7 @@ function InviteFriends() {
                   <h6 className="fw-bold" style={{ color: "#f3ba2f" }}>Share Your Referral Links</h6>
                   <p className="text-white-50 fs-12 mb-0">Tap on any box to copy the link</p>
                 </div>
-                
+
                 <div className="px-2">
                   {/* Conditionally render Telegram ShareBox only if user exists (Telegram Mini-App) */}
                   {user && (
@@ -242,7 +248,7 @@ function InviteFriends() {
                       bgColor="linear-gradient(135deg, #229ED9 0%, #1e88c7 100%)"
                     />
                   )}
-                  
+
                   <ShareBox
                     title="Web App Referral"
                     link={dappLink}
@@ -255,9 +261,9 @@ function InviteFriends() {
               </div>
 
               {levelData && (
-                <div 
-                  className="row text-center mb-4" 
-                  data-aos="fade-up" 
+                <div
+                  className="row text-center mb-4"
+                  data-aos="fade-up"
                   data-aos-delay="200"
                 >
                   <div className="col-4">
@@ -277,8 +283,8 @@ function InviteFriends() {
 
               <ReferralList />
 
-              <div 
-                className="invite_fixed_wrapper rounded-4 p-3"
+              <div
+                className="invite_fixed_wrapper rounded-4 p-3 d-none"
                 style={{
                   background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
                   border: "1px solid rgba(243, 186, 47, 0.3)",
@@ -288,7 +294,7 @@ function InviteFriends() {
                 <div className="d-flex gap-3 align-items-center">
                   <div
                     className="flex-grow-1 content_area text-center py-2 rounded-3"
-                    style={{ 
+                    style={{
                       cursor: "pointer",
                       background: "linear-gradient(135deg, #f3ba2f 0%, #ffd700 100%)",
                       color: "#000",
@@ -337,7 +343,7 @@ function InviteFriends() {
                         <FiCopy style={{ color: "#229ED9" }} />
                       </div>
                     )}
-                    
+
                     <div
                       className="rounded-circle d-flex align-items-center justify-content-center"
                       style={{
@@ -368,14 +374,14 @@ function InviteFriends() {
       </div>
 
       <FooterNav />
-      <ToastContainer 
+      <ToastContainer
         toastStyle={{
           background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
           color: "#fff",
           border: "1px solid rgba(243, 186, 47, 0.3)"
         }}
       />
-      
+
       <style jsx>{`
         .share-box-hover:hover {
           transform: translateY(-2px);

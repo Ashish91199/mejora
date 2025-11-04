@@ -10,8 +10,8 @@ import { getProfile } from "./helper/apifunction";
 import { useAccount } from "wagmi";
 
 function Wallet() {
-    const { address } = useAccount();
-  
+  const { address } = useAccount();
+
   const [activeTab, setActiveTab] = useState("tab1");
   const [user, setUser] = useState(null);
   const [user_data, setUserData] = useState(null);
@@ -72,9 +72,7 @@ function Wallet() {
               <div className="mt-3">
                 <div className="text-gray fs-12">Wallet Balance</div>
                 <div className="wallet_amt">
-                  {user_data?.deposit_balance
-                    ? (Number(user_data.deposit_balance) / 1e18).toFixed(2)
-                    : "0.00"}
+                  <span>{user_data?.earning_balance ? user_data.earning_balance + user_data.spinearnBalance : "0.00"}</span>
                 </div>
 
 
@@ -197,6 +195,30 @@ function Wallet() {
                         </div>
                       </Link>
                     </div> */}
+                    <div className="card mb-2 card_with_info">
+                      <div className="card-body">
+                        <div className="d-flex gap-3 align-items-center">
+                          <img
+                            src="/images/Withdraw.png"
+                            width={"28px"}
+                            alt=""
+                          />
+                          <div>
+                            <div className="text-lgray">Total Deposit</div>
+                            <div>
+                              <span>
+                                {user_data?.deposit_balance
+                                  ? (
+                                    Number(user_data.deposit_balance) /
+                                    1e18
+                                  ).toFixed(2)
+                                  : "0.00"}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <div>
                       <Link to="#">
                         <div className="card mb-2 card_with_info">
@@ -210,7 +232,7 @@ function Wallet() {
                                 />
                               </div>
                               <div>
-                                <div className="text-lgray">His Rank</div>
+                                <div className="text-lgray"> Rank</div>
                                 <div>
 
 
@@ -382,7 +404,7 @@ function Wallet() {
                                   Withdrawal Balance
                                 </div>
                                 <div>
-                                  <span>{user_data?.earning_balance ? user_data.earning_balance+ user_data.spinearnBalance : "0.00"}</span>
+                                  <span>{user_data?.earning_balance ? user_data.earning_balance + user_data.spinearnBalance : "0.00"}</span>
 
                                 </div>
                               </div>
