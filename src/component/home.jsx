@@ -64,10 +64,10 @@ function Home() {
           <div className="col-4">
             <Link className="anchor_pointer text-white" to="#">
               <div className="d-flex gap-2 align-items-center">
-                <img src="/images/MejoraLogo.png" width={"28px"} alt="" />
+                <img src="/images/Mejoratext.png" width={"137px"} alt="" />
                 <div>{user?.username
                   ? user.username
-                  : [user?.first_name, user?.last_name].filter(Boolean).join(" ") || "Mejora"}
+                  : [user?.first_name, user?.last_name].filter(Boolean).join(" ") || ""}
 
                 </div>
               </div>

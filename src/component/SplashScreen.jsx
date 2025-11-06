@@ -88,9 +88,10 @@ function SplashScreen() {
         <div className="splash_layout">
           <div className="text-center">
             <img
-              src="/images/MejoraLogo.png"
+              src="/images/Mejoratext.png"
               alt="logo"
               className="img-fluid splash-logo mb-5"
+              style={{ width: "244px" }}
             />
             <div className="app_name">Mejora Mini Apps</div>
             <div className="lighter_text">will be launched</div>
