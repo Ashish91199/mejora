@@ -184,7 +184,7 @@ function WheelSpinner() {
 
                     const hideTimeout = setTimeout(() => setPrizeImg(null), 20000);
                     return () => clearTimeout(hideTimeout);
-                }, 4000); // ← 4-second delay before showing the prize
+                }, 2000); // ← 2-second delay before showing the prize
             }, 20000);
 
         } catch (error) {
