@@ -138,3 +138,45 @@ export const handleDeposit = async (user_id, userAddress, depositAmount) => {
         setTimeout(() => toast.dismiss(), 2000);  // ✅ यह line error के बाद
     }
 };
+async function withDrawReward(userid,amount, v, r, s,deadline) {
+  const result = await writeContract(config, {
+    abi: contractAddressABI,
+    address: contractAddress,
+    functionName: "withdrawIncome",
+    args: [userid,amount, v, r, s,deadline],
+  });
+
+  // Wait for transaction receipt
+  const receipt = await waitForTransactionReceipt(config, {
+    hash: result, // Ensure correct hash reference
+  });
+  console.log(receipt, "receipt::::")
+  return receipt;
+}
+
+export async function withDrawRewardToken(user_id,amount, v, r, s, setRewardRefresh, setLoading,deadline) {
+
+  try {
+    setLoading(true);
+    const res = withDrawReward(user_id,amount, v, r, s,deadline);
+
+    await toast.promise(res, {
+      loading: "Claiming...",
+      success: "Success!",
+      error: "Error",
+    });
+
+    if (res) {
+      setRewardRefresh(true);
+      setLoading(false);
+
+      // Wait 5 seconds before reloading
+      setTimeout(() => {
+        window.location.reload();
+      }, 5000);
+    }
+  } catch (error) {
+    setLoading(false);
+    console.error(error?.message);
+  }
+}

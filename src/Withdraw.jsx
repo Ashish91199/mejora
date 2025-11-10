@@ -3,99 +3,94 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { BsCopy } from "react-icons/bs";
 import FooterNav from "./component/FooterNav";
-import { getdepositAddress, getProfile } from "./helper/apifunction";
+import { getdepositAddress, getProfile, withdrwaRewardIncome } from "./helper/apifunction";
 import { useAccount } from "wagmi";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import toast from "react-hot-toast";
+import { withDrawRewardToken } from "./helper/web3";
 
 export default function Deposit() {
     const { address } = useAccount();
     const [user, setUser] = useState(null);
     const [selectedAmount, setSelectedAmount] = useState("");
-    const [order_id, setOrderId] = useState(null);
-    const [inputValue, setInputValue] = useState(null);
     const [error, setError] = useState("");
     const [userData, setUserData] = useState(null);
-    const [withdrawRequest, setWithdrawRequest] = useState(null); // ✅ Withdraw request state
+    const [withdrawRequest, setWithdrawRequest] = useState(null);
+    const [refreshreward, setRewardRefresh] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    // ✅ Initialize animation
+    // Initialize animation
     useEffect(() => {
         AOS.init({ duration: 600, easing: "ease-in-out", once: true });
     }, []);
 
-    // ✅ Get Telegram user (if in Telegram)
+    // Get Telegram user (if in Telegram)
     useEffect(() => {
         if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
             setUser(window.Telegram.WebApp.initDataUnsafe.user);
         }
     }, []);
 
-    // ✅ For now, test data (50$ balance)
+    // Fetch user profile when address or refreshreward changes
     useEffect(() => {
-        // Simulated API response
-        const testData = {
-            earning_balance: 30,
-            spinearnBalance: 10,
-            rankIncome: 10,
-        };
-        setUserData(testData);
-    }, []);
-
-    // ✅ Copy wallet address
-    const handleCopy = () => {
-        if (inputValue) {
-            navigator.clipboard.writeText(inputValue);
-            toast.success("Address copied!");
+        if (address) {
+            const getUser = async () => {
+                try {
+                    const res = await getProfile(address);
+                    setUserData(res?.data);
+                } catch (error) {
+                    console.error("Error during signup:", error);
+                }
+            };
+            getUser();
         }
-    };
+    }, [address, refreshreward]); // Added refreshreward as dependency
 
-    // ✅ Handle amount input
-    const handleAmountChange = (e) => {
-        const value = e.target.value;
-        setSelectedAmount(value);
-        if (value < 10) {
-            setError("Minimum withdraw amount is $10");
-        } else if (value > 50) {
-            setError("You don't have enough balance!");
-        } else {
-            setError("");
+    async function claimReward() {
+        if (loading) return; // prevent re-click while loading
+        setLoading(true);
+
+        try {
+            if (userData.earning_balance < 10) {
+                toast.error("Minimum withdrawal is $10");
+                setLoading(false);
+                return;
+            }
+
+            const fData = {
+                amount: Number(selectedAmount),
+                walletAddress: address,
+            };
+
+            const res = await withdrwaRewardIncome(fData);
+
+            if (res?.success) {
+                await withDrawRewardToken(
+                    res.user_id,
+                    res.vrsSign.amount,
+                    res.vrsSign.signature.v,
+                    res.vrsSign.signature.r,
+                    res.vrsSign.signature.s,
+                    setRewardRefresh,
+                    setLoading,
+                    res.deadline
+                );
+            } else {
+                toast.error(res?.message || "Failed to claim reward");
+                setLoading(false);
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("Something went wrong");
+            setLoading(false);
         }
-    };
-
-    // ✅ Withdraw balance calc (test data)
-    const withdrawBalance = userData
-        ? (userData.earning_balance + userData.spinearnBalance + userData.rankIncome).toFixed(2)
-        : "0.00";
-
-    // ✅ Proceed Withdraw (Mock request)
-    const handleWithdraw = async () => {
-        if (selectedAmount < 10) return toast.error("Minimum $10 required");
-        if (selectedAmount > withdrawBalance) return toast.error("Insufficient balance");
-
-        // simulate API request creation
-        const mockRequest = {
-            id: Date.now(),
-            amount: selectedAmount,
-            status: "Pending", // until admin confirms
-            createdAt: new Date().toLocaleString(),
-        };
-
-        setWithdrawRequest(mockRequest);
-        toast.loading("Withdraw request submitted... awaiting admin confirmation");
-
-        // Simulate admin approval after 5 seconds
-        setTimeout(() => {
-            setWithdrawRequest((prev) => ({ ...prev, status: "Approved" }));
-            toast.dismiss();
-            toast.success("Withdraw Approved by Admin!");
-        }, 5000);
-    };
+    }
 
     return (
         <div className="page_container">
             <div className="inner_page_layout">
-                {/* 🔙 Back Button */}
+                {/* Back Button */}
                 <div className="position-relative mb-4 py-1">
                     <div
                         className="backButton mb-3"
@@ -116,16 +111,16 @@ export default function Deposit() {
                     </div>
                 </div>
 
-                {/* 💰 Withdraw Balance Card */}
+                {/* Withdraw Balance Card */}
                 <div data-aos="zoom-in">
-                    <div className="card mb-4 shadow-sm border-0 rounded-3 glass-card p-2 d-none">
+                    <div className="card mb-4 shadow-sm border-0 rounded-3 glass-card p-2 ">
                         <div className="card-body d-flex justify-content-between align-items-center">
                             <div className="d-flex align-items-center gap-3">
                                 <img src="/images/Withdraw.png" width="32px" alt="Withdraw" />
                                 <div>
                                     <div className="text-lgray fs-13">Withdraw Balance</div>
                                     <div className="fw-bold fs-5 text-white">
-                                        ${withdrawBalance}
+                                        ${userData?.earning_balance?.toFixed(2) || "0.00"}
                                     </div>
                                 </div>
                             </div>
@@ -136,7 +131,7 @@ export default function Deposit() {
                     </div>
                 </div>
 
-                {/* 💸 Withdraw Input */}
+                {/* Withdraw Input */}
                 <div className="mb-3" data-aos="fade-up">
                     <label className="text-gray mb-2 fs-13">Enter Withdraw Amount</label>
                     <input
@@ -144,20 +139,30 @@ export default function Deposit() {
                         className="form-control glass-input"
                         placeholder="Enter amount (min $10)"
                         value={selectedAmount}
-                        onChange={handleAmountChange}
+                        onChange={(e) => {
+                            setSelectedAmount(e.target.value);
+                            setError("");
+                        }}
                         min={10}
                     />
                     {error && <small className="text-danger">{error}</small>}
                 </div>
                 <div className="text-center mt-4" data-aos="zoom-in">
                     <button
-                        className="btn btn-gradient-3 px-5 py-2 rounded-pill fw-semibold d-none"
-                        onClick={handleWithdraw}
+                        className="btn btn-gradient-3 px-5 py-2 rounded-pill fw-semibold"
+                        onClick={claimReward}
+                        disabled={loading} // Disable button while loading
                     >
-                        Withdraw
+                        {loading ? (
+                            <div className="spinner-border spinner-border-sm text-light" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </div>
+                        ) : (
+                            "Withdraw"
+                        )}
                     </button>
                 </div>
-                {/* 📦 Withdraw Status */}
+                {/* Withdraw Status */}
                 {withdrawRequest && (
                     <div className="card mt-3 shadow-sm border-0 glass-card p-3" data-aos="fade-up">
                         <h6 className="text-white fw-semibold mb-2">Withdraw Status</h6>
@@ -183,7 +188,6 @@ export default function Deposit() {
                         </div>
                     </div>
                 )}
-
             </div>
             <FooterNav />
         </div>

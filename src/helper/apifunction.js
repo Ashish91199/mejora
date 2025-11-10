@@ -263,3 +263,14 @@ export async function getUserData(walletAddress) {
     return response.json();
   });
 }
+export const withdrwaRewardIncome = async (formData) => {
+  try {
+   
+    const data = await axios.post(`${url}/withdraw`, formData);
+
+    return data.data;
+  } catch (e) {
+    console.error("Error in catch:", e);
+    return [];
+  }
+};
