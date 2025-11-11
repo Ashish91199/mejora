@@ -80,7 +80,7 @@ function Home() {
                 <div className="wallet_btn">
                   <div className="d-flex gap-2 align-items-center">
                     {/* <div>+{formatNumber(user_data?.deposit_balance)}</div>{" "} */}
-                    <div>+<span>{user_data?.earning_balance ? user_data.earning_balance + user_data.spinearnBalance : "0.00"}</span></div>
+                    <div>+<span>{user_data?.earning_balance ? user_data.earning_balance : "0.00"}</span></div>
 
                     <div>
                       <Link to="/wallet">

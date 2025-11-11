@@ -72,7 +72,8 @@ function Wallet() {
               <div className="mt-3">
                 <div className="text-gray fs-12">Wallet Balance</div>
                 <div className="wallet_amt">
-                  <span>{user_data?.earning_balance ? user_data.earning_balance + user_data.spinearnBalance : "0.00"}</span>
+                  <span>{user_data?.earning_balance ? user_data.earning_balance : "0.00"}</span>
+
                 </div>
 
 
@@ -404,7 +405,8 @@ function Wallet() {
                                   Withdrawal Balance
                                 </div>
                                 <div>
-                                  <span>{user_data?.earning_balance ? user_data.earning_balance + user_data.spinearnBalance : "0.00"}</span>
+                                  <span>{user_data?.earning_balance ? user_data.earning_balance : "0.00"}</span>
+
 
                                 </div>
                               </div>
