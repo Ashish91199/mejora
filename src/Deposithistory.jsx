@@ -3,33 +3,25 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { FiUser, FiDollarSign, FiHash, FiCalendar } from "react-icons/fi";
 import FooterNav from "./component/FooterNav";
-import { getDepositHistory } from "./helper/apifunction"; // Make sure you have this function
+import { getDepositHistory, getWithdrawHistory } from "./helper/apifunction";
 import { formatNumber } from "./helper/Math";
 import { Link } from "react-router-dom";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { useAccount } from "wagmi";
 
 function Deposithistory() {
-    const { address } = useAccount()
-    
-    const [user, setUser] = useState(null);
+    const { address } = useAccount();
     const [depositData, setDepositData] = useState([]);
     const [withdrawData, setWithdrawData] = useState([]);
-    const [activeTab, setActiveTab] = useState("deposit"); // deposit or withdraw
+    const [activeTab, setActiveTab] = useState("deposit");
 
-    // Initialize AOS
     useEffect(() => {
         AOS.init({ duration: 600, easing: "ease-in-out", once: true });
     }, []);
 
-    // Set Telegram user
     useEffect(() => {
-        const tgUser = window?.Telegram?.WebApp?.initDataUnsafe?.user;
-        if (tgUser) setUser(tgUser);
-    }, []);
+        if (!address) return;
 
-    // Fetch deposit and withdraw history
-    useEffect(() => {
         const fetchDeposit = async () => {
             try {
                 const res = await getDepositHistory(address);
@@ -41,7 +33,7 @@ function Deposithistory() {
 
         const fetchWithdraw = async () => {
             try {
-                const res = await getWithdrawHistory(user.id);
+                const res = await getWithdrawHistory(address);
                 setWithdrawData(res?.data || []);
             } catch (err) {
                 console.error("Error fetching withdraw history:", err);
@@ -50,7 +42,7 @@ function Deposithistory() {
 
         fetchDeposit();
         fetchWithdraw();
-    }, [user]);
+    }, [address]);
 
     const totalDeposit = depositData.reduce(
         (acc, item) => acc + Number(item?.depositAmt || 0) / 1e18,
@@ -67,6 +59,7 @@ function Deposithistory() {
                                 <MdKeyboardArrowLeft className="fs-1" />
                             </Link>
                         </div>
+
                         <div className="mb-5 text-center">
                             <h4 className="mb-3">History</h4>
                         </div>
@@ -86,21 +79,6 @@ function Deposithistory() {
                                 Withdraw History
                             </button>
                         </div>
-
-                        {/* Total Deposit (only for deposit tab) */}
-                        {activeTab === "deposit" && (
-                            <div className="card mb-2 d-none">
-                                <div className="card-body d-flex align-items-center gap-3">
-                                    <div className="circle_bg">
-                                        <FiUser />
-                                    </div>
-                                    <div>
-                                        <p className="mb-0">Total Deposit</p>
-                                        <div className="text-gray">{formatNumber(totalDeposit.toFixed(2))}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
 
                         {/* Deposit Tab */}
                         {activeTab === "deposit" && (
@@ -197,6 +175,8 @@ function Deposithistory() {
                                         >
                                             <div className="dep-hist-serial-badge">{index + 1}</div>
                                             <div className="dep-hist-card-body">
+
+                                                {/* Withdraw Amount */}
                                                 <div className="dep-hist-card-item">
                                                     <div className="dep-hist-icon">
                                                         <FiDollarSign />
@@ -205,11 +185,12 @@ function Deposithistory() {
                                                         <span className="dep-hist-label">Withdraw Amount</span>
                                                         <br />
                                                         <span className="dep-hist-value">
-                                                            {(item?.withdrawAmt ? item.withdrawAmt / 1e18 : 0).toFixed(2)}
+                                                            {(item?.amount ? Number(item.amount) : 0).toFixed(2)}
                                                         </span>
                                                     </div>
                                                 </div>
 
+                                                {/* Transaction Hash */}
                                                 <div className="dep-hist-card-item">
                                                     <div className="dep-hist-icon">
                                                         <FiHash />
@@ -228,6 +209,7 @@ function Deposithistory() {
                                                     </div>
                                                 </div>
 
+                                                {/* Date & Time */}
                                                 <div className="dep-hist-card-item">
                                                     <div className="dep-hist-icon">
                                                         <FiCalendar />
@@ -244,6 +226,7 @@ function Deposithistory() {
                                                         </span>
                                                     </div>
                                                 </div>
+
                                             </div>
                                         </div>
                                     ))
@@ -252,9 +235,11 @@ function Deposithistory() {
                                 )}
                             </div>
                         )}
+
                     </div>
                 </div>
             </div>
+
             <FooterNav />
         </>
     );

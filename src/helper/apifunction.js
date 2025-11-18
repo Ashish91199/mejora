@@ -194,6 +194,21 @@ export function getDepositHistory(user_id) {
       return response.json();
     });
 }
+export function getWithdrawHistory(walletAddress) {
+  return fetch(`${url}/withdraw-history/${walletAddress}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    });
+}
+
 
 export async function getlevelincome(user_id) {
   const res = await axios.get(`${url}/levelIncome?userId=${user_id}`, {
@@ -232,7 +247,7 @@ export async function getRankIncome(user_id) {
   return [];
 }
 
-export async function registerApp(walletAddress,referral_address) {
+export async function registerApp(walletAddress, referral_address) {
   // Make sure to use the correct endpoint from your local server
   return fetch(`${url}/register`, {
     method: 'POST',
@@ -255,7 +270,7 @@ export async function getUserData(walletAddress) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ walletAddress: walletAddress}),
+    body: JSON.stringify({ walletAddress: walletAddress }),
   }).then(response => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -265,7 +280,7 @@ export async function getUserData(walletAddress) {
 }
 export const withdrwaRewardIncome = async (formData) => {
   try {
-   
+
     const data = await axios.post(`${url}/withdraw`, formData);
 
     return data.data;
