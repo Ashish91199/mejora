@@ -4,7 +4,7 @@ import App from "./App";
 import "./index.css";
 import "@rainbow-me/rainbowkit/styles.css";
 
-import { RainbowKitProvider, getDefaultWallets } from "@rainbow-me/rainbowkit";
+import { RainbowKitProvider, connectorsForWallets, getDefaultWallets } from "@rainbow-me/rainbowkit";
 import { createConfig, http } from "@wagmi/core";
 import {
   mainnet,
@@ -23,30 +23,23 @@ import { WagmiConfig } from "wagmi";
 import { Toaster } from "react-hot-toast";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
-
+import {
+  binanceWallet,
+  metaMaskWallet,
+  tokenPocketWallet,
+  trustWallet,
+  walletConnectWallet,
+} from "@rainbow-me/rainbowkit/wallets";
 // Create a QueryClient instance
 const queryClient = new QueryClient();
 
 const chains = [
-  // mainnet,
-  // sepolia,
-  // bsc,
-  // polygon,
-  // avalanche,
-  // optimism,
-  // arbitrum,
-  opBNBTestnet,
-  // bscTestnet
+
+  bsc
+
 ];
 const transports = {
-  [mainnet.id]: http(
-    "https://eth-mainnet.g.alchemy.com/v2/tO_FPsuW9FEXXtmHOauwN",
-    { batch: true }
-  ),
-  [sepolia.id]: http(
-    "https://eth-sepolia.g.alchemy.com/v2/tO_FPsuW9FEXXtmHOauwN",
-    { batch: true }
-  ),
+
   [bsc.id]: http("https://bsc-dataseed.binance.org/", {
     batch: true,
     fallback: [
@@ -54,33 +47,36 @@ const transports = {
       "https://bsc-dataseed1.ninicoin.io/",
     ],
   }),
-  [polygon.id]: http(
-    "https://polygon-mainnet.g.alchemy.com/v2/tO_FPsuW9FEXXtmHOauwN",
-    { batch: true }
-  ),
-  [avalanche.id]: http(
-    "https://avalanche-mainnet.infura.io/v3/tO_FPsuW9FEXXtmHOauwN",
-    { batch: true }
-  ),
-  [optimism.id]: http(
-    "https://opt-mainnet.g.alchemy.com/v2/tO_FPsuW9FEXXtmHOauwN",
-    { batch: true }
-  ),
-  [arbitrum.id]: http("https://arb1.arbitrum.io/rpc", { batch: true }),
-  [opBNB.id]: http("https://opbnb-mainnet-rpc.bnbchain.org", { batch: true }),
-  [bscTestnet.id]: http("https://bsc-testnet-rpc.publicnode.com", { batch: true }),
-  [opBNBTestnet.id]: http("https://opbnb-testnet-rpc.publicnode.com", { batch: true }),
-
 
 
 };
 
+
+
+const connectors = connectorsForWallets(
+  [
+    {
+      groupName: "Recommended",
+      wallets: [
+        trustWallet,
+        metaMaskWallet,
+        tokenPocketWallet,
+        binanceWallet,
+        walletConnectWallet,
+      ],
+    },
+  ],
+  {
+    appName: "My RainbowKit App",
+    projectId: "a00fd414445702b7dcd0ef56dba0b1df",
+  }
+);
 // Get default wallets
-const { connectors } = getDefaultWallets({
-  appName: "My App",
-  projectId: "a00fd414445702b7dcd0ef56dba0b1df",
-  chains,
-});
+// const { connectors } = getDefaultWallets({
+//   appName: "My App",
+//   projectId: "a00fd414445702b7dcd0ef56dba0b1df",
+//   chains,
+// });
 
 // Create Wagmi config
 const wagmiConfig = createConfig({
